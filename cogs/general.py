@@ -49,7 +49,7 @@ class General(commands.Cog):
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar_url)
-        page.set_footer(text="Use the reactions to flip pages.")
+        page.set_footer(text="Use the reactions to flip pages. Help menu made by: CHamburr#2591(Thank you!)")
         page.add_field(
             name="Invite",
             value=f"https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id}"
