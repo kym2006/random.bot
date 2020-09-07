@@ -1,0 +1,195 @@
+import discord 
+from discord.ext import commands 
+import random 
+import asyncio 
+import typing 
+
+# This cog implements a lot of the random functions of random.bot
+class Random(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def rnd(self, ctx, arg1: int, arg2: int):
+        await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2+1), arg1, arg2))
+
+
+    @commands.command(description = "Send the name of someone in the server")
+    async def name(self, ctx, allow_bots:str="0", *, msg:str=""):
+        try:
+            allow_bots=int(allow_bots)
+            if allow_bots:
+                user = random.choice(ctx.channel.guild.members)
+                await ctx.send("Picked {}".format(user.name+"#"+str(user.discriminator)))
+            else:
+                raise KeyboardInterrupt
+        except:
+            potential = []
+            for i in ctx.channel.guild.members:
+                if not i.bot:
+                    potential.append(i)
+            user = random.choice(potential)
+            await ctx.send("Picked {}".format(user.name+"#"+str(user.discriminator)))
+
+    @commands.command(name = "someone", usage = "@someone", description = "ping someone at random")
+    async def mention(self, ctx, allow_bots:str="0", *, msg:str=""):
+        try:
+            allow_bots=int(allow_bots)
+            if allow_bots:
+                user = random.choice(ctx.channel.guild.members)
+                await ctx.send("Picked <@!{}>".format(user.id))
+            else:
+                raise KeyboardInterrupt
+        except:
+            potential = []
+            for i in ctx.channel.guild.members:
+                if not i.bot:
+                    potential.append(i)
+            user = random.choice(potential)
+            await ctx.send("Picked <@!{}>".format(user.id))
+    
+    @commands.command()
+    async def wheel(self, ctx, *, msg:str=""):
+
+        potential = []
+        for i in ctx.channel.guild.members:
+            if not i.bot:
+                potential.append(i)
+        finals = []
+        for i in range(random.randint(2,8)):
+            user = random.choice(potential)
+            msg = await ctx.send(f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw.")
+            finals.append(user)
+            await asyncio.sleep(10)
+        user = random.choice(potential)
+        await ctx.send(f"Final winner: {random.choice(finals).mention}")
+
+    @commands.command() 
+    async def somerole(self, ctx, role: str):
+        users = []
+        role = role.replace("<","")
+        role = role.replace(">","")
+        role = role.replace("@","")
+        role = role.replace("&","")
+        role = discord.utils.get(ctx.message.guild.roles, id=int(role))
+        for member in ctx.message.guild.members:
+            if role in member.roles:
+                users.append(member)
+        user = random.choice(users)
+        await ctx.send("Picked {}".format(user.mention))
+    
+    @commands.command(name = "8ball")
+    async def eightball(self, ctx, question: str):
+        li = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.", "You may rely on it.",
+            "As I see it, yes.", "Most likely.", "Yes.", "Signs point to yes.",
+            "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.",
+            "Don't count on it.", "My reply is no.", "My sources say no.", "Very doubtful.",
+            "You should definitely join random.bot's support server first, at https://discord.gg/ZatYnsX"]
+        await ctx.send(":8ball: " + random.choice(li))
+    
+    @commands.command()
+    async def coinflip(self, ctx, chosen: str = "null"):
+        notland = random.randint(1,6000) # this chance
+        if notland == 1:
+            await ctx.send("The coin landed perfectly on it's side! What a miracle!")
+            owner = self.bot.get_user(298661966086668290)
+            await owner.send(str(ctx.author.id) + " got a perfect coinflip!")
+            return
+        if chosen == 'null':
+            sideint = random.randint(1, 2)
+            if sideint == 1:
+                await ctx.send("The coin landed on tails")
+            else:
+                await ctx.send("The coin landed on heads")
+            return
+        if chosen != "heads" and chosen != "tails":
+            await ctx.send("Please choose heads or tails only.")
+            return
+        sideint = random.randint(1, 2)
+        side = 'heads'
+
+
+        if sideint == 1:
+            side = 'tails'
+        if side == chosen:
+            await ctx.send("The coin landed on {}. You have guessed correct".format(side))
+        else:
+            await ctx.send("The coin landed on {}. You have guessed wrong".format(side))
+    
+    
+    @commands.command(description = "Choose something")
+    async def choose(self, ctx, *args):
+        await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
+
+    @commands.command(description = "Shuffle a list.")
+    async def shuffle(self, ctx, *args):
+        args=list(args)
+        random.shuffle(args)
+        res=""
+        for i in args:
+            res+=i+" "
+
+        await ctx.send(f"Shuffled list: {res}")
+
+    @commands.command(name = "iamveryrandom", usage = "@iamveryrandom <ban|kick>")
+    async def iamveryrandom(self, ctx, kick_or_ban: str = "ban"):
+        if (kick_or_ban.lower() != "ban" and kick_or_ban.lower() != "kick"):
+            await ctx.send("Do you want me to ban or kick?")
+            return
+        member = ctx.guild.get_member(ctx.author.id)
+        if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members:
+            await ctx.send("You do not have permissions in this server to use this command.")
+            return 
+        if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members:
+            await ctx.send("You do not have permissions in this server to use this command.")
+            return 
+        user = random.choice(ctx.channel.guild.members)
+        await ctx.send("Picked <@!{}>".format(user.id))
+        await ctx.send("Say your goodbyes...")
+        if (kick_or_ban.lower() == "ban"):
+
+            await ctx.send("Banning in 10 seconds... ")
+            await self.bot.change_presence(activity=discord.Game("Banning someone"))
+            await asyncio.sleep(10)
+            await self.bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds))))
+            try:
+                await ctx.channel.guild.ban(user, reason = "Haha lol random bans best", delete_message_days = 0)
+            except:
+                await ctx.send("I need higher perms than that person.")
+                return
+            await ctx.send("Goodbye!")
+            await self.bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds))))
+        else:
+            await ctx.send("Kicking in 10 seconds... ")
+            await self.bot.change_presence(activity=discord.Game("Kicking someone"))
+            await asyncio.sleep(10)
+            await self.bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds))))
+            try:
+                await ctx.channel.guild.kick(user, reason = "Haha lol random kicks best")
+            except:
+                await ctx.send("I need higher perms than that person.")
+                return
+            await ctx.send("Goodbye!")
+            await self.bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds))))
+    
+
+    @commands.command(name = "team", description = "Assign random teams players", usage = "@team {number of teams} [players]")
+    async def teams(self, ctx, num: typing.Optional[int] = 2, *players):
+        num = min(num, len(players))
+        players = list(players)
+        random.shuffle(players) 
+        n = len(players)
+        teams = [[] for i in players]
+        for i in range(len(players)):
+            teams[i%num].append(players[i])
+        embed = discord.Embed(title = "Random Teams")
+        for i in range(num):
+            res = ""
+            for j in teams[i]:
+                res += f"{j}, "
+            res = res[:-2]
+            embed.add_field(name=f"Team {i+1}", value = res, inline = False) 
+        await ctx.send(embed=embed)
+
+def setup(bot):
+    bot.add_cog(Random(bot))

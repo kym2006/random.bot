@@ -9,9 +9,8 @@ from discord.ext import commands
 
 
 def config_load():
-    with open('data/config.json', 'r', encoding='utf-8') as doc:
-        #  Please make sure encoding is correct, especially after editing the config file
-        return json.load(doc)
+    f = open('data/config.json', 'r', encoding="utf-8-sig") 
+    return json.load(f)
 
 
 async def run():
@@ -56,7 +55,7 @@ class Bot(commands.Bot):
         I have made this a coroutine just to show that it can be done. If you needed async logic in here it can be done.
         A good example of async logic would be retrieving a prefix from a database.
         """
-        prefix = ['!']
+        prefix = ['@']
         return commands.when_mentioned_or(*prefix)(bot, message)
 
     async def load_all_extensions(self):
@@ -94,6 +93,7 @@ class Bot(commands.Bot):
         If you wish to have multiple event listeners they can be added in other cogs. All on_message listeners should
         always ignore bots.
         """
+        print(message.content)
         if message.author.bot:
             return  # ignore all bots
         await self.process_commands(message)

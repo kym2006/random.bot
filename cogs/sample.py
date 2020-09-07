@@ -6,13 +6,14 @@ class Sample(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
+    '''
     @commands.Cog.listener()
-    def on_guild_join(self, guild):
+    async def on_guild_join(self, guild):
         """
         This event receives the the guild when the bot joins.
         """
         print(f'Joined {guild.name} with {guild.member_count} users!')
+    '''
 
     @commands.command()
     async def test(self, ctx):
