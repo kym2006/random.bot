@@ -22,6 +22,8 @@ async def run():
     config = config_load()
     bot = Bot(config=config,
               description=config['description'])
+    bot.help_command = None 
+    bot.primary_colour = discord.Color.green()
     try:
         await bot.start(config['token'])
     except KeyboardInterrupt:

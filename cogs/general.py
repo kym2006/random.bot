@@ -5,7 +5,6 @@ import discord
 import psutil
 
 from discord.ext import commands
-
 from utils.paginator import Paginator
 
 log = logging.getLogger(__name__)
@@ -44,7 +43,7 @@ class General(commands.Cog):
         all_pages = []
         page = discord.Embed(
             title=f"{self.bot.user.name} Help Menu",
-            description="Thank you for using ModMail! Please direct message me if you wish to contact staff. You can "
+            description="Thank you for using Random.bot! Please direct message me if you wish to contact staff. You can "
             "also invite me to your server with the link below, or join our support server if you need further help."
             f"\n\nDon't forget to check out our partners with the `{ctx.prefix}partners` command!",
             colour=self.bot.primary_colour,
@@ -54,25 +53,23 @@ class General(commands.Cog):
         page.add_field(
             name="Invite",
             value=f"https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id}"
-            "&permissions=268823640&scope=bot",
+            "&permissions=134150&scope=bot",
             inline=False,
         )
-        page.add_field(name="Support Server", value="https://discord.gg/wjWJwJB", inline=False)
+        page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
         all_pages.append(page)
         page = discord.Embed(title=f"{self.bot.user.name} Help Menu", colour=self.bot.primary_colour)
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.set_footer(text="Use the reactions to flip pages.")
         page.add_field(
-            name="About ModMail",
-            value="ModMail is a feature-rich Discord bot designed to enable your server members to contact staff "
-            "easily. A new channel is created whenever a user messages the bot, and the channel will serve as a shared "
-            "inbox for seamless communication between staff and the user.",
+            name="About Random.bot",
+            value="Random.bot provides convenient, random randomness in your server.",
             inline=False,
         )
         page.add_field(
             name="Getting Started",
             value="Follow these steps to get the bot all ready to serve your server!\n1. Invite the bot with "
-            f"[this link](https://modmail.xyz/invite)\n2. Run `{ctx.prefix}setup`, there will be an interactive guide."
+            f"[this link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=134150)\n2."
             f"\n3. All done! For a full list of commands, see `{ctx.prefix}help`.",
             inline=False,
         )
@@ -365,3 +362,4 @@ class General(commands.Cog):
 
 def setup(bot):
     bot.add_cog(General(bot))
+

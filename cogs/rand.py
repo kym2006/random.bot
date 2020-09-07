@@ -9,12 +9,12 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name = "rnd", description = "Pick a number in range <st> to <en>")
     async def rnd(self, ctx, arg1: int, arg2: int):
         await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2+1), arg1, arg2))
 
 
-    @commands.command(description = "Send the name of someone in the server")
+    @commands.command(name = "name", description = "Send the name of someone in the server")
     async def name(self, ctx, allow_bots:str="0", *, msg:str=""):
         try:
             allow_bots=int(allow_bots)
@@ -48,7 +48,7 @@ class Random(commands.Cog):
             user = random.choice(potential)
             await ctx.send("Picked <@!{}>".format(user.id))
     
-    @commands.command()
+    @commands.command(name = "wheel", description = "@someone but more dramatic")
     async def wheel(self, ctx, *, msg:str=""):
 
         potential = []
@@ -64,7 +64,7 @@ class Random(commands.Cog):
         user = random.choice(potential)
         await ctx.send(f"Final winner: {random.choice(finals).mention}")
 
-    @commands.command() 
+    @commands.command(name = "somerole", description = "Ping a user with that role in your server") 
     async def somerole(self, ctx, role: str):
         users = []
         role = role.replace("<","")
@@ -78,7 +78,7 @@ class Random(commands.Cog):
         user = random.choice(users)
         await ctx.send("Picked {}".format(user.mention))
     
-    @commands.command(name = "8ball")
+    @commands.command(name = "8ball", description = "classic 8ball", aliases=["eightball"])
     async def eightball(self, ctx, question: str):
         li = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.", "You may rely on it.",
             "As I see it, yes.", "Most likely.", "Yes.", "Signs point to yes.",
@@ -87,7 +87,7 @@ class Random(commands.Cog):
             "You should definitely join random.bot's support server first, at https://discord.gg/ZatYnsX"]
         await ctx.send(":8ball: " + random.choice(li))
     
-    @commands.command()
+    @commands.command(name = "coinflip", description = "Flip a coin. Input a side to bet.")
     async def coinflip(self, ctx, chosen: str = "null"):
         notland = random.randint(1,6000) # this chance
         if notland == 1:
@@ -117,11 +117,11 @@ class Random(commands.Cog):
             await ctx.send("The coin landed on {}. You have guessed wrong".format(side))
     
     
-    @commands.command(description = "Choose something")
+    @commands.command(name = "choose", description = "Choose something")
     async def choose(self, ctx, *args):
         await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
 
-    @commands.command(description = "Shuffle a list.")
+    @commands.command(name = "shuffle", description = "Shuffle a list.")
     async def shuffle(self, ctx, *args):
         args=list(args)
         random.shuffle(args)
@@ -131,7 +131,7 @@ class Random(commands.Cog):
 
         await ctx.send(f"Shuffled list: {res}")
 
-    @commands.command(name = "iamveryrandom", usage = "@iamveryrandom <ban|kick>")
+    @commands.command(name = "iamveryrandom", usage = "@iamveryrandom <ban|kick>", description = "Randomly ban or kick a user, depending on what you input")
     async def iamveryrandom(self, ctx, kick_or_ban: str = "ban"):
         if (kick_or_ban.lower() != "ban" and kick_or_ban.lower() != "kick"):
             await ctx.send("Do you want me to ban or kick?")
