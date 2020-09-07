@@ -24,6 +24,7 @@ async def run():
               description=config['description'])
     bot.help_command = None 
     bot.primary_colour = discord.Color.green()
+    
     try:
         await bot.start(config['token'])
     except KeyboardInterrupt:
@@ -87,6 +88,7 @@ class Bot(commands.Bot):
               f'Owner: {self.app_info.owner}\n'
               f'Template Maker: SourSpoon / Spoon#0001')
         print('-' * 10)
+        await bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(bot.guilds))))
 
     async def on_message(self, message):
         """
