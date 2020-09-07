@@ -155,12 +155,6 @@ class General(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    @commands.command(
-        description="See the amazing stuff we have partnered with.",
-        usage="partners",
-        aliases=["partner"],
-    )
-
     @commands.command(description="Get a link to invite me.", usage="invite")
     async def invite(self, ctx):
         await ctx.send(

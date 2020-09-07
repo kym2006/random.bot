@@ -27,7 +27,7 @@ async def run():
     
     try:
         await bot.start(config['token'])
-        await bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(bot.guilds))))
+        
     except KeyboardInterrupt:
         await bot.logout()
 
@@ -68,6 +68,7 @@ class Bot(commands.Bot):
         """
         await self.wait_until_ready()
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
+        await self.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.guilds))))
         cogs = [x.stem for x in Path('cogs').glob('*.py')]
         for extension in cogs:
             try:
