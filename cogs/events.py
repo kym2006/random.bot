@@ -26,7 +26,7 @@ class Events(commands.Cog):
     async def on_guild_remove(self, guild):
         embed = discord.Embed(
             title="Server Leave",
-            description=f"{guild.name} ({guild.id})",
+            description=f"{guild.name} ({guild.id}): {guild.member_count} members",
             colour=discord.Colour.red(),
             timestamp=datetime.datetime.utcnow(),
         )

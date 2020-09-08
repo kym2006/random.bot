@@ -3,7 +3,7 @@ import datetime
 import json
 import logging
 from pathlib import Path
-
+import asyncpg
 import discord
 from discord.ext import commands
 
@@ -43,7 +43,10 @@ class Bot(commands.Bot):
 
         self.loop.create_task(self.track_start())
         self.loop.create_task(self.load_all_extensions())
+        self.loop.create_task(self.connect_postgres())
 
+    async def connect_postgres(self):
+        self.conn = await asyncpg.connect("postgres://wzjgcdxwbmwonx:69810806bf38d4e8a89c73830da992814460afd68cd64f01aeb6d7bd32b3372d@ec2-54-235-192-146.compute-1.amazonaws.com:5432/d81vhiqqts6r24?sslmode=require")
     async def track_start(self):
         """
         Waits for the bot to connect to discord and then records the time.
@@ -102,6 +105,7 @@ class Bot(commands.Bot):
         if message.author.bot:
             return  # ignore all bots
         await self.process_commands(message)
+
 
 
 if __name__ == '__main__':
