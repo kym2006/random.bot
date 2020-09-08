@@ -44,8 +44,10 @@ class Events(commands.Cog):
             data.append((i['silver'], i['gold'], f"{user.name}#{user.discriminator}"))
             
         data = sorted(data, key = lambda x:x[0]+x[1], reverse=True)
+        gold = self.bot.get_emoji(635020560249913394)
+        silver = self.bot.get_emoji(635020537349013519)
         for i in data:
-            payload += f"{i[2]}: {i[0]} silver, {i[1]} gold\n"
+            payload += f"{i[2]}: {i[0]} {silver}, {i[1]} {gold}\n"
         response = requests.post('https://hastebin.com/documents', data=payload.encode('utf-8'))
         li = json.loads(response.content)
         key = li['key']
