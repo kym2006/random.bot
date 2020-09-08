@@ -6,7 +6,7 @@ from discord.ext import commands
 
 log = logging.getLogger(__name__)
 
-owners = [298661966086668290, 412969691276115968]
+owners = [298661966086668290, 412969691276115968, 446290930723717120, 723794074498367498, 488283878189039626]
 admins = []
 def is_owner():
     def predicate(ctx):

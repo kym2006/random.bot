@@ -175,7 +175,7 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Get the link to ModMail's website.", usage="website")
+    @commands.command(description="Get the link to Random.bot's website.", usage="website")
     async def website(self, ctx):
         await ctx.send(
             embed=discord.Embed(
