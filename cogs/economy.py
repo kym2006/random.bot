@@ -50,7 +50,10 @@ class Events(commands.Cog):
         li = json.loads(response.content)
         key = li['key']
         await ctx.send(embed=discord.Embed(description="Full leaderboard: {}".format("https://hastebin.com/" + key)))
-        await ctx.send(embed=discord.Embed(header="Top 5", description = payload.split('\n')[:5].join('\n')))
+        partial = ""
+        for i in payload.split('\n')[:10]:
+            partial += i+'\n'
+        await ctx.send(embed=discord.Embed(header="Top 5", description = partial))
 
     
 
