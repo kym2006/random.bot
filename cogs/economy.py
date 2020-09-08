@@ -49,8 +49,8 @@ class Events(commands.Cog):
         response = requests.post('https://hastebin.com/documents', data=payload.encode('utf-8'))
         li = json.loads(response.content)
         key = li['key']
-        await ctx.send(embed=discord.Embed(description="Success! {}".format("https://hastebin.com/" + key)))
-
+        await ctx.send(embed=discord.Embed(description="Full leaderboard: {}".format("https://hastebin.com/" + key)))
+        await ctx.send(embed=discord.Embed(header="Top 5", description = payload.split('\n')[:5].join('\n')))
 
     
 
