@@ -1,18 +1,19 @@
 import logging
 import platform
-
+import json 
 import discord
 import psutil
 import datetime
 from discord.ext import commands
 import asyncpg 
+import requests 
 log = logging.getLogger(__name__)
 
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(name = "mine", description = "mine for ~~bit~~silver coins")
+    @commands.command(name = "mine", description = "mine for ~~bit~~silver coins", usage = "<mine>")
     async def mine(self, ctx):
         id = ctx.message.author.id
         row = await self.bot.conn.fetchrow(
@@ -32,7 +33,23 @@ class Events(commands.Cog):
         row = await self.bot.conn.fetchrow(
         'SELECT * FROM credit WHERE userid = $1', id)
         await ctx.send(f"You now have {row['silver']} silver.")
-
+    
+    @commands.command(name = "leaderboard", description = "See the richest people", usage = "leaderboard")
+    async def leaderboard(self, ctx):
+        rows = await self.bot.conn.fetch('SELECT * FROM credit')
+        payload = ""
+        data = []
+        for i in rows:
+            user = self.bot.get_user(i['userid'])
+            data.append((i['silver'], i['gold'], f"{user.name}#{user.discriminator}"))
+            
+        data = sorted(data, key = lambda x:x[0]+x[1], reverse=True)
+        for i in data:
+            payload += f"{i[2]}: {i[0]} silver, {i[1]} gold\n"
+        response = requests.post('https://hastebin.com/documents', data=payload.encode('utf-8'))
+        li = json.loads(response.content)
+        key = li['key']
+        await ctx.send(embed=discord.Embed(description="Success! {}".format("https://hastebin.com/" + key)))
 
 
     
