@@ -40,7 +40,7 @@ class Bot(commands.Bot):
         )
         self.start_time = None
         self.app_info = None
-        self.bot.cogs = ["economy", "events", "owner", "general", "rand"]
+        self.cogs = ["economy", "events", "owner", "general", "rand"]
 
         self.loop.create_task(self.track_start())
         self.loop.create_task(self.load_all_extensions())
