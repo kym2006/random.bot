@@ -56,6 +56,7 @@ class Economy(commands.Cog):
         for i in payload.split('\n')[:10]:
             partial += i+'\n'
         await ctx.send(embed=discord.Embed(header="Top 5", description = partial))
+    
 
     
 

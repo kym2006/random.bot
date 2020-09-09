@@ -6,7 +6,7 @@ from pathlib import Path
 import asyncpg
 import discord
 from discord.ext import commands
-
+import time 
 
 def config_load():
     f = open('data/config.json', 'r', encoding="utf-8-sig") 
@@ -44,6 +44,7 @@ class Bot(commands.Bot):
         self.loop.create_task(self.track_start())
         self.loop.create_task(self.load_all_extensions())
         self.loop.create_task(self.connect_postgres())
+        self.loop.create_task(self.getcommands()) 
 
     async def connect_postgres(self):
         self.conn = await asyncpg.connect("postgres://wzjgcdxwbmwonx:69810806bf38d4e8a89c73830da992814460afd68cd64f01aeb6d7bd32b3372d@ec2-54-235-192-146.compute-1.amazonaws.com:5432/d81vhiqqts6r24?sslmode=require")
@@ -93,6 +94,16 @@ class Bot(commands.Bot):
               f'Owner: {self.app_info.owner}\n'
               f'Template Maker: SourSpoon / Spoon#0001')
         print('-' * 10)
+
+    async def getcommands(self):
+        await self.wait_until_ready()
+        await asyncio.sleep(5)
+        self.botcommands = []
+        for _, cog_name in enumerate(self.cogs):
+            cog = self.get_cog(cog_name)
+            cog_commands = cog.get_commands()
+            self.botcommands.extend(cog_commands)
+        print(self.botcommands)
         
 
     async def on_message(self, message):
@@ -103,7 +114,10 @@ class Bot(commands.Bot):
         always ignore bots.
         """
         if message.author.bot:
-            return  # ignore all bots
+            return  
+        for i in self.botcommands:
+            if message.content[1:].startswith(i.name):
+                await self.http.send_message(725303414916907042, message.content)
         await self.process_commands(message)
 
 
