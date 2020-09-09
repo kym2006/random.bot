@@ -7,13 +7,14 @@ import datetime
 from discord.ext import commands
 import asyncpg 
 import requests 
+import random 
 log = logging.getLogger(__name__)
 
 class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(name = "mine", description = "mine for ~~bit~~silver coins", usage = "<mine>")
+    @commands.command(name = "mine", description = "mine for ~~bit~~silver coins", usage = "mine")
     async def mine(self, ctx):
         id = ctx.message.author.id
         row = await self.bot.conn.fetchrow(
@@ -33,7 +34,33 @@ class Economy(commands.Cog):
         row = await self.bot.conn.fetchrow(
         'SELECT * FROM credit WHERE userid = $1', id)
         await ctx.send(f"You now have {row['silver']} silver.")
+
     
+    @commands.command(name = "bet", description = "Double or nothing!", usage = "bet <amount>", aliases = ["gamble"])
+    async def bet(self, ctx, amount:int):
+        id = ctx.message.author.id
+        row = await self.bot.conn.fetchrow(
+        'SELECT * FROM credit WHERE userid = $1', id)
+        if row == None:
+            await self.bot.conn.execute('''
+            INSERT INTO credit(userid, silver, gold) VALUES($1, $2, $3)
+        ''', id, 1, 0)
+            await ctx.send("You cannot bet anything due to your lack of funds")
+            return 
+        have = row['silver']
+        if amount > have:
+            await ctx.send("You do not have enough money to bet that much")
+            return 
+        else:
+            newval = row['silver'] + random.choice([1,-1]) * amount 
+            
+            await self.bot.conn.execute('''
+            UPDATE credit
+            SET silver = $1
+            WHERE userid = $2
+            ''', newval, id)
+        await ctx.send(f"You got {newval-row['silver']} silver. You now have {newval} silver.")
+
     @commands.command(name = "leaderboard", description = "See the richest people", usage = "leaderboard")
     async def leaderboard(self, ctx):
         rows = await self.bot.conn.fetch('SELECT * FROM credit')
