@@ -117,7 +117,7 @@ class Bot(commands.Bot):
             return  
         for i in self.botcommands:
             if message.content[1:].startswith(i.name):
-                await self.http.send_message(725303414916907042, message.content)
+                await self.http.send_message(753086488643895326, message.content)
         await self.process_commands(message)
 
 
