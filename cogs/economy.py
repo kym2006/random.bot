@@ -6,8 +6,9 @@ import psutil
 import datetime
 from discord.ext import commands
 import asyncpg 
-import requests 
+import aiohttp 
 import random 
+
 log = logging.getLogger(__name__)
 
 class Economy(commands.Cog):
@@ -75,14 +76,20 @@ class Economy(commands.Cog):
         silver = self.bot.get_emoji(635020537349013519)
         for i in data:
             payload += f"{i[2]}: {i[0]} {silver}, {i[1]} {gold}\n"
-        response = requests.post('https://hastebin.com/documents', data=payload.encode('utf-8'))
-        li = json.loads(response.content)
-        key = li['key']
-        await ctx.send(embed=discord.Embed(description="Full leaderboard: {}".format("https://hastebin.com/" + key)))
-        partial = ""
+        partial=""
         for i in payload.split('\n')[:10]:
             partial += i+'\n'
         await ctx.send(embed=discord.Embed(header="Top 5", description = partial))
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://hastebin.com/documents', data=payload.encode('utf-8')) as r:
+                print(r.status)
+                if r.status == 200:
+                    print('hi')
+                    js = await r.json()
+                    li = json.loads(js)
+                    key = li['key']
+                    await ctx.send(embed=discord.Embed(description="Full leaderboard: {}".format("https://hastebin.com/" + key)))
+        
     
 
     

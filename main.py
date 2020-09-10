@@ -97,7 +97,7 @@ class Bot(commands.Bot):
 
     async def getcommands(self):
         await self.wait_until_ready()
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
         self.botcommands = []
         for _, cog_name in enumerate(self.cogs):
             cog = self.get_cog(cog_name)
