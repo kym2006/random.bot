@@ -39,7 +39,7 @@ class Random(commands.Cog):
             return 
         row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
         if row == None:
-            await self.bot.conn.execute('''INSERT INTO ping(serverid, haveping) VALUES($1, $2)''', ctx.guild.id, 1)
+            await self.bot.conn.execute('''INSERT INTO ping(serverid, haveping) VALUES($1, $2)''', ctx.guild.id, 0)
         row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
         await self.bot.conn.execute('''
         UPDATE ping
@@ -51,7 +51,7 @@ class Random(commands.Cog):
     @commands.command(name = "someone", usage = "someone", description = "ping someone at random")
     async def mention(self, ctx, allow_bots:str="0", *, msg:str=""):
         row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
-        if row == None or row['haveping'] == 1:
+        if row not None and row['haveping'] == 1:
             canping = 1
         else:
             canping = 0
@@ -62,7 +62,9 @@ class Random(commands.Cog):
                 if canping:
                     await ctx.send("Picked <@!{}>".format(user.id))
                 else:
-                    await ctx.send(embed = discord.Embed(description = "Picked <@!{}>".format(user.id)))
+                    embed = discord.Embed(description = "Picked <@!{}>".format(user.id))
+                    embed.set_footer(text = f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+                    await ctx.send(embed = embed)
             else:
                 raise KeyboardInterrupt
         except:
@@ -74,12 +76,14 @@ class Random(commands.Cog):
             if canping:
                 await ctx.send("Picked <@!{}>".format(user.id))
             else:
-                await ctx.send(embed = discord.Embed(description = "Picked <@!{}>".format(user.id)))
+                embed = discord.Embed(description = "Picked <@!{}>".format(user.id))
+                embed.set_footer(text = f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+                await ctx.send(embed = embed)
     
     @commands.command(name = "wheel", description = "@someone but more dramatic")
     async def wheel(self, ctx, *, msg:str=""):
         row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
-        if row == None or row['haveping'] == 1:
+        if row not None and row['haveping'] == 1:
             canping = 1
         else:
             canping = 0
@@ -97,12 +101,14 @@ class Random(commands.Cog):
         if canping:
             await ctx.send(f"Final winner: {random.choice(finals).mention}")
         else:
-            await ctx.send(embed = discord.Embed(description = f"Final winner: {random.choice(finals).mention}"))
+            discord.Embed(description = f"Final winner: {random.choice(finals).mention}")
+            embed.set_footer(text = f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+            await ctx.send(embed = embed)
 
     @commands.command(name = "somerole", description = "Ping a user with that role in your server") 
     async def somerole(self, ctx, role: str):
         row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
-        if row == None or row['haveping'] == 1:
+        if row not None and row['haveping'] == 1:
             canping = 1
         else:
             canping = 0
@@ -119,7 +125,9 @@ class Random(commands.Cog):
         if canping:
             await ctx.send("Picked {}".format(user.mention))
         else:
-            await ctx.send(embed = discord.Embed(description = "Picked {}".format(user.mention)))
+            embed = discord.Embed(description = "Picked {}".format(user.mention))
+            embed.set_footer(text = f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+            await ctx.send(embed = embed)
     
     @commands.command(name = "8ball", description = "classic 8ball", aliases=["eightball"])
     async def eightball(self, ctx, question: str):
