@@ -83,7 +83,7 @@ class Owner(commands.Cog):
 
     @checks.is_owner()
     @commands.command(name="eval", description="Evaluate code.", usage="eval <code>", hidden=True)
-    async def _eval(self, ctx, *, body: str):
+    async def _eval(self, ctx, *, body: str):    
         env = {
             "bot": self.bot,
             "ctx": ctx,
@@ -91,19 +91,23 @@ class Owner(commands.Cog):
             "author": ctx.author,
             "guild": ctx.guild,
             "message": ctx.message,
-            "_": self._last_result,
+        }  
+        stdout = io.StringIO()  
+        #env.update(globals())
+        #new env: only send (ctx.send)
+        '''
+        env = {
+            "ctx": ctx,
         }
-        env.update(globals())
-        body = cleanup_code(body)
-        stdout = io.StringIO()
-        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
+        '''
+        exec("", env)
+        to_compile = f'async def func():\n  try:\n{textwrap.indent(body, "    ")}\n  except:\n    raise'
         try:
             exec(to_compile, env)
-        except Exception as e:
+        except:
             await ctx.send(
                 embed=discord.Embed(
-                    description=f"```py\n{e.__class__.__name__}: {e}\n```",
-                    colour=self.bot.primary_colour,
+                    description=f"```py\n{traceback.format_exc()}\n```", colour=discord.Color.red(),
                 )
             )
             return
@@ -111,30 +115,54 @@ class Owner(commands.Cog):
         try:
             with redirect_stdout(stdout):
                 ret = await func()
-        except Exception:
-            value = stdout.getvalue()
+        except (AttributeError, Exception, BaseException):
             await ctx.send(
                 embed=discord.Embed(
-                    description=f"```py\n{value}{traceback.format_exc()}\n```",
-                    colour=self.bot.error_colour,
+                    description=f"```py\n{stdout.getvalue()}{traceback.format_exc()}\n```",colour=discord.Color.red(),
                 )
             )
         else:
-            value = stdout.getvalue()
+            value = ret
             try:
                 await ctx.message.add_reaction("✅")
             except discord.Forbidden:
                 pass
-            if ret is None:
-                if value:
-                    await ctx.send(
-                        embed=discord.Embed(description=f"```py\n{value}\n```", colour=self.bot.primary_colour)
+
+            if stdout.getvalue():
+                try:
+                    if value != None:
+                        await ctx.send(
+                        embed=discord.Embed(
+                            description=f"```py\n{stdout.getvalue()}{value}\n```", colour=discord.Color.green()
+                        )
                     )
-            else:
-                self._last_result = ret
-                await ctx.send(
-                    embed=discord.Embed(description=f"```py\n{value}{ret}\n```", colour=self.bot.primary_colour)
+                    else:
+                        await ctx.send(
+                            embed=discord.Embed(
+                                description=f"```py\n{stdout.getvalue()}\n```", colour=discord.Color.green()
+                            )
+                        )
+                except:
+                    await ctx.send(
+                    embed=discord.Embed(    
+                        description=f"```py\n{traceback.format_exc()[-5000:]}\n```", colour=discord.Color.red()
+                    )
                 )
+            else:
+                try: 
+                    #will not send if no return value
+                    if value != None:
+                        await ctx.send(
+                            embed=discord.Embed(
+                                description=f"```py\n{value}\n```", colour=discord.Color.green()
+                            )
+                        )
+                except:
+                    await ctx.send(
+                        embed=discord.Embed(    
+                        description=f"```py\n{traceback.format_exc()[-5000:]}\n```", colour=discord.Color.red()
+                    )
+                )   
 
     @checks.is_owner()
     @commands.command(name = "sharedservers")

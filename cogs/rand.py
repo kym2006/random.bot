@@ -101,7 +101,7 @@ class Random(commands.Cog):
         if canping:
             await ctx.send(f"Final winner: {random.choice(finals).mention}")
         else:
-            discord.Embed(description = f"Final winner: {random.choice(finals).mention}")
+            embed = discord.Embed(description = f"Final winner: {random.choice(finals).mention}")
             embed.set_footer(text = f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed = embed)
 
