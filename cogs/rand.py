@@ -31,13 +31,38 @@ class Random(commands.Cog):
             user = random.choice(potential)
             await ctx.send("Picked {}".format(user.name+"#"+str(user.discriminator)))
 
-    @commands.command(name = "someone", usage = "@someone", description = "ping someone at random")
+    @commands.command(name = "toggleping", usage = "toggleping", description = "toggle between pinging a user or not")
+    async def toggleping(self, ctx):
+        member = ctx.guild.get_member(ctx.author.id)
+        if not member.guild_permissions.administrator:
+            await ctx.send("You do not have permissions in this server to use this command.")
+            return 
+        row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
+        if row == None:
+            await self.bot.conn.execute('''INSERT INTO ping(serverid, haveping) VALUES($1, $2)''', ctx.guild.id, 1)
+        row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
+        await self.bot.conn.execute('''
+        UPDATE ping
+        SET haveping=$1
+        WHERE serverid=$2
+        ''', 1-row['haveping'], ctx.guild.id)
+        await ctx.send("Successfuly updated your settings!")
+
+    @commands.command(name = "someone", usage = "someone", description = "ping someone at random")
     async def mention(self, ctx, allow_bots:str="0", *, msg:str=""):
+        row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
+        if row == None or row['haveping'] == 1:
+            canping = 1
+        else:
+            canping = 0
         try:
             allow_bots=int(allow_bots)
             if allow_bots:
                 user = random.choice(ctx.channel.guild.members)
-                await ctx.send("Picked <@!{}>".format(user.id))
+                if canping:
+                    await ctx.send("Picked <@!{}>".format(user.id))
+                else:
+                    await ctx.send(embed = discord.Embed(description = "Picked <@!{}>".format(user.id)))
             else:
                 raise KeyboardInterrupt
         except:
@@ -46,11 +71,18 @@ class Random(commands.Cog):
                 if not i.bot:
                     potential.append(i)
             user = random.choice(potential)
-            await ctx.send("Picked <@!{}>".format(user.id))
+            if canping:
+                await ctx.send("Picked <@!{}>".format(user.id))
+            else:
+                await ctx.send(embed = discord.Embed(description = "Picked <@!{}>".format(user.id)))
     
     @commands.command(name = "wheel", description = "@someone but more dramatic")
     async def wheel(self, ctx, *, msg:str=""):
-
+        row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
+        if row == None or row['haveping'] == 1:
+            canping = 1
+        else:
+            canping = 0
         potential = []
         for i in ctx.channel.guild.members:
             if not i.bot:
@@ -62,10 +94,18 @@ class Random(commands.Cog):
             finals.append(user)
             await asyncio.sleep(10)
         user = random.choice(potential)
-        await ctx.send(f"Final winner: {random.choice(finals).mention}")
+        if canping:
+            await ctx.send(f"Final winner: {random.choice(finals).mention}")
+        else:
+            await ctx.send(embed = discord.Embed(description = f"Final winner: {random.choice(finals).mention}"))
 
     @commands.command(name = "somerole", description = "Ping a user with that role in your server") 
     async def somerole(self, ctx, role: str):
+        row = await self.bot.conn.fetchrow('SELECT * FROM ping WHERE serverid=$1', ctx.guild.id)
+        if row == None or row['haveping'] == 1:
+            canping = 1
+        else:
+            canping = 0
         users = []
         role = role.replace("<","")
         role = role.replace(">","")
@@ -76,7 +116,10 @@ class Random(commands.Cog):
             if role in member.roles:
                 users.append(member)
         user = random.choice(users)
-        await ctx.send("Picked {}".format(user.mention))
+        if canping:
+            await ctx.send("Picked {}".format(user.mention))
+        else:
+            await ctx.send(embed = discord.Embed(description = "Picked {}".format(user.mention)))
     
     @commands.command(name = "8ball", description = "classic 8ball", aliases=["eightball"])
     async def eightball(self, ctx, question: str):
