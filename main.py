@@ -32,7 +32,7 @@ async def run():
         await bot.logout()
 
 
-class Bot(commands.Bot):
+class Bot(commands.AutoShardedBot):
     def __init__(self, **kwargs):
         super().__init__(
             command_prefix=self.get_prefix_,
@@ -40,7 +40,7 @@ class Bot(commands.Bot):
         )
         self.start_time = None
         self.app_info = None
-
+        self.version = "1.0.0"
         self.loop.create_task(self.track_start())
         self.loop.create_task(self.load_all_extensions())
         self.loop.create_task(self.connect_postgres())
@@ -120,6 +120,9 @@ class Bot(commands.Bot):
                 await self.http.send_message(753086488643895326, message.content)
         await self.process_commands(message)
 
+    @property
+    def uptime(self):
+        return datetime.datetime.utcnow() - self.start_time
 
 
 if __name__ == '__main__':
