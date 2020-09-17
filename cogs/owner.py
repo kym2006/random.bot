@@ -224,7 +224,7 @@ class Owner(commands.Cog):
     @checks.is_owner()
     @commands.command(description="Execute SQL.", usage="sql <query>", hidden=True)
     async def sql(self, ctx, *, query: str):
-        async with self.bot.pool.acquire() as conn:
+        with self.bot.conn as conn:
             try:
                 res = await conn.fetch(query)
             except Exception:

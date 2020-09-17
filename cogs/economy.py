@@ -69,9 +69,16 @@ class Economy(commands.Cog):
         data = []
         for i in rows:
             user = self.bot.get_user(i['userid'])
-            data.append((i['silver'], i['gold'], f"{user.name}#{user.discriminator}"))
+            try:
+                data.append((i['silver'], i['gold'], f"{user.name}#{user.discriminator}"))
+            except AttributeError:
+                pass 
             
         data = sorted(data, key = lambda x:x[0]+x[1], reverse=True)
+        '''
+        gold = self.bot.get_emoji(752769769895100447)
+        silver = self.bot.get_emoji(752770848808763432)
+        '''
         gold = self.bot.get_emoji(635020560249913394)
         silver = self.bot.get_emoji(635020537349013519)
         for i in data:
@@ -80,15 +87,16 @@ class Economy(commands.Cog):
         for i in payload.split('\n')[:10]:
             partial += i+'\n'
         await ctx.send(embed=discord.Embed(header="Top 5", description = partial))
+        payload = payload.replace("<:silver:635020537349013519>", "silver")
+        payload = payload.replace("<:gold:635020560249913394>", "gold")
         async with aiohttp.ClientSession() as session:
-            async with session.post('https://hastebin.com/documents', data=payload.encode('utf-8')) as r:
+            async with session.post('https://hasteb.in/documents', data=payload.encode('utf-8')) as r:
                 print(r.status)
                 if r.status == 200:
                     print('hi')
                     js = await r.json()
-                    li = json.loads(js)
-                    key = li['key']
-                    await ctx.send(embed=discord.Embed(description="Full leaderboard: {}".format("https://hastebin.com/" + key)))
+                    key = js['key']
+                    await ctx.send(embed=discord.Embed(description="Full leaderboard: {}".format("https://hasteb.in/" + key)))
         
     
 
