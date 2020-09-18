@@ -64,6 +64,8 @@ class Bot(commands.AutoShardedBot):
         A good example of async logic would be retrieving a prefix from a database.
         """
         prefix = '@'
+        if message.guild == None:
+            return commands.when_mentioned_or('@')(bot, message)
         row = await self.conn.fetchrow(
         'SELECT * FROM data WHERE guild = $1', message.guild.id)
         if row == None or row['prefix'] == None:

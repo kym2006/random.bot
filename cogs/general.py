@@ -56,7 +56,7 @@ class General(commands.Cog):
             +"&permissions=134150&scope=bot\n{Credits if you don't leave within a minute.",
             inline=False,
         )
-        page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
+        page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
         all_pages.append(page)
         page = discord.Embed(title=f"{self.bot.user.name} Help Menu", colour=self.bot.primary_colour)
         page.set_thumbnail(url=self.bot.user.avatar_url)
@@ -171,7 +171,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Support Server",
-                description="https://discord.gg/ZatYnsX",
+                description="https://invite.gg/randombot",
                 colour=self.bot.primary_colour,
             )
         )
