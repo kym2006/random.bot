@@ -36,7 +36,14 @@ class Config(commands.Cog):
                 return
             if prefix == '@':
                 prefix = None
-            await self.bot.conn.execute("UPDATE data SET prefix=$1 WHERE guild=$2", prefix, ctx.guild.id)
+            have = await self.bot.conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+            print(have)
+            if have == None:
+                print('hi')
+                await self.bot.conn.execute("INSERT INTO data(guild, prefix) VALUES($1, $2);", ctx.guild.id, prefix)
+            else:
+
+                await self.bot.conn.execute("UPDATE data SET prefix=$1 WHERE guild=$2", prefix, ctx.guild.id)
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully changed the prefix to "
