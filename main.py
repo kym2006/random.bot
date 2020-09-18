@@ -63,8 +63,14 @@ class Bot(commands.AutoShardedBot):
         I have made this a coroutine just to show that it can be done. If you needed async logic in here it can be done.
         A good example of async logic would be retrieving a prefix from a database.
         """
-        prefix = ['@']
-        return commands.when_mentioned_or(*prefix)(bot, message)
+        prefix = '@'
+        row = await self.conn.fetchrow(
+        'SELECT * FROM data WHERE guild = $1', message.guild.id)
+        if row == None or row['prefix'] == None:
+            prefix = '@'
+        else:
+            prefix = row['prefix']
+        return commands.when_mentioned_or(prefix)(bot, message)
 
     async def load_all_extensions(self):
         """
