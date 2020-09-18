@@ -224,14 +224,13 @@ class Owner(commands.Cog):
     @checks.is_owner()
     @commands.command(description="Execute SQL.", usage="sql <query>", hidden=True)
     async def sql(self, ctx, *, query: str):
-        with self.bot.conn as conn:
-            try:
-                res = await conn.fetch(query)
-            except Exception:
-                await ctx.send(
-                    embed=discord.Embed(description=f"```py\n{traceback.format_exc()}```", colour=self.bot.error_colour)
-                )
-                return
+        try:
+            res = await self.bot.conn.fetch(query)
+        except Exception:
+            await ctx.send(
+                embed=discord.Embed(description=f"```py\n{traceback.format_exc()}```", colour=self.bot.error_colour)
+            )
+            return
         if res:
             await ctx.send(embed=discord.Embed(description=f"```{res}```", colour=self.bot.primary_colour))
         else:
