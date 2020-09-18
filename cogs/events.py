@@ -28,7 +28,8 @@ class Events(commands.Cog):
                 try:
                     await i.send('''Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX for monthly giveaways!
 Type @help to view all commands! 
-Type @leaderboard to see who's the richest users for random.bot! Note that the richer you are, the more likely you are to be chosen for the giveaway!''')
+Type @leaderboard to see who's the richest users for random.bot! Note that the richer you are, the more likely you are to be chosen for the giveaway!
+Type @prefix to change the prefix.''')
                     return 
                 except:
                     continue
