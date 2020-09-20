@@ -7,7 +7,7 @@ import asyncpg
 import discord
 from discord.ext import commands
 import time 
-blackist = [723794074498367498]
+blacklist = [723794074498367498]
 def config_load():
     f = open('data/config.json', 'r', encoding="utf-8-sig") 
     return json.load(f)
