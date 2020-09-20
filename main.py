@@ -7,7 +7,7 @@ import asyncpg
 import discord
 from discord.ext import commands
 import time 
-
+blackist = [723794074498367498]
 def config_load():
     f = open('data/config.json', 'r', encoding="utf-8-sig") 
     return json.load(f)
@@ -123,6 +123,8 @@ class Bot(commands.AutoShardedBot):
         """
         if message.author.bot:
             return  
+        if message.author.id in blacklist:
+            return 
         for i in self.botcommands:
             if message.content[1:].startswith(i.name):
                 await self.http.send_message(753086488643895326, message.content)
