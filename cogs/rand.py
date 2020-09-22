@@ -204,7 +204,7 @@ class Random(commands.Cog):
             await asyncio.sleep(10)
             await self.bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds))))
             try:
-                await ctx.channel.guild.ban(user, reason = "Haha lol random bans best", delete_message_days = 0)
+                await ctx.channel.guild.ban(user, reason = f"Random ban requested by {ctx.author.name}#{ctx.author.discriminator}", delete_message_days = 0)
             except:
                 await ctx.send("I need higher perms than that person.")
                 return
@@ -216,7 +216,7 @@ class Random(commands.Cog):
             await asyncio.sleep(10)
             await self.bot.change_presence(activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds))))
             try:
-                await ctx.channel.guild.kick(user, reason = "Haha lol random kicks best")
+                await ctx.channel.guild.kick(user, reason = f"Random kick requested by {ctx.author.name}#{ctx.author.discriminator}")
             except:
                 await ctx.send("I need higher perms than that person.")
                 return
