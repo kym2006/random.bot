@@ -53,7 +53,7 @@ class General(commands.Cog):
         page.add_field(
             name="Invite",
             value=f"https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id}"
-            +"&permissions=134150&scope=bot\n{Credits if you don't leave within a minute.",
+            +"&permissions=314374&scope=bot\Kudos to you if you don't leave within a minute.",
             inline=False,
         )
         page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
@@ -69,7 +69,7 @@ class General(commands.Cog):
         page.add_field(
             name="Getting Started",
             value="Follow these steps to get the bot all ready to serve your server!\n1. Invite the bot with "
-            f"[this link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=134150)\n2."
+            f"[this link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374)\n2."
             f"\n3. All done! For a full list of commands, see `{ctx.prefix}help`.",
             inline=False,
         )
@@ -161,7 +161,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Invite Link",
-                description=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=134150",
+                description=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374",
                 colour=self.bot.primary_colour,
             )
         )
