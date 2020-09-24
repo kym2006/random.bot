@@ -53,7 +53,7 @@ class General(commands.Cog):
         page.add_field(
             name="Invite",
             value=f"https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id}"
-            +"&permissions=314374&scope=bot\Kudos to you if you don't leave within a minute.",
+            +"&permissions=314374&scope=bot\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
         page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
