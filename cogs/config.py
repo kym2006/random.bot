@@ -23,7 +23,7 @@ class Config(commands.Cog):
             )
             return
         if ctx.author.guild_permissions.administrator is False:
-            await ctx.send("You need to be an admnistrator to do this.")
+            await ctx.send("You need to be an administrator to do this.")
             return 
         else:
             if len(prefix) > 10:
