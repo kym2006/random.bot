@@ -97,6 +97,23 @@ class General(commands.Cog):
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
 
+    @commands.command(description = "Look at my partners", usage = "partners")
+    async def partners(self, ctx):
+        
+        all_pages = []
+        page = discord.Embed(
+            title="Snippet",
+            description="Snippet is a bot designed to help you easily store and retrieve something in discord. You can use this bot to store copypasta, store music, display faq, and many more. Invite it with https://discordapp.com/oauth2/authorize?client_id=726673431143383090&scope=bot&permissions=11328",
+            colour=self.bot.primary_colour,
+        )
+        page.add_field(name="Website", value="https://snippetsite.netlify.app")
+        page.set_thumbnail(
+            url="https://cdn.discordapp.com/avatars/726673431143383090/bd4e791fbfc8f7cd7662a281989c15f4.png"
+        )
+        all_pages.append(page)
+        paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
+        await paginator.start(ctx)
+
     @commands.command(description="Pong! Get my latency.", usage="ping")
     async def ping(self, ctx):
         await ctx.send(
