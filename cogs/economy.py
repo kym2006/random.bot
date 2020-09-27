@@ -39,6 +39,9 @@ class Economy(commands.Cog):
     
     @commands.command(name = "bet", description = "Double or nothing!", usage = "bet <amount>", aliases = ["gamble"])
     async def bet(self, ctx, amount:int):
+        if(amount < 0):
+            await ctx.send("positive amounts only")
+            return 
         id = ctx.message.author.id
         row = await self.bot.conn.fetchrow(
         'SELECT * FROM credit WHERE userid = $1', id)
