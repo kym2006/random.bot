@@ -21,7 +21,8 @@ async def run():
 
     config = config_load()
     bot = Bot(config=config,
-              description=config['description'])
+              description=config['description'],
+              shard_count=10)
     bot.help_command = None 
     bot.primary_colour = discord.Color.green()
     
