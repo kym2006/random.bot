@@ -3,8 +3,8 @@ import platform
 
 import discord
 import psutil
-
 from discord.ext import commands
+
 from utils.paginator import Paginator
 
 log = logging.getLogger(__name__)
@@ -31,11 +31,19 @@ class General(commands.Cog):
                     )
                 )
                 return
-            embed = discord.Embed(title=command.name, description=command.description, colour=self.bot.primary_colour)
-            usage = "\n".join([ctx.prefix + x.strip() for x in command.usage.split("\n")])
+            embed = discord.Embed(
+                title=command.name,
+                description=command.description,
+                colour=self.bot.primary_colour,
+            )
+            usage = "\n".join(
+                [ctx.prefix + x.strip() for x in command.usage.split("\n")]
+            )
             embed.add_field(name="Usage", value=f"```{usage}```", inline=False)
             if len(command.aliases) > 1:
-                embed.add_field(name="Aliases", value=f"`{'`, `'.join(command.aliases)}`")
+                embed.add_field(
+                    name="Aliases", value=f"`{'`, `'.join(command.aliases)}`"
+                )
             elif len(command.aliases) > 0:
                 embed.add_field(name="Alias", value=f"`{command.aliases[0]}`")
             await ctx.send(embed=embed)
@@ -49,16 +57,22 @@ class General(commands.Cog):
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar_url)
-        page.set_footer(text="Use the reactions to flip pages. Help menu made by: CHamburr#2591(Thank you!)")
+        page.set_footer(
+            text="Use the reactions to flip pages. Help menu made by: CHamburr#2591(Thank you!)"
+        )
         page.add_field(
             name="Invite",
             value=f"https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id}"
-            +"&permissions=314374&scope=bot\nKudos to you if you don't leave within a minute.",
+            + "&permissions=314374&scope=bot\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
-        page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
+        page.add_field(
+            name="Support Server", value="https://invite.gg/randombot", inline=False
+        )
         all_pages.append(page)
-        page = discord.Embed(title=f"{self.bot.user.name} Help Menu", colour=self.bot.primary_colour)
+        page = discord.Embed(
+            title=f"{self.bot.user.name} Help Menu", colour=self.bot.primary_colour
+        )
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.set_footer(text="Use the reactions to flip pages.")
         page.add_field(
@@ -87,19 +101,24 @@ class General(commands.Cog):
                 "help <command>` for more information on a command.",
                 colour=self.bot.primary_colour,
             )
-            page.set_author(name=f"{self.bot.user.name} Help Menu", icon_url=self.bot.user.avatar_url)
+            page.set_author(
+                name=f"{self.bot.user.name} Help Menu",
+                icon_url=self.bot.user.avatar_url,
+            )
             page.set_thumbnail(url=self.bot.user.avatar_url)
             page.set_footer(text="Use the reactions to flip pages.")
             for cmd in cog_commands:
                 if cmd.hidden is False:
                     page.add_field(name=cmd.name, value=cmd.description, inline=False)
             all_pages.append(page)
-        paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
+        paginator = Paginator(
+            length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120
+        )
         await paginator.start(ctx)
 
-    @commands.command(description = "Look at my partners", usage = "partners")
+    @commands.command(description="Look at my partners", usage="partners")
     async def partners(self, ctx):
-        
+
         all_pages = []
         page = discord.Embed(
             title="Snippet",
@@ -111,7 +130,9 @@ class General(commands.Cog):
             url="https://cdn.discordapp.com/avatars/726673431143383090/bd4e791fbfc8f7cd7662a281989c15f4.png"
         )
         all_pages.append(page)
-        paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
+        paginator = Paginator(
+            length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120
+        )
         await paginator.start(ctx)
 
     @commands.command(description="Pong! Get my latency.", usage="ping")
@@ -124,9 +145,12 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description = "Support random.bot!", usage = "donate")
+    @commands.command(description="Support random.bot!", usage="donate")
     async def donate(self, ctx):
-        await ctx.send("Hi, I'm really happy that you would be willing to donate! Please contact kym2006#6342 for more details(because no one ever donated yet, so this might be the first)!")
+        await ctx.send(
+            "Hi, I'm really happy that you would be willing to donate! Please contact kym2006#6342 for more details(because no one ever donated yet, so this might be the first)!"
+        )
+
     def get_bot_uptime(self, *, brief=False):
         hours, remainder = divmod(int(self.bot.uptime.total_seconds()), 3600)
         minutes, seconds = divmod(remainder, 60)
@@ -151,13 +175,20 @@ class General(commands.Cog):
         guilds = len(self.bot.guilds)
         users = len(self.bot.users)
 
-        embed = discord.Embed(title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour)
-        embed.add_field(name="Owners", value="kym2006#6342, SquiddyPoos#6795, waterflamev8#4123, FlareonIsCute#1566")
+        embed = discord.Embed(
+            title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour
+        )
+        embed.add_field(
+            name="Owners",
+            value="kym2006#6342, SquiddyPoos#6795, waterflamev8#4123, FlareonIsCute#1566",
+        )
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
-        #embed.add_field(name="Clusters", value=f"{self.bot.cluster}/{self.bot.cluster_count}")
+        # embed.add_field(name="Clusters", value=f"{self.bot.cluster}/{self.bot.cluster_count}")
         if ctx.guild:
-            embed.add_field(name="Shards", value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}")
+            embed.add_field(
+                name="Shards", value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}"
+            )
         else:
             embed.add_field(name="Shards", value=f"{self.bot.shard_count}")
         embed.add_field(name="Servers", value=str(guilds))
@@ -183,7 +214,11 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Get a link to my support server.", usage="support", aliases=["server"])
+    @commands.command(
+        description="Get a link to my support server.",
+        usage="support",
+        aliases=["server"],
+    )
     async def support(self, ctx):
         await ctx.send(
             embed=discord.Embed(
@@ -193,7 +228,9 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Get the link to Random.bot's website.", usage="website")
+    @commands.command(
+        description="Get the link to Random.bot's website.", usage="website"
+    )
     async def website(self, ctx):
         await ctx.send(
             embed=discord.Embed(
@@ -203,7 +240,9 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Usage statistics of the bot.", usage="usagestats", hidden=True)
+    @commands.command(
+        description="Usage statistics of the bot.", usage="usagestats", hidden=True
+    )
     async def usagestats(self, ctx):
         embed = discord.Embed(
             title="Usage Statistics",
@@ -224,14 +263,16 @@ class General(commands.Cog):
         hidden=True,
     )
     async def topservers(self, ctx):
-        data = self.bot.guilds 
+        data = self.bot.guilds
         guilds = []
         for chunk in data:
             guilds.extend(chunk)
         guilds = sorted(guilds, key=lambda x: x["member_count"], reverse=True)[:15]
         top_guilds = []
         for index, guild in enumerate(guilds):
-            top_guilds.append(f"#{str(index + 1)} {guild['name']} ({guild['member_count']} members)")
+            top_guilds.append(
+                f"#{str(index + 1)} {guild['name']} ({guild['member_count']} members)"
+            )
         await ctx.send(
             embed=discord.Embed(
                 title="Top 15 Servers",
@@ -243,4 +284,3 @@ class General(commands.Cog):
 
 def setup(bot):
     bot.add_cog(General(bot))
-

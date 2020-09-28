@@ -3,7 +3,6 @@ import re
 
 import dateparser
 import discord
-
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -51,7 +50,9 @@ class GlobalUser(commands.UserConverter):
 
 class GlobalGuild(commands.Converter):
     async def convert(self, ctx, argument):
-        guild = await ctx.bot.cogs["Communication"].handler("get_guild", 1, {"guild_id": int(argument)})
+        guild = await ctx.bot.cogs["Communication"].handler(
+            "get_guild", 1, {"guild_id": int(argument)}
+        )
         if guild:
             return guild[0]
         raise commands.BadArgument("Guild not found")

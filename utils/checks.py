@@ -1,13 +1,21 @@
 import logging
 
 import discord
-
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
 
-owners = [298661966086668290, 412969691276115968, 446290930723717120, 488283878189039626,685456111259615252, 723794074498367498]
+owners = [
+    298661966086668290,
+    412969691276115968,
+    446290930723717120,
+    488283878189039626,
+    685456111259615252,
+    723794074498367498,
+]
 admins = []
+
+
 def is_owner():
     def predicate(ctx):
         if ctx.author.id not in owners:
@@ -26,7 +34,6 @@ def is_admin():
             return True
 
     return commands.check(predicate)
-
 
 
 def is_premium():
@@ -54,7 +61,9 @@ def is_premium():
 def is_patron():
     async def predicate(ctx):
         async with ctx.bot.pool.acquire() as conn:
-            res = await conn.fetchrow("SELECT identifier FROM premium WHERE identifier=$1", ctx.author.id)
+            res = await conn.fetchrow(
+                "SELECT identifier FROM premium WHERE identifier=$1", ctx.author.id
+            )
         if res:
             return True
         slots = await ctx.bot.tools.get_premium_slots(ctx.bot, ctx.author.id)

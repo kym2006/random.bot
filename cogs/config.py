@@ -1,8 +1,10 @@
-import discord 
-from discord.ext import commands 
-import random 
-import asyncio 
-import typing 
+import asyncio
+import random
+import typing
+
+import discord
+from discord.ext import commands
+
 
 # This cog implements a lot of the random functions of random.bot
 class Config(commands.Cog):
@@ -11,7 +13,9 @@ class Config(commands.Cog):
 
     @commands.guild_only()
     @commands.command(
-        description="Change the prefix or view the current prefix.", usage="prefix [new prefix]", aliases=["setprefix"]
+        description="Change the prefix or view the current prefix.",
+        usage="prefix [new prefix]",
+        aliases=["setprefix"],
     )
     async def prefix(self, ctx, *, prefix: str = None):
         if prefix is None:
@@ -24,26 +28,34 @@ class Config(commands.Cog):
             return
         if ctx.author.guild_permissions.administrator is False:
             await ctx.send("You need to be an administrator to do this.")
-            return 
+            return
         else:
             if len(prefix) > 10:
                 await ctx.send(
                     embed=discord.Embed(
                         description="The chosen prefix is too long.",
-                        colour=discord.Color.red()
+                        colour=discord.Color.red(),
                     )
                 )
                 return
-            if prefix == '@':
+            if prefix == "@":
                 prefix = None
-            have = await self.bot.conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+            have = await self.bot.conn.fetchrow(
+                "SELECT * FROM data WHERE guild=$1", ctx.guild.id
+            )
             print(have)
             if have == None:
-                print('hi')
-                await self.bot.conn.execute("INSERT INTO data(guild, prefix) VALUES($1, $2);", ctx.guild.id, prefix)
+                print("hi")
+                await self.bot.conn.execute(
+                    "INSERT INTO data(guild, prefix) VALUES($1, $2);",
+                    ctx.guild.id,
+                    prefix,
+                )
             else:
 
-                await self.bot.conn.execute("UPDATE data SET prefix=$1 WHERE guild=$2", prefix, ctx.guild.id)
+                await self.bot.conn.execute(
+                    "UPDATE data SET prefix=$1 WHERE guild=$2", prefix, ctx.guild.id
+                )
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully changed the prefix to "
@@ -51,6 +63,7 @@ class Config(commands.Cog):
                     colour=self.bot.primary_colour,
                 )
             )
+
 
 def setup(bot):
     bot.add_cog(Config(bot))
