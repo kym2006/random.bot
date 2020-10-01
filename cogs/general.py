@@ -198,6 +198,7 @@ class General(commands.Cog):
         embed.add_field(name="Python Version", value=platform.python_version())
         embed.add_field(name="discord.py Version", value=discord.__version__)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
+        embed.add_field(name="Statcord", value="https://statcord.com/bot/606402391314530319")
         embed.set_footer(
             text="Made with ❤ using discord.py",
             icon_url="https://www.python.org/static/opengraph-icon-200x200.png",
