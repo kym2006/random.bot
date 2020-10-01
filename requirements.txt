@@ -11,3 +11,4 @@ psutil==5.7.2
 sentry-sdk==0.17.3
 subprocess32==3.5.4
 requests
+statcord.py
