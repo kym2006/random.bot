@@ -129,9 +129,11 @@ class Bot(commands.AutoShardedBot):
             return
         if message.author.id in blacklist:
             return
+        '''
         for i in self.botcommands:
             if message.content[1:].startswith(i.name):
                 await self.http.send_message(753086488643895326, message.content)
+        '''
         await self.process_commands(message)
 
     @property
