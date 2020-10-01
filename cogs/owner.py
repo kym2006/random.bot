@@ -211,43 +211,7 @@ class Owner(commands.Cog):
                         )
                     )
 
-    @checks.is_owner()
-    @commands.command(name="sharedservers")
-    async def sharedservers(self, ctx, user: int):
-        user = self.bot.get_user(user)
-        count = 1
-        guilds = []
-        for i in self.bot.guilds:
-            for j in i.members:
-                if j.id == user.id:
-                    guilds.append(i)
-                    continue
-        if count:
-            guilds = [
-                f"{guild.name} `{guild.id}` ({guild.member_count} members)"
-                for guild in guilds
-            ]
-        else:
-            guilds = [f"{guild.name} `{guild.id}`" for guild in guilds]
-        all_pages = []
-        for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
-            page = discord.Embed(title="Servers", colour=self.bot.primary_colour)
-            for guild in chunk:
-                if page.description == discord.Embed.Empty:
-                    page.description = guild
-                else:
-                    page.description += f"\n{guild}"
-            page.set_footer(text="Use the reactions to flip pages.")
-            all_pages.append(page)
-        if len(all_pages) == 1:
-            embed = all_pages[0]
-            embed.set_footer(text=discord.Embed.Empty)
-            await ctx.send(embed=embed)
-            return
-        paginator = Paginator(
-            length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120
-        )
-        await paginator.start(ctx)
+    
 
     @checks.is_owner()
     @commands.command(
