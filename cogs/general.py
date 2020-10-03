@@ -62,7 +62,7 @@ class General(commands.Cog):
         )
         page.add_field(
             name="Invite",
-            value=f"https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id}"
+            value=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374"
             + "&permissions=314374&scope=bot\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
@@ -133,7 +133,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value=f"[Invite Link](https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id})"
+            value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374)"
         )
         page.add_field(
             name="Support Server", value="https://invite.gg/randombot", inline=False
