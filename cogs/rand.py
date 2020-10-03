@@ -11,7 +11,7 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="rnd", description="Pick a number in range <st> to <en>")
+    @commands.command(name="randint", aliases = ["rnd"], description="Pick a number in range <st> to <en>")
     async def rnd(self, ctx, arg1: int, arg2: int):
         await ctx.send(
             "Picked {} from {} to {}".format(
@@ -39,41 +39,6 @@ class Random(commands.Cog):
             await ctx.send(
                 "Picked {}".format(user.name + "#" + str(user.discriminator))
             )
-
-    @commands.command(
-        name="toggleping",
-        usage="toggleping",
-        description="toggle between pinging a user or not",
-    )
-    async def toggleping(self, ctx):
-        member = ctx.guild.get_member(ctx.author.id)
-        if not member.guild_permissions.administrator:
-            await ctx.send(
-                "You do not have permissions in this server to use this command."
-            )
-            return
-        row = await self.bot.conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
-        if row == None:
-            await self.bot.conn.execute(
-                """INSERT INTO ping(serverid, haveping) VALUES($1, $2)""",
-                ctx.guild.id,
-                0,
-            )
-        row = await self.bot.conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
-        await self.bot.conn.execute(
-            """
-        UPDATE ping
-        SET haveping=$1
-        WHERE serverid=$2
-        """,
-            1 - row["haveping"],
-            ctx.guild.id,
-        )
-        await ctx.send("Successfuly updated your settings!")
 
     @commands.command(
         name="someone", usage="someone", description="ping someone at random"
