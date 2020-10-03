@@ -18,7 +18,7 @@ class General(commands.Cog):
     @commands.command(
         description="Shows the help menu or information for a specific command when specified.",
         usage="help [command]",
-        aliases=["h", "commands"],
+        aliases=["h"],
     )
     async def help(self, ctx, *, command: str = None):
         if command:
@@ -51,14 +51,14 @@ class General(commands.Cog):
         all_pages = []
         page = discord.Embed(
             title=f"{self.bot.user.name} Help Menu",
-            description="Thank you for using Random.bot! Please direct message me if you wish to contact staff. You can "
+            description="Thank you for using Random.bot! You can "
             "also invite me to your server with the link below, or join our support server if you need further help."
             f"\n\nDon't forget to check out our partners with the `{ctx.prefix}partners` command!",
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.set_footer(
-            text="Use the reactions to flip pages. Help menu made by: CHamburr#2591(Thank you!)"
+            text="Use the reactions to flip pages. Help menu from CHamburr#2591(Thank you!)"
         )
         page.add_field(
             name="Invite",
@@ -71,22 +71,25 @@ class General(commands.Cog):
         )
         all_pages.append(page)
         page = discord.Embed(
-            title=f"{self.bot.user.name} Help Menu", colour=self.bot.primary_colour
+            title=f"Commands Menu",
+            description="See all commmands briefly, use flip pages to see the more detailed versions.",
+            colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar_url)
-        page.set_footer(text="Use the reactions to flip pages.")
-        page.add_field(
-            name="About Random.bot",
-            value="Random.bot provides convenient, random randomness in your server.",
-            inline=False,
-        )
-        page.add_field(
-            name="Getting Started",
-            value="Follow these steps to get the bot all ready to serve your server!\n1. Invite the bot with "
-            f"[this link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374)\n2."
-            f"\n3. All done! For a full list of commands, see `{ctx.prefix}help`.",
-            inline=False,
-        )
+        page.set_thumbnail(url=self.bot.user.avatar_url)
+        for _, cog_name in enumerate(self.bot.cogs):
+            if cog_name in ["Owner", "Admin"]:
+                continue
+            cog = self.bot.get_cog(cog_name)
+            cog_commands = cog.get_commands()
+            if len(cog_commands) == 0:
+                continue
+            cmds = "```\n"
+            for cmd in cog_commands:
+                if cmd.hidden is False:
+                    cmds += cmd.name + '\n'
+            cmds += "```"
+            page.add_field(name=cog_name, value=cmds)
         all_pages.append(page)
         for _, cog_name in enumerate(self.bot.cogs):
             if cog_name in ["Owner", "Admin"]:
@@ -115,6 +118,43 @@ class General(commands.Cog):
             length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120
         )
         await paginator.start(ctx)
+    
+    @commands.command(
+        description="Shows brief help menu",
+        usage="commands",
+        name="commands"
+    )
+    async def _commands(self, ctx):
+        page = discord.Embed(
+            title=f"{self.bot.user.name} Commands Menu",
+            description="See all commmands brief, use @help to see the more detailed versions.",
+            colour=self.bot.primary_colour,
+        )
+        page.set_thumbnail(url=self.bot.user.avatar_url)
+        page.add_field(
+            name="Invite",
+            value=f"[Invite Link](https://discordapp.com/api/oauth2/authorize?client_id={self.bot.user.id})"
+        )
+        page.add_field(
+            name="Support Server", value="https://invite.gg/randombot", inline=False
+        )
+        page.set_thumbnail(url=self.bot.user.avatar_url)
+        for _, cog_name in enumerate(self.bot.cogs):
+            if cog_name in ["Owner", "Admin"]:
+                continue
+            cog = self.bot.get_cog(cog_name)
+            cog_commands = cog.get_commands()
+            if len(cog_commands) == 0:
+                continue
+            cmds = "```\n"
+            for cmd in cog_commands:
+                if cmd.hidden is False:
+                    cmds += cmd.name + '\n'
+            cmds += "```"
+            page.add_field(name=cog_name, value=cmds)
+            
+        await ctx.send(embed=page)
+            
 
     @commands.command(description="Look at my partners", usage="partners")
     async def partners(self, ctx):

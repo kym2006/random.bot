@@ -122,7 +122,7 @@ class Admin(commands.Cog):
             try:
                 invite = await guild.text_channels[0].create_invite(max_age=120)
             except discord.Forbidden:
-                return
+                pass
         if not invite:
             await ctx.send(
                 embed=discord.Embed(
