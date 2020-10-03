@@ -27,14 +27,15 @@ class Admin(commands.Cog):
         hidden=True,
     )
     async def findserver(self, ctx, count: Optional[bool], *, name: str):
-        data = await self.bot.cogs["Communication"].handler("find_guild", self.bot.cluster_count, {"name": name})
+
         guilds = []
-        for chunk in data:
-            guilds.extend(chunk)
+        for guild in self.bot.guilds:
+            if guild.name.lower().count(name.lower()) > 0:
+                guilds.append(guild)
         if count:
-            guilds = [f"{guild['name']} `{guild['id']}` ({guild['member_count']} members)" for guild in guilds]
+            guilds = [f"{guild.name} `{guild.id}` ({guild.member_count} members)" for guild in guilds]
         else:
-            guilds = [f"{guild['name']} `{guild['id']}`" for guild in guilds]
+            guilds = [f"{guild.name} `{guild.id}`" for guild in guilds]
         if len(guilds) == 0:
             await ctx.send(embed=discord.Embed(description="No such guild was found.", colour=self.bot.error_colour))
             return
