@@ -224,7 +224,7 @@ class General(commands.Cog):
         )
         embed.add_field(
             name="Owners",
-            value="kym2006#6342, SquiddyPoos#6795",
+            value="kym2006#6342, SquiddyPoos#6795, waterflamev8#4123",
         )
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
