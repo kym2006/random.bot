@@ -1,5 +1,6 @@
 import logging
 import platform
+import time
 
 import discord
 import psutil
@@ -177,10 +178,13 @@ class General(commands.Cog):
 
     @commands.command(description="Pong! Get my latency.", usage="ping")
     async def ping(self, ctx):
-        await ctx.send(
+        start = time.time()
+        msg = await ctx.send(embed=discord.Embed(description="Checking latency...", colour=self.bot.primary_colour))
+        await msg.edit(
             embed=discord.Embed(
                 title="Pong!",
-                description=f"My current latency is {round(self.bot.latency * 1000, 2)}ms.",
+                description=f"Gateway latency: {round(self.bot.latency * 1000, 2)}ms.\n"
+                f"HTTP API latency: {round((time.time() - start) * 1000, 2)}ms.",
                 colour=self.bot.primary_colour,
             )
         )
