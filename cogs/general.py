@@ -218,7 +218,7 @@ class General(commands.Cog):
     async def stats(self, ctx):
         guilds = len(self.bot.guilds)
         users = len(self.bot.users)
-        channels = sum([len(g.channels) for g in bot.guilds])
+        channels = sum([len(g.channels) for g in self.bot.guilds])
         embed = discord.Embed(
             title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour
         )
