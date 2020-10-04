@@ -218,7 +218,7 @@ class General(commands.Cog):
     async def stats(self, ctx):
         guilds = len(self.bot.guilds)
         users = len(self.bot.users)
-
+        channels = sum([len(g.channels) for g in bot.guilds])
         embed = discord.Embed(
             title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour
         )
@@ -236,6 +236,7 @@ class General(commands.Cog):
         else:
             embed.add_field(name="Shards", value=f"{self.bot.shard_count}")
         embed.add_field(name="Servers", value=str(guilds))
+        embed.add_field(name="Channels", value=str(channels))
         embed.add_field(name="Users", value=str(users))
         embed.add_field(name="CPU Usage", value=f"{psutil.cpu_percent()}%")
         embed.add_field(name="RAM Usage", value=f"{psutil.virtual_memory().percent}%")
