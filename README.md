@@ -1,7 +1,7 @@
 # Random.bot
 Bot for randomness.
 # Developers
-Made by: kym2006 and SquiddyPoos ~~and waterflamev8#~~
+Made by: kym2006 and SquiddyPoos ~~and waterflamev8~~
 # Links about us
 [Why](https://www.youtube.com/watch?v=BeG5FqTpl9U)\
 [Website](https://randomweb.netlify.app/)\
