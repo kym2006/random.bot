@@ -6,7 +6,7 @@ Made by: kym2006 and SquiddyPoos ~~and waterflamev8~~
 [Why](https://www.youtube.com/watch?v=BeG5FqTpl9U)\
 [Website](https://randomweb.netlify.app/)\
 [Support server](https://discord.gg/ZatYnsX)\
-[Patreon](https://www.patreon.com/kym2006)\
+[Patreon](https://www.patreon.com/kym2006)
 
 # Commands
 Do @help in a server with random.bot, or in DM.\
