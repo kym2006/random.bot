@@ -14,6 +14,9 @@ class Events(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_ready(self):
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"))
+    @commands.Cog.listener()
     async def on_guild_join(self, guild):
         embed = discord.Embed(
             title="Server Join",

@@ -25,7 +25,6 @@ async def _get_prefix(bot, message):
 
 bot = Bot(
     command_prefix=_get_prefix,
-    activity=discord.Activity(type=discord.ActivityType.watching, name=config.activity),
     heartbeat_timeout=300,
 )
 

@@ -10,8 +10,7 @@ additional_shards = 0
 # The default prefix for commands
 default_prefix = "@"
 
-# Status of the bot
-activity = f"{default_prefix}help | @someone"
+
 
 # The main bot owner
 owners = [298661966086668290, 723794074498367498, 412969691276115968]

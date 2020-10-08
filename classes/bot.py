@@ -89,3 +89,4 @@ class Bot(commands.AutoShardedBot):
 
         
         await self.start(self.config.token)
+
