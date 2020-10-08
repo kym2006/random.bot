@@ -11,13 +11,9 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="randint", aliases = ["rnd"], description="Pick a number in range <st> to <en>")
+    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
     async def rnd(self, ctx, arg1: int, arg2: int):
-        await ctx.send(
-            "Picked {} from {} to {}".format(
-                random.randrange(arg1, arg2 + 1), arg1, arg2
-            )
-        )
+        await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2))
 
     @commands.command(name="name", description="Send the name of someone in the server")
     async def name(self, ctx, allow_bots: str = "0", *, msg: str = ""):
@@ -25,9 +21,7 @@ class Random(commands.Cog):
             allow_bots = int(allow_bots)
             if allow_bots:
                 user = random.choice(ctx.channel.guild.members)
-                await ctx.send(
-                    "Picked {}".format(user.name + "#" + str(user.discriminator))
-                )
+                await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
             else:
                 raise KeyboardInterrupt
         except:
@@ -36,18 +30,12 @@ class Random(commands.Cog):
                 if not i.bot:
                     potential.append(i)
             user = random.choice(potential)
-            await ctx.send(
-                "Picked {}".format(user.name + "#" + str(user.discriminator))
-            )
+            await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
 
-    @commands.command(
-        name="someone", usage="someone", description="ping someone at random"
-    )
+    @commands.command(name="someone", usage="someone", description="ping someone at random")
     async def mention(self, ctx, allow_bots: str = "0", *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
+            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
         if row and row["haveping"] == 1:
             canping = 1
         else:
@@ -60,9 +48,7 @@ class Random(commands.Cog):
                     await ctx.send("Picked <@!{}>".format(user.id))
                 else:
                     embed = discord.Embed(description="Picked <@!{}>".format(user.id))
-                    embed.set_footer(
-                        text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user"
-                    )
+                    embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
                     await ctx.send(embed=embed)
             else:
                 raise KeyboardInterrupt
@@ -76,17 +62,13 @@ class Random(commands.Cog):
                 await ctx.send("Picked <@!{}>".format(user.id))
             else:
                 embed = discord.Embed(description="Picked <@!{}>".format(user.id))
-                embed.set_footer(
-                    text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user"
-                )
+                embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
                 await ctx.send(embed=embed)
 
     @commands.command(name="wheel", description="@someone but more dramatic")
     async def wheel(self, ctx, *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
+            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
         if row and row["haveping"] == 1:
             canping = 1
         else:
@@ -98,31 +80,21 @@ class Random(commands.Cog):
         finals = []
         for i in range(random.randint(2, 8)):
             user = random.choice(potential)
-            msg = await ctx.send(
-                f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw."
-            )
+            msg = await ctx.send(f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw.")
             finals.append(user)
             await asyncio.sleep(10)
         user = random.choice(potential)
         if canping:
             await ctx.send(f"Final winner: {random.choice(finals).mention}")
         else:
-            embed = discord.Embed(
-                description=f"Final winner: {random.choice(finals).mention}"
-            )
-            embed.set_footer(
-                text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user"
-            )
+            embed = discord.Embed(description=f"Final winner: {random.choice(finals).mention}")
+            embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
-    @commands.command(
-        name="somerole", description="Ping a user with that role in your server"
-    )
+    @commands.command(name="somerole", description="Ping a user with that role in your server")
     async def somerole(self, ctx, role: str):
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
+            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
         if row and row["haveping"] == 1:
             canping = 1
         else:
@@ -141,9 +113,7 @@ class Random(commands.Cog):
             await ctx.send("Picked {}".format(user.mention))
         else:
             embed = discord.Embed(description="Picked {}".format(user.mention))
-            embed.set_footer(
-                text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user"
-            )
+            embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
     @commands.command(name="8ball", description="classic 8ball", aliases=["eightball"])
@@ -195,9 +165,7 @@ class Random(commands.Cog):
         if sideint == 1:
             side = "tails"
         if side == chosen:
-            await ctx.send(
-                "The coin landed on {}. You have guessed correct".format(side)
-            )
+            await ctx.send("The coin landed on {}. You have guessed correct".format(side))
         else:
             await ctx.send("The coin landed on {}. You have guessed wrong".format(side))
 
@@ -226,14 +194,10 @@ class Random(commands.Cog):
             return
         member = ctx.guild.get_member(ctx.author.id)
         if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members:
-            await ctx.send(
-                "You do not have permissions in this server to use this command."
-            )
+            await ctx.send("You do not have permissions in this server to use this command.")
             return
         if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members:
-            await ctx.send(
-                "You do not have permissions in this server to use this command."
-            )
+            await ctx.send("You do not have permissions in this server to use this command.")
             return
         user = random.choice(ctx.channel.guild.members)
         await ctx.send("Picked <@!{}>".format(user.id))
@@ -244,11 +208,7 @@ class Random(commands.Cog):
             await self.bot.change_presence(activity=discord.Game("Banning someone"))
             await asyncio.sleep(10)
             await self.bot.change_presence(
-                activity=discord.Game(
-                    "@help | @someone | being random on {} servers".format(
-                        len(self.bot.guilds)
-                    )
-                )
+                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
             )
             try:
                 await ctx.channel.guild.ban(
@@ -261,22 +221,14 @@ class Random(commands.Cog):
                 return
             await ctx.send("Goodbye!")
             await self.bot.change_presence(
-                activity=discord.Game(
-                    "@help | @someone | being random on {} servers".format(
-                        len(self.bot.guilds)
-                    )
-                )
+                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
             )
         else:
             await ctx.send("Kicking in 10 seconds... ")
             await self.bot.change_presence(activity=discord.Game("Kicking someone"))
             await asyncio.sleep(10)
             await self.bot.change_presence(
-                activity=discord.Game(
-                    "@help | @someone | being random on {} servers".format(
-                        len(self.bot.guilds)
-                    )
-                )
+                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
             )
             try:
                 await ctx.channel.guild.kick(
@@ -288,11 +240,7 @@ class Random(commands.Cog):
                 return
             await ctx.send("Goodbye!")
             await self.bot.change_presence(
-                activity=discord.Game(
-                    "@help | @someone | being random on {} servers".format(
-                        len(self.bot.guilds)
-                    )
-                )
+                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
             )
 
     @commands.command(

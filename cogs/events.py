@@ -15,7 +15,12 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"))
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+            )
+        )
+
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         embed = discord.Embed(
@@ -24,18 +29,10 @@ class Events(commands.Cog):
             colour=discord.Colour.green(),
             timestamp=datetime.datetime.utcnow(),
         )
-        embed.set_footer(
-            text=f"{len(self.bot.guilds)} servers, {len(self.bot.users)} users"
-        )
-        await self.bot.http.send_message(
-            725303414916907043, None, embed=embed.to_dict()
-        )
+        embed.set_footer(text=f"{len(self.bot.guilds)} servers, {len(self.bot.users)} users")
+        await self.bot.http.send_message(725303414916907043, None, embed=embed.to_dict())
         await self.bot.change_presence(
-            activity=discord.Game(
-                "@help | @someone | being random on {} servers".format(
-                    len(self.bot.guilds)
-                )
-            )
+            activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
         )
         txtchannel = self.bot.get_channel(725303414363390018)
         for i in guild.channels:
@@ -59,18 +56,10 @@ Type @prefix to change the prefix."""
             colour=discord.Colour.red(),
             timestamp=datetime.datetime.utcnow(),
         )
-        embed.set_footer(
-            text=f"{len(self.bot.guilds)} servers, {len(self.bot.users)} users"
-        )
-        await self.bot.http.send_message(
-            725303414916907043, None, embed=embed.to_dict()
-        )
+        embed.set_footer(text=f"{len(self.bot.guilds)} servers, {len(self.bot.users)} users")
+        await self.bot.http.send_message(725303414916907043, None, embed=embed.to_dict())
         await self.bot.change_presence(
-            activity=discord.Game(
-                "@help | @someone | being random on {} servers".format(
-                    len(self.bot.guilds)
-                )
-            )
+            activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
         )
 
 

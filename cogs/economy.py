@@ -17,9 +17,7 @@ class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(
-        name="mine", description="mine for ~~bit~~silver coins", usage="mine"
-    )
+    @commands.command(name="mine", description="mine for ~~bit~~silver coins", usage="mine")
     async def mine(self, ctx):
         id = ctx.message.author.id
         async with self.bot.pool.acquire() as conn:
@@ -27,25 +25,25 @@ class Economy(commands.Cog):
         if row == None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                """
+                    """
             INSERT INTO credit(userid, silver, gold) VALUES($1, $2, $3)
         """,
-                id,
-                1,
-                0,
-            )
+                    id,
+                    1,
+                    0,
+                )
         else:
             newval = row["silver"] + 1
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                """
+                    """
             UPDATE credit
             SET silver = $1
             WHERE userid = $2
             """,
-                newval,
-                id,
-            )
+                    newval,
+                    id,
+                )
         async with self.bot.pool.acquire() as conn:
             row = conn.fetchrow("SELECT * FROM credit WHERE userid = $1", id)
         await ctx.send(f"You now have {row['silver']} silver.")
@@ -66,13 +64,13 @@ class Economy(commands.Cog):
         if row == None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                """
+                    """
             INSERT INTO credit(userid, silver, gold) VALUES($1, $2, $3)
         """,
-                id,
-                1,
-                0,
-            )
+                    id,
+                    1,
+                    0,
+                )
             await ctx.send("You cannot bet anything due to your lack of funds")
             return
         have = row["silver"]
@@ -83,21 +81,17 @@ class Economy(commands.Cog):
             newval = row["silver"] + random.choice([1, -1]) * amount
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                """
+                    """
             UPDATE credit
             SET silver = $1
             WHERE userid = $2
             """,
-                newval,
-                id,
-            )
-        await ctx.send(
-            f"You got {newval-row['silver']} silver. You now have {newval} silver."
-        )
+                    newval,
+                    id,
+                )
+        await ctx.send(f"You got {newval-row['silver']} silver. You now have {newval} silver.")
 
-    @commands.command(
-        name="leaderboard", description="See the richest people", usage="leaderboard"
-    )
+    @commands.command(name="leaderboard", description="See the richest people", usage="leaderboard")
     async def leaderboard(self, ctx):
         async with self.bot.pool.acquire() as conn:
             rows = await conn.fetch("SELECT * FROM credit")
@@ -106,9 +100,7 @@ class Economy(commands.Cog):
         for i in rows:
             user = self.bot.get_user(i["userid"])
             try:
-                data.append(
-                    (i["silver"], i["gold"], f"{user.name}#{user.discriminator}")
-                )
+                data.append((i["silver"], i["gold"], f"{user.name}#{user.discriminator}"))
             except AttributeError:
                 pass
 
@@ -128,20 +120,14 @@ class Economy(commands.Cog):
         payload = payload.replace("<:silver:635020537349013519>", "silver")
         payload = payload.replace("<:gold:635020560249913394>", "gold")
         async with aiohttp.ClientSession() as session:
-            async with session.post(
-                "https://hasteb.in/documents", data=payload.encode("utf-8")
-            ) as r:
+            async with session.post("https://hasteb.in/documents", data=payload.encode("utf-8")) as r:
                 print(r.status)
                 if r.status == 200:
                     print("hi")
                     js = await r.json()
                     key = js["key"]
                     await ctx.send(
-                        embed=discord.Embed(
-                            description="Full leaderboard: {}".format(
-                                "https://hasteb.in/" + key
-                            )
-                        )
+                        embed=discord.Embed(description="Full leaderboard: {}".format("https://hasteb.in/" + key))
                     )
 
 

@@ -11,7 +11,6 @@ additional_shards = 0
 default_prefix = "@"
 
 
-
 # The main bot owner
 owners = [298661966086668290, 723794074498367498, 412969691276115968]
 
