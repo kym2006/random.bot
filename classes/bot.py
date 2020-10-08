@@ -19,6 +19,7 @@ class Bot(commands.AutoShardedBot):
         super().__init__(**kwargs)
         self.help_command = None
         self.start_time = datetime.datetime.utcnow()
+        self.version = "1.0.0"
 
     @property
     def uptime(self):
