@@ -22,6 +22,7 @@ psutil==5.7.2
 pycodestyle==2.6.0
 pyflakes==2.2.0
 python-dateutil==2.8.1
+python-dotenv==0.14.0
 pytz==2020.1
 regex==2020.9.27
 sentry-sdk==0.17.3
