@@ -4,7 +4,7 @@ import logging
 import discord
 from discord.ext import commands
 
-import config
+from 
 from classes.bot import Bot
 from utils.tools import get_prefix
 
