@@ -1,7 +1,11 @@
 # Random.bot
 Bot for randomness.
+[![Discord](https://discordapp.com/api/guilds/725303414220914758/embed.png)](https://discord.gg/wjWJwJB)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/kym2006/random.bot/blob/master/README.md)
+
 # Developers
-Made by: kym2006 and SquiddyPoos
+Made by: kym2006, [waterflamev8](https://github.com/waterflamev8), SquiddyPoos
+
 # Links about us
 [Why](https://www.youtube.com/watch?v=BeG5FqTpl9U)
 [Website](https://randomweb.netlify.app/)
@@ -9,19 +13,15 @@ Made by: kym2006 and SquiddyPoos
 [Patreon](https://www.patreon.com/kym2006)
 
 # Commands
-Do @help in a server with random.bot, or in DM.
-Some commands include: 
-@someone - Ping someone in your server
-@iamveryrandom - Randomly kick someone from your server
-@eightball - Classic 8ball
-@rnd - Random number generator
-@coinflip - Flip a coin!
-@choose - Choose something out of everything
-@shuffle - Shuffle things given!
-@name - Random name of someone in your server
-@team - Put everyone in teams
+Do @help in a server with random.bot, or in DM.\
+Some commands include:\
+@someone - Ping someone in your server\
+@iamveryrandom - Randomly kick someone from your server\
+@eightball - Classic 8ball\
+@rnd - Random number generator\
+@coinflip - Flip a coin!\
+@choose - Choose something out of everything\
+@shuffle - Shuffle things given!\
+@name - Random name of someone in your server\
+@team - Put everyone in teams\
 Do note that the bot is still under development.
-
-
-# Thanks to:
-https://github.com/chamburr/modmail for help and owner cogs.

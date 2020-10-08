@@ -2,10 +2,10 @@ import datetime
 import logging
 import sys
 import traceback
-import config
+from pathlib import Path
+
 import asyncpg
 from discord.ext import commands
-from pathlib import Path
 
 import config
 from utils import tools
@@ -87,6 +87,4 @@ class Bot(commands.AutoShardedBot):
                 print(f"failed to load extension {error}")
             print("-" * 10)
 
-        
         await self.start(self.config.token)
-

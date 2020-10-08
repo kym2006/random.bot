@@ -1,19 +1,15 @@
 import json
 import logging
-
 from typing import Optional
 
 import discord
-
 from discord.ext import commands
-from classes import converters
 
+from classes import converters
 from utils import checks
 from utils.paginator import Paginator
 
 log = logging.getLogger(__name__)
-
-
 
 
 class Admin(commands.Cog):
@@ -69,10 +65,7 @@ class Admin(commands.Cog):
                     guilds.append(i)
                     continue
         if count:
-            guilds = [
-                f"{guild.name} `{guild.id}` ({guild.member_count} members)"
-                for guild in guilds
-            ]
+            guilds = [f"{guild.name} `{guild.id}` ({guild.member_count} members)" for guild in guilds]
         else:
             guilds = [f"{guild.name} `{guild.id}`" for guild in guilds]
         all_pages = []
@@ -90,11 +83,8 @@ class Admin(commands.Cog):
             embed.set_footer(text=discord.Embed.Empty)
             await ctx.send(embed=embed)
             return
-        paginator = Paginator(
-            length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120
-        )
+        paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
-
 
     @checks.is_admin()
     @commands.command(
@@ -109,7 +99,7 @@ class Admin(commands.Cog):
             await ctx.send(f"Here is the invite link: https://discord.gg/{invite[0]['code']}")
         except:
             await ctx.send("Cannot be done")
-    
+
     @checks.is_admin()
     @commands.command(
         description="Create an invite to the specified server.",

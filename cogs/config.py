@@ -58,35 +58,29 @@ class Config(commands.Cog):
     async def toggleping(self, ctx):
         member = ctx.guild.get_member(ctx.author.id)
         if not member.guild_permissions.administrator:
-            await ctx.send(
-                "You do not have permissions in this server to use this command."
-            )
+            await ctx.send("You do not have permissions in this server to use this command.")
             return
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
+            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
         if row == None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                """INSERT INTO ping(serverid, haveping) VALUES($1, $2)""",
-                ctx.guild.id,
-                0,
-            )
+                    """INSERT INTO ping(serverid, haveping) VALUES($1, $2)""",
+                    ctx.guild.id,
+                    0,
+                )
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow(
-            "SELECT * FROM ping WHERE serverid=$1", ctx.guild.id
-        )
+            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
         async with self.bot.pool.acquire() as conn:
             await conn.execute(
-            """
+                """
         UPDATE ping
         SET haveping=$1
         WHERE serverid=$2
         """,
-            1 - row["haveping"],
-            ctx.guild.id,
-        )
+                1 - row["haveping"],
+                ctx.guild.id,
+            )
         await ctx.send("Successfuly updated your settings!")
 
 

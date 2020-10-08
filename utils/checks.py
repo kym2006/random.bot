@@ -19,4 +19,3 @@ def is_admin():
             return True
 
     return commands.check(predicate)
-
