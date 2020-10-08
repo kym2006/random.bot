@@ -1,9 +1,8 @@
 # Bot's token
-token = "NjA2NDAyMzkxMzE0NTMwMzE5.XUKiPA.X14xUUjkMTyioh6abgYYKsx8pDI"
-
-# Postgres database credentials
-database_url = "postgres://wzjgcdxwbmwonx:69810806bf38d4e8a89c73830da992814460afd68cd64f01aeb6d7bd32b3372d@ec2-54-235-192-146.compute-1.amazonaws.com:5432/d81vhiqqts6r24?sslmode=require"
-
+from dotenv import load_dotenv
+load_dotenv()
+token = os.getenv('TOKEN')
+database_url = os.getenv('DB_URL')
 # Additional shards to launch
 additional_shards = 0
 
@@ -13,7 +12,7 @@ default_prefix = "@"
 
 
 # The main bot owner
-owners = [298661966086668290, 723794074498367498, 412969691276115968]
+owners = [298661966086668290, 723794074498367498, 412969691276115968, 685456111259615252, 488283878189039626, 446290930723717120]
 
 # Bot admins that have access to admin commands
 admins = []
