@@ -21,11 +21,11 @@ admins = []
 
 
 # Channels to send logs
-event_channel = 754285948099100711
-admin_channel = 754285948099100712
+event_channel = 725303414916907043
+admin_channel = 725303414916907042
 
 # This is where patron roles are at
-main_server = 754285947213971456
+main_server = 725303414220914758
 
 # Patron roles for premium servers
 premium1 = 000000000000000000
@@ -33,6 +33,6 @@ premium3 = 000000000000000000
 premium5 = 000000000000000000
 
 # The colour used in embeds
-primary_colour = 0x1E90FF
+primary_colour = 0x8125DA
 success_colour = 0x00FF00
 error_colour = 0xFF0000
