@@ -7,7 +7,7 @@ class Snippet(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="snippetadd", description="add a snippet")
+    @commands.command(name="snippetadd", description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.", usage = "snippetadd")
     async def snippetadd(self, ctx, name: str, *, content: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -112,7 +112,7 @@ class Snippet(commands.Cog):
         embed = discord.Embed(title="How to use snippets in random.bot", description="Simple! Just store a snippet with snippetadd, then you can use that snippet with snippetuse! Check out other snippet related commands by flipping through the help menu.")
 
         embed.add_field(name="Example", value="For example, after doing\n ``@snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``@snippetuse letter``\nand it'll choose a random letter for me! ")
-        embed.add_field(name="Other commands", value="Do @help to see all commands.\nSnippet commands include\nsnippetadd, snippetuse, snippetview, snippetall and snippetremove. Do @help <command> to get more information.")
+        embed.add_field(name="Other commands", value="Do @help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do @help <command> to get more information.")
         embed.add_field(name="Snippet", value="If you want a dedicated bot to store snippet, then **Snippet** may be the right bot for you! You can check it out via [this link](https://snippetsite.netlify.app/)")
 
         await ctx.send(embed=embed)
