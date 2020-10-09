@@ -165,7 +165,7 @@ class Owner(commands.Cog):
         except Exception:
             await ctx.send(
                 embed=discord.Embed(
-                    title="⚠ Error"
+                    title="⚠ Error",
                     description=f"```py\n{traceback.format_exc()}```",
                     colour=self.bot.error_colour,
                 )
