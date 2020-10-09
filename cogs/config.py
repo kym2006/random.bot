@@ -78,7 +78,7 @@ class Config(commands.Cog):
         SET ping=$1
         WHERE guild=$2
         """,
-                1 - row["ping"],
+                bool(1 - (0,row["ping"])[row["ping"] != None]),
                 ctx.guild.id,
             )
         await ctx.send("Successfuly updated your settings!")
