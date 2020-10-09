@@ -70,13 +70,6 @@ class Owner(commands.Cog):
             "message": ctx.message,
         }
         stdout = io.StringIO()
-        # env.update(globals())
-        # new env: only send (ctx.send)
-        """
-        env = {
-            "ctx": ctx,
-        }
-        """
         exec("", env)
         to_compile = f'async def func():\n  try:\n{textwrap.indent(body, "    ")}\n  except:\n    raise'
         try:
