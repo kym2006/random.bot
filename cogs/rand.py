@@ -35,8 +35,8 @@ class Random(commands.Cog):
     @commands.command(name="someone", usage="someone", description="ping someone at random")
     async def mention(self, ctx, allow_bots: str = "0", *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
-        if row and row["haveping"] == 1:
+            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+        if row and row["ping"] != None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
@@ -68,8 +68,8 @@ class Random(commands.Cog):
     @commands.command(name="wheel", description="@someone but more dramatic")
     async def wheel(self, ctx, *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
-        if row and row["haveping"] == 1:
+            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+        if row and row["ping"] != None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
@@ -94,8 +94,8 @@ class Random(commands.Cog):
     @commands.command(name="somerole", description="Ping a user with that role in your server")
     async def somerole(self, ctx, role: str):
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
-        if row and row["haveping"] == 1:
+            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+        if row and row["ping"] != None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0

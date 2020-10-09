@@ -61,13 +61,13 @@ class Config(commands.Cog):
             await ctx.send("You do not have permissions in this server to use this command.")
             return
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
+            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         if row == None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                    """INSERT INTO data(guild, ping, prefix) VALUES($1, $2, $3)""",
+                    """INSERT INTO data(guild, ping) VALUES($1, $2)""",
                     ctx.guild.id,
-                    0,
+                    False,
                 )
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
