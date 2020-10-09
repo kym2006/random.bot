@@ -3,41 +3,28 @@ from discord.ext import commands, tasks
 import discord
 import os
 import aiohttp
-
+from quart import Quart
 app = web.Application()
 routes = web.RouteTableDef()
 
 
-def setup(bot):
-    bot.add_cog(Webserver(bot))
 
 
 class Webserver(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.web_server.start()
-
-        @routes.get('/')
-        async def welcome(request):
-            return web.Response(text="Hello, world")
-
-        @routes.get('/ping')
-        async def ping(request):
-            return web.Response(text=f"Ping is: {self.bot.latency*1000}")
-
-        self.webserver_port = os.environ.get('PORT', 5000)
-        print(self.webserver_port)
-        app.add_routes(routes)
-
+        app = Quart(__name__)
         
+        @app.route('/')
+        async def hello():
+            return 'hello world'
 
-    @tasks.loop()
-    async def web_server(self):
-        runner = web.AppRunner(app)
-        await runner.setup()
-        site = web.TCPSite(runner, host = "randombot2.herokuapp.com")
-        await site.start()
+        @app.route('/ping')
+        async def ping():
+            return f"{self.bot.latency*1000}"
 
-    @web_server.before_loop
-    async def web_server_before_loop(self):
-        await self.bot.wait_until_ready()
+        bot.loop.create_task(app.run_task())
+
+
+def setup(bot):
+    bot.add_cog(Webserver(bot))
