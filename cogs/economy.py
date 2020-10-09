@@ -46,7 +46,7 @@ class Economy(commands.Cog):
                 )
         async with self.bot.pool.acquire() as conn:
             row = conn.fetchrow("SELECT * FROM credit WHERE userid = $1", id)
-        await ctx.send(f"You now have {row['silver']} silver.")
+            await ctx.send(f"You now have {row['silver']} silver.")
 
     @commands.command(
         name="bet",
