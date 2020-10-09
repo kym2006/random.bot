@@ -35,7 +35,8 @@ class Snippet(commands.Cog):
         snippets = str()
         if res == []:
             snippets = " {} "
-            await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id,json.dumps(snippets))
+            async with self.bot.pool.acquire() as conn:
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id,json.dumps(snippets))
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
@@ -56,7 +57,8 @@ class Snippet(commands.Cog):
         snippets = str()
         if res == []:
             snippets = " {} "
-            await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
+            async with self.bot.pool.acquire() as conn:
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
