@@ -44,8 +44,6 @@ class Owner(commands.Cog):
             )
 
 
-
-
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
