@@ -1,7 +1,5 @@
 import datetime
 import logging
-import sys
-import traceback
 from pathlib import Path
 
 import asyncpg
@@ -15,7 +13,6 @@ log = logging.getLogger(__name__)
 
 class Bot(commands.AutoShardedBot):
     def __init__(self, **kwargs):
-        print(kwargs)
         super().__init__(**kwargs)
         self.help_command = None
         self.start_time = datetime.datetime.utcnow()
@@ -49,20 +46,7 @@ class Bot(commands.AutoShardedBot):
         async with self.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", guild)
             if not res:
-                await conn.execute(
-                    "INSERT INTO data VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-                    guild,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                )
+                await conn.execute("INSERT INTO data VALUES ($1, $2, $3)", guild, None, None)
                 return await self.get_data(guild)
             return res
 

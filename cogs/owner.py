@@ -7,7 +7,8 @@ import traceback
 from contextlib import redirect_stdout
 from datetime import timezone
 from typing import Optional
-import aiohttp 
+
+import aiohttp
 import discord
 from discord.ext import commands
 
@@ -42,7 +43,6 @@ class Owner(commands.Cog):
                     colour=self.bot.primary_colour,
                 )
             )
-
 
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)

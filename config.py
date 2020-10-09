@@ -1,22 +1,31 @@
 # Bot's token
+import os
+
 from dotenv import load_dotenv
-import os 
+
 load_dotenv()
-token = os.getenv('TOKEN')
-database_url = os.getenv('DB_URL')
+token = os.getenv("TOKEN")
+database_url = os.getenv("DB_URL")
+
 # Additional shards to launch
 additional_shards = 0
 
 # The default prefix for commands
 default_prefix = "@"
 
-
 # The main bot owner
-owners = [298661966086668290, 723794074498367498, 412969691276115968, 685456111259615252, 488283878189039626, 446290930723717120]
+owners = [
+    298661966086668290,
+    723794074498367498,
+]
 
 # Bot admins that have access to admin commands
-admins = []
-
+admins = [
+    412969691276115968,
+    685456111259615252,
+    488283878189039626,
+    446290930723717120,
+]
 
 # Channels to send logs
 event_channel = 725303414916907043
