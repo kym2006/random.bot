@@ -16,17 +16,16 @@ class Snippet(commands.Cog):
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, snippets)
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
         else:
             snippets = res[0]["content"]
-        snippets = snippets.replace("'", '"')
         if(len(snippets) + len(content) > 10000):
             await ctx.send("Limit of 10000 exceeded.")
             return 
         s = json.loads(snippets)
         s[name] = content
         async with self.bot.pool.acquire() as conn:
-            await conn.execute("UPDATE snippet set content=$1 where userid=$2", str(s), ctx.author.id)
+            await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="snippetuse", description="use a snippet")
@@ -36,10 +35,9 @@ class Snippet(commands.Cog):
         snippets = str()
         if res == []:
             snippets = " {} "
-            await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, snippets)
+            await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id,json.dumps(snippets))
         else:
             snippets = res[0]["content"]
-        snippets = snippets.replace("'", '"')
         s = json.loads(snippets)
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel 
@@ -58,10 +56,9 @@ class Snippet(commands.Cog):
         snippets = str()
         if res == []:
             snippets = " {} "
-            await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, snippets)
+            await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
         else:
             snippets = res[0]["content"]
-        snippets = snippets.replace("'", '"')
         s = json.loads(snippets)
         if name in s:
             await ctx.send(embed=discord.Embed(title = f"Snippet name: {name}", description = f"{ctx.prefix}{s[name]}"))
@@ -77,10 +74,9 @@ class Snippet(commands.Cog):
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, snippets)
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
         else:
             snippets = res[0]["content"]
-        snippets = snippets.replace("'", '"')
         s = json.loads(snippets)
         try:
             del s[name]
@@ -89,8 +85,28 @@ class Snippet(commands.Cog):
             await ctx.send("You do not have a snippet named that!")
         print(s)
         async with self.bot.pool.acquire() as conn:
-            await conn.execute("UPDATE snippet set content=$1 where userid=$2", str(s), ctx.author.id)
+            await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
+
+
+    @commands.command(name ="snippetall", description = "View all the names of your snippets", usage = "snippetall")
+    async def snippetall(self, ctx):
+        async with self.bot.pool.acquire() as conn:
+            res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
+
+        snippets = str()
+        if res == []:
+            snippets = " {} "
+            async with self.bot.pool.acquire() as conn:
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
+        else:
+            snippets = res[0]["content"]
+        s = json.loads(snippets)
+        res = ""
+        for i in s.keys():
+            res += i + '\n'
+        await ctx.send(embed = discord.Embed(title="All snippets", description = res))
+
 
 
 def setup(bot):
