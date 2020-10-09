@@ -107,6 +107,16 @@ class Snippet(commands.Cog):
             res += i + '\n'
         await ctx.send(embed = discord.Embed(title="All snippets", description = res))
 
+    @commands.command(name = "snippetabout", description = "How to use snippets", usage = "snippetabout")
+    async def snippetabout(self, ctx):
+        embed = discord.Embed(title="How to use snippets in random.bot", description="Simple! Just store a snippet with snippetadd, then you can use that snippet with snippetuse! Check out other snippet related commands by flipping through the help menu.")
+
+        embed.add_field(name="Example", value="For example, after doing\n ``@snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``@snippetuse letter``\nand it'll choose a random letter for me! ")
+        embed.add_field(name="Other commands", value="Do @help to see all commands.\nSnippet commands include\nsnippetadd, snippetuse, snippetview, snippetall and snippetremove. Do @help <command> to get more information.")
+        embed.add_field(name="Snippet", value="If you want a dedicated bot to store snippet, then **Snippet** may be the right bot for you! You can check it out via [this link](https://snippetsite.netlify.app/)")
+
+        await ctx.send(embed=embed)
+
 
 
 def setup(bot):
