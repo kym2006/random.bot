@@ -27,6 +27,7 @@ class Owner(commands.Cog):
         self.bot = bot
         self._last_result = None
 
+    '''
     @checks.is_owner()
     @commands.command(description="Load a module.", usage="load <cog>", hidden=True)
     async def load(self, ctx, *, cog: str):
@@ -40,6 +41,7 @@ class Owner(commands.Cog):
             )
         except Exception as e:
             await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
+
 
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
@@ -55,6 +57,7 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
 
+    '''
     @checks.is_owner()
     @commands.command(name="eval", description="Evaluate code.", usage="eval <code>", hidden=True)
     async def _eval(self, ctx, *, body: str):
@@ -65,19 +68,24 @@ class Owner(commands.Cog):
             "author": ctx.author,
             "guild": ctx.guild,
             "message": ctx.message,
-            "_": self._last_result,
         }
-        env.update(globals())
-        body = cleanup_code(body)
         stdout = io.StringIO()
-        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
+        # env.update(globals())
+        # new env: only send (ctx.send)
+        """
+        env = {
+            "ctx": ctx,
+        }
+        """
+        exec("", env)
+        to_compile = f'async def func():\n  try:\n{textwrap.indent(body, "    ")}\n  except:\n    raise'
         try:
             exec(to_compile, env)
-        except Exception as e:
+        except:
             await ctx.send(
                 embed=discord.Embed(
-                    description=f"```py\n{e.__class__.__name__}: {e}\n```",
-                    colour=self.bot.primary_colour,
+                    description=f"```py\n{traceback.format_exc()}\n```",
+                    colour=discord.Color.red(),
                 )
             )
             return
@@ -85,31 +93,60 @@ class Owner(commands.Cog):
         try:
             with redirect_stdout(stdout):
                 ret = await func()
-        except Exception:
-            value = stdout.getvalue()
+        except (AttributeError, Exception, BaseException):
             await ctx.send(
                 embed=discord.Embed(
-                    title="⚠ Error"
-                    description=f"```py\n{value}{traceback.format_exc()}\n```",
-                    colour=self.bot.error_colour,
+                    description=f"```py\n{stdout.getvalue()}{traceback.format_exc()}\n```",
+                    colour=discord.Color.red(),
                 )
             )
         else:
-            value = stdout.getvalue()
+            value = ret
             try:
                 await ctx.message.add_reaction("✅")
             except discord.Forbidden:
                 pass
-            if ret is None:
-                if value:
+
+            if stdout.getvalue():
+                try:
+                    if value != None:
+                        await ctx.send(
+                            embed=discord.Embed(
+                                description=f"```py\n{stdout.getvalue()}{value}\n```",
+                                colour=discord.Color.green(),
+                            )
+                        )
+                    else:
+                        await ctx.send(
+                            embed=discord.Embed(
+                                description=f"```py\n{stdout.getvalue()}\n```",
+                                colour=discord.Color.green(),
+                            )
+                        )
+                except:
                     await ctx.send(
-                        embed=discord.Embed(description=f"```py\n{value}\n```", colour=self.bot.primary_colour)
+                        embed=discord.Embed(
+                            description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
+                            colour=discord.Color.red(),
+                        )
                     )
             else:
-                self._last_result = ret
-                await ctx.send(
-                    embed=discord.Embed(description=f"```py\n{value}{ret}\n```", colour=self.bot.primary_colour)
-                )
+                try:
+                    # will not send if no return value
+                    if value != None:
+                        await ctx.send(
+                            embed=discord.Embed(
+                                description=f"```py\n{value}\n```",
+                                colour=discord.Color.green(),
+                            )
+                        )
+                except:
+                    await ctx.send(
+                        embed=discord.Embed(
+                            description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
+                            colour=discord.Color.red(),
+                        )
+                    )
 
     @checks.is_owner()
     @commands.command(description="Execute code in bash.", usage="bash <command>", hidden=True)
