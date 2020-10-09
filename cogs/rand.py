@@ -6,7 +6,6 @@ import discord
 from discord.ext import commands
 
 
-# This cog implements a lot of the random functions of random.bot
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

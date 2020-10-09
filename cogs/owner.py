@@ -8,13 +8,10 @@ from contextlib import redirect_stdout
 from datetime import timezone
 from typing import Optional
 
-import aiohttp
 import discord
-from discord.ext import commands
-
 from classes import converters
+from discord.ext import commands
 from utils import checks
-from utils.paginator import Paginator
 
 log = logging.getLogger(__name__)
 
@@ -33,62 +30,30 @@ class Owner(commands.Cog):
     @checks.is_owner()
     @commands.command(description="Load a module.", usage="load <cog>", hidden=True)
     async def load(self, ctx, *, cog: str):
-        data = await self.bot.cogs["Communication"].handler("load_extension", self.bot.cluster_count, {"cog": cog})
-        if not data or data[0] != "Success":
-            await ctx.send(embed=discord.Embed(description=f"Error: {data[0]}", colour=discord.Color.red()))
-        else:
+        try:
+            self.bot.load_extension(f"cogs.{cog}.py")
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully loaded the module.",
                     colour=self.bot.primary_colour,
                 )
             )
+        except Exception as e:
+            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
 
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
-        data = await self.bot.cogs["Communication"].handler("unload_extension", self.bot.cluster_count, {"cog": cog})
-        if not data or data[0] != "Success":
-            await ctx.send(embed=discord.Embed(description=f"Error: {data[0]}", colour=discord.Color.red()))
-        else:
+        try:
+            self.bot.unload_extension(f"cogs.{cog}.py")
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully unloaded the module.",
                     colour=self.bot.primary_colour,
                 )
             )
-
-    @checks.is_owner()
-    @commands.command(description="Reload a module.", usage="reload <cog>", hidden=True)
-    async def reload(self, ctx, *, cog: str):
-        data = await self.bot.cogs["Communication"].handler("unload_extension", self.bot.cluster_count, {"cog": cog})
-        if not data or data[0] != "Success":
-            await ctx.send(embed=discord.Embed(description=f"Error: {data[0]}", colour=discord.Color.red()))
-        else:
-            data = await self.bot.cogs["Communication"].handler("load_extension", self.bot.cluster_count, {"cog": cog})
-            if not data or data[0] != "Success":
-                await ctx.send(embed=discord.Embed(description=f"Error: {data[0]}", colour=discord.Color.red()))
-            else:
-                await ctx.send(
-                    embed=discord.Embed(
-                        description="Successfully reloaded the module.",
-                        colour=self.bot.primary_colour,
-                    )
-                )
-
-    @checks.is_owner()
-    @commands.command(description="Reload a library.", usage="reloadlib", hidden=True)
-    async def reloadlib(self, ctx, *, lib: str):
-        data = await self.bot.cogs["Communication"].handler("reload_import", self.bot.cluster_count, {"lib": lib})
-        if not data or data[0] != "Success":
-            await ctx.send(embed=discord.Embed(description=f"Error: {data[0]}", colour=discord.Color.red()))
-        else:
-            await ctx.send(
-                embed=discord.Embed(
-                    description="Successfully reloaded the library.",
-                    colour=self.bot.primary_colour,
-                )
-            )
+        except Exception as e:
+            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
 
     @checks.is_owner()
     @commands.command(name="eval", description="Evaluate code.", usage="eval <code>", hidden=True)
@@ -100,24 +65,19 @@ class Owner(commands.Cog):
             "author": ctx.author,
             "guild": ctx.guild,
             "message": ctx.message,
+            "_": self._last_result,
         }
+        env.update(globals())
+        body = cleanup_code(body)
         stdout = io.StringIO()
-        # env.update(globals())
-        # new env: only send (ctx.send)
-        """
-        env = {
-            "ctx": ctx,
-        }
-        """
-        exec("", env)
-        to_compile = f'async def func():\n  try:\n{textwrap.indent(body, "    ")}\n  except:\n    raise'
+        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
         try:
             exec(to_compile, env)
-        except:
+        except Exception as e:
             await ctx.send(
                 embed=discord.Embed(
-                    description=f"```py\n{traceback.format_exc()}\n```",
-                    colour=discord.Color.red(),
+                    description=f"```py\n{e.__class__.__name__}: {e}\n```",
+                    colour=self.bot.primary_colour,
                 )
             )
             return
@@ -125,70 +85,31 @@ class Owner(commands.Cog):
         try:
             with redirect_stdout(stdout):
                 ret = await func()
-        except (AttributeError, Exception, BaseException):
+        except Exception:
+            value = stdout.getvalue()
             await ctx.send(
                 embed=discord.Embed(
-                    description=f"```py\n{stdout.getvalue()}{traceback.format_exc()}\n```",
-                    colour=discord.Color.red(),
+                    title="⚠ Error"
+                    description=f"```py\n{value}{traceback.format_exc()}\n```",
+                    colour=self.bot.error_colour,
                 )
             )
         else:
-            value = ret
+            value = stdout.getvalue()
             try:
                 await ctx.message.add_reaction("✅")
             except discord.Forbidden:
                 pass
-
-            if stdout.getvalue():
-                try:
-                    if value != None:
-                        await ctx.send(
-                            embed=discord.Embed(
-                                description=f"```py\n{stdout.getvalue()}{value}\n```",
-                                colour=discord.Color.green(),
-                            )
-                        )
-                    else:
-                        await ctx.send(
-                            embed=discord.Embed(
-                                description=f"```py\n{stdout.getvalue()}\n```",
-                                colour=discord.Color.green(),
-                            )
-                        )
-                except:
+            if ret is None:
+                if value:
                     await ctx.send(
-                        embed=discord.Embed(
-                            description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
-                            colour=discord.Color.red(),
-                        )
+                        embed=discord.Embed(description=f"```py\n{value}\n```", colour=self.bot.primary_colour)
                     )
             else:
-                try:
-                    # will not send if no return value
-                    if value != None:
-                        await ctx.send(
-                            embed=discord.Embed(
-                                description=f"```py\n{value}\n```",
-                                colour=discord.Color.green(),
-                            )
-                        )
-                except:
-                    await ctx.send(
-                        embed=discord.Embed(
-                            description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
-                            colour=discord.Color.red(),
-                        )
-                    )
-
-    @checks.is_owner()
-    @commands.command(description="Evaluate code on all clusters", usage="evall <code>", hidden=True)
-    async def evall(self, ctx, *, code: str):
-        data = "\n".join(
-            await self.bot.cogs["Communication"].handler("evaluate", self.bot.cluster_count, {"code": code})
-        )
-        if len(data) > 2000:
-            data = data[:1997] + "..."
-        await ctx.send(embed=discord.Embed(description=data, colour=self.bot.primary_colour))
+                self._last_result = ret
+                await ctx.send(
+                    embed=discord.Embed(description=f"```py\n{value}{ret}\n```", colour=self.bot.primary_colour)
+                )
 
     @checks.is_owner()
     @commands.command(description="Execute code in bash.", usage="bash <command>", hidden=True)
@@ -199,8 +120,9 @@ class Owner(commands.Cog):
         except Exception as error:
             await ctx.send(
                 embed=discord.Embed(
+                    title="⚠ Error"
                     description=f"```py\n{error.__class__.__name__}: {error}\n```",
-                    colour=discord.Color.red(),
+                    colour=self.bot.error_colour
                 )
             )
 
@@ -213,8 +135,9 @@ class Owner(commands.Cog):
         except Exception:
             await ctx.send(
                 embed=discord.Embed(
+                    title="⚠ Error"
                     description=f"```py\n{traceback.format_exc()}```",
-                    colour=discord.Color.red(),
+                    colour=self.bot.error_colour,
                 )
             )
             return
@@ -244,48 +167,6 @@ class Owner(commands.Cog):
         msg.content = ctx.prefix + command
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
-
-    @checks.is_owner()
-    @commands.command(
-        description="Give a user temporary premium.",
-        usage="givepremium <user> <expiry>",
-        hidden=True,
-    )
-    async def givepremium(self, ctx, user: converters.GlobalUser, *, expiry: converters.DateTime):
-        premium = await self.bot.tools.get_premium_slots(self.bot, user.id)
-        if premium:
-            await ctx.send(
-                embed=discord.Embed(
-                    description="That user already has premium.",
-                    colour=discord.Color.red(),
-                )
-            )
-            return
-        async with self.bot.pool.acquire() as conn:
-            timestamp = int(expiry.replace(tzinfo=timezone.utc).timestamp() * 1000)
-            await conn.execute(
-                "INSERT INTO premium (identifier, guild, expiry) VALUES ($1, $2, $3)",
-                user.id,
-                [],
-                timestamp,
-            )
-        await ctx.send(
-            embed=discord.Embed(
-                description="Successfully assigned that user premium temporarily.",
-                colour=self.bot.primary_colour,
-            )
-        )
-
-    @checks.is_owner()
-    @commands.command(description="Remove a user's premium.", usage="wipepremium <user>", hidden=True)
-    async def wipepremium(self, ctx, *, user: converters.GlobalUser):
-        await self.bot.tools.wipe_premium(self.bot, user.id)
-        await ctx.send(
-            embed=discord.Embed(
-                description="Successfully removed that user's premium.",
-                colour=self.bot.primary_colour,
-            )
-        )
 
     @checks.is_owner()
     @commands.command(description="Ban a user from the bot", usage="banuser <user>", hidden=True)

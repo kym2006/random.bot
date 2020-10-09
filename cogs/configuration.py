@@ -1,13 +1,8 @@
-import asyncio
-import random
-import typing
-
 import discord
 from discord.ext import commands
 
 
-# This cog implements a lot of the random functions of random.bot
-class Config(commands.Cog):
+class Configuration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -49,6 +44,7 @@ class Config(commands.Cog):
                 )
             )
 
+    @commands.has_permissions(administrator=True)
     @commands.guild_only()
     @commands.command(
         name="toggleping",
@@ -56,13 +52,9 @@ class Config(commands.Cog):
         description="toggle between pinging a user or not",
     )
     async def toggleping(self, ctx):
-        member = ctx.guild.get_member(ctx.author.id)
-        if not member.guild_permissions.administrator:
-            await ctx.send("You do not have permissions in this server to use this command.")
-            return
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
-        if row == None:
+        if row is None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     """INSERT INTO data(guild, ping) VALUES($1, $2)""",
@@ -78,11 +70,11 @@ class Config(commands.Cog):
         SET ping=$1
         WHERE guild=$2
         """,
-                bool(1 - (0, row["ping"])[row["ping"] != None]),
+                bool(1 - (0, row["ping"])[row["ping"] is not None]),
                 ctx.guild.id,
             )
         await ctx.send("Successfuly updated your settings!")
 
 
 def setup(bot):
-    bot.add_cog(Config(bot))
+    bot.add_cog(Configuration(bot))

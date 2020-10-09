@@ -1,4 +1,3 @@
-import json
 import logging
 from typing import Optional
 
@@ -97,7 +96,7 @@ class Admin(commands.Cog):
         try:
             invite = (await guild.invites())[0]
             await ctx.send(f"Here is the invite link: https://discord.gg/{invite[0]['code']}")
-        except:
+        except Exception:
             await ctx.send("Cannot be done")
 
     @checks.is_admin()

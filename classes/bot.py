@@ -1,5 +1,7 @@
 import datetime
 import logging
+import sys
+import traceback
 from pathlib import Path
 
 import asyncpg
@@ -65,10 +67,8 @@ class Bot(commands.AutoShardedBot):
         for extension in cogs:
             try:
                 self.load_extension(f"cogs.{extension}")
-                print(f"loaded {extension}")
-            except Exception as e:
-                error = f"{extension}\n {type(e).__name__} : {e}"
-                print(f"failed to load extension {error}")
-            print("-" * 10)
+            except Exception:
+                log.error(f"Failed to load extension {extension}.", file=sys.stderr)
+                log.error(traceback.print_exc())
 
         await self.start(self.config.token)
