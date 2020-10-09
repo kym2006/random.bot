@@ -182,8 +182,7 @@ class General(commands.Cog):
     @commands.command(description="Support random.bot!", usage="donate")
     async def donate(self, ctx):
         await ctx.send(
-            embed = discord.Embed(title = "Support random.bot and get patron roles!", description = "Donate to random.bot via [this link](https://paypal.me/waterflamev8)!")
-        
+            embed = discord.Embed(title = "Support random.bot and get patron roles!", description = "Donate to random.bot via [this link](https://paypal.me/waterflamev8)!", colour=self.bot.primary_colour)
         )
 
     def get_bot_uptime(self, *, brief=False):
