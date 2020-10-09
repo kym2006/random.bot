@@ -35,7 +35,7 @@ class Webserver(commands.Cog):
     async def web_server(self):
         runner = web.AppRunner(app)
         await runner.setup()
-        site = web.TCPSite(runner, port=self.webserver_port)
+        site = web.TCPSite(runner, host = "randombot2.herokuapp.com")
         await site.start()
 
     @web_server.before_loop
