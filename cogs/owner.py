@@ -44,12 +44,6 @@ class Owner(commands.Cog):
             )
 
 
-    @checks.is_owner()
-    @commands.command(description = "post a command", hidden = True)
-    async def posthuggin(self, ctx):
-        async with aiohttp.ClientSession() as session:
-            await session.post("https://huginn.chamburr.xyz/users/1/web_requests/12/ae7cf81ab0f456972fb91ce8dc4c5d46", data = {"content": ctx.message.content})
-
 
 
     @checks.is_owner()
