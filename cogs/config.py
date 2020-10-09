@@ -65,20 +65,20 @@ class Config(commands.Cog):
         if row == None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
-                    """INSERT INTO ping(serverid, haveping) VALUES($1, $2)""",
+                    """INSERT INTO data(guild, ping, prefix) VALUES($1, $2, $3)""",
                     ctx.guild.id,
                     0,
                 )
         async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM ping WHERE serverid=$1", ctx.guild.id)
+            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         async with self.bot.pool.acquire() as conn:
             await conn.execute(
                 """
-        UPDATE ping
-        SET haveping=$1
-        WHERE serverid=$2
+        UPDATE data
+        SET ping=$1
+        WHERE guild=$2
         """,
-                1 - row["haveping"],
+                1 - row["ping"],
                 ctx.guild.id,
             )
         await ctx.send("Successfuly updated your settings!")
