@@ -135,8 +135,7 @@ class Random(commands.Cog):
             "Don't count on it.",
             "My reply is no.",
             "My sources say no.",
-            "Very doubtful.",
-            "You should definitely join random.bot's support server first, at https://discord.gg/ZatYnsX",
+            "Very doubtful."
         ]
         await ctx.send(":8ball: " + random.choice(li))
 
