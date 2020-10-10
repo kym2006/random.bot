@@ -140,7 +140,7 @@ class Admin(commands.Cog):
         guilds = sorted(guilds, key=lambda x: x.member_count, reverse=True)[:count]
         top_guilds = []
         for index, guild in enumerate(guilds):
-            top_guilds.append(f"#{index + 1} {guild['name']} `{guild['id']}` ({guild['member_count']} members)")
+            top_guilds.append(f"#{index + 1} {guild.name} `{guild.id}` ({guild.member_count} members)")
         all_pages = []
         for chunk in [top_guilds[i : i + 20] for i in range(0, len(top_guilds), 20)]:
             page = discord.Embed(title="Top Servers", colour=self.bot.primary_colour)
