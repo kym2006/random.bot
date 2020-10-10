@@ -42,11 +42,9 @@ class Snippet(commands.Cog):
         s = json.loads(snippets)
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel 
-        try:
-            msg.author = ctx.channel.guild.get_member(ctx.author.id)
-        except Exception:
-            msg.author = ctx.author
+        msg.author = ctx.channel.guild.get_member(ctx.author.id) or ctx.author
         msg.content = ctx.prefix + s[name]
+        print(msg)
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
 

@@ -182,21 +182,11 @@ class Owner(commands.Cog):
         usage="invoke [channel] <user> <command>",
         hidden=True,
     )
-    async def invoke(
-        self,
-        ctx,
-        channel: Optional[discord.TextChannel],
-        user: converters.GlobalUser,
-        *,
-        command: str,
-    ):
+    async def invoke(self, ctx, channel: Optional[discord.TextChannel], user: converters.GlobalUser, *, command: str):
         msg = copy.copy(ctx.message)
         channel = channel or ctx.channel
         msg.channel = channel
-        try:
-            msg.author = ctx.channel.guild.get_member(user.id)
-        except Exception:
-            msg.author = user
+        msg.author = channel.guild.get_member(user.id) or user
         msg.content = ctx.prefix + command
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
