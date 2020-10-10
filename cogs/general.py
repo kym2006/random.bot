@@ -181,7 +181,7 @@ class General(commands.Cog):
 
     @commands.command(description="Support random.bot!", usage="donate")
     async def donate(self, ctx):
-        embed = discord.Embed(title="Looking to donate?", description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/waterflamev8).")
+        embed = discord.Embed(title="Looking to donate?", description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/waterflamev8).", colour=self.bot.primary_colour)
 
         embed.add_field(inline=False, name="Snippet storage space", value="Patrons get additional storage space for snippets\nPatrons: 20000\nSuper patrons: 50000\nSuper duper patrons: 100000")
         embed.add_field(inline=False, name="Priority support", value="If you are a patron, we would definitely support you first! (Then again, support for our normal members are rather fast as well) :)")
