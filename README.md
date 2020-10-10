@@ -8,7 +8,6 @@ Bot for randomness.
 Made by: kym2006, [waterflamev8](https://github.com/waterflamev8), SquiddyPoos
 
 # Links about us
-[Why](https://www.youtube.com/watch?v=BeG5FqTpl9U)\
 [Website](https://randomweb.netlify.app/)\
 [Support server](https://discord.gg/ZatYnsX)\
 [Donate](https://paypal.me/waterflamev8)
