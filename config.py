@@ -35,9 +35,9 @@ admin_channel = 725303414916907042
 main_server = 725303414220914758
 
 # Patron roles for premium servers
-premium1 = 000000000000000000
-premium3 = 000000000000000000
-premium5 = 000000000000000000
+patron1 = 725303414220914763
+patron2 = 725303414220914764
+patron3 = 725303414220914765
 
 # The colour used in embeds
 primary_colour = 0x8125DA

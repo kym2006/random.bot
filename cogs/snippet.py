@@ -19,8 +19,23 @@ class Snippet(commands.Cog):
                 await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
         else:
             snippets = res[0]["content"]
-        if(len(snippets) + len(content) > 10000):
-            await ctx.send("Limit of 10000 exceeded.")
+
+        guild = bot.get_guild(725303414220914758)
+        limit = 10000
+        if ctx.author.id in [g.id for g in guild.members]:
+            patron1 = discord.utils.find(lambda r: r.id == config.patron1, guild.roles)
+            patron2 = discord.utils.find(lambda r: r.id == config.patron2, guild.roles)
+            patron3 = discord.utils.find(lambda r: r.id == config.patron3, guild.roles)
+            member = await guild.get_member(ctx.author.id)
+            if patron1 in member.roles:
+                limit = 20000
+            if patron2 in member.roles:
+                limit = 50000
+            if patron3 in member.roles:
+                limit = 100000
+
+        if(len(snippets) + len(content) > limit):
+            await ctx.send(f"Limit of {limit} exceeded.")
             return 
         s = json.loads(snippets)
         s[name] = content
