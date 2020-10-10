@@ -11,7 +11,7 @@ Made by: kym2006, [waterflamev8](https://github.com/waterflamev8), SquiddyPoos
 [Why](https://www.youtube.com/watch?v=BeG5FqTpl9U)\
 [Website](https://randomweb.netlify.app/)\
 [Support server](https://discord.gg/ZatYnsX)\
-[Patreon](https://www.patreon.com/kym2006)
+[Donate](https://paypal.me/waterflamev8)
 
 # Commands
 Do @help in a server with random.bot, or in DM.\
