@@ -276,6 +276,16 @@ class General(commands.Cog):
             )
         )
 
+    @commands.command(description = "Top.gg site for random.bot", usage="vote")
+    async def vote(self, ctx):
+        await ctx.send(
+            embed=discord.Embed(
+                title="Vote for random.bot!",
+                description="https://top.gg/bot/606402391314530319/vote",
+                colour=self.bot.primary_colour,
+            )
+        )
+
     @commands.command(description="Usage statistics of the bot.", usage="usagestats", hidden=True)
     async def usagestats(self, ctx):
         embed = discord.Embed(
