@@ -40,6 +40,7 @@ class Snippet(commands.Cog):
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
+        print(s)
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel 
         try:
