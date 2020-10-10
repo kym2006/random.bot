@@ -196,7 +196,7 @@ class Owner(commands.Cog):
         try:
             msg.author = ctx.channel.guild.get_member(user.id)
         except Exception:
-            msg.author = user.id
+            msg.author = user
         msg.content = ctx.prefix + command
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
