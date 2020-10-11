@@ -1,6 +1,6 @@
 import asyncio
 import logging
-
+import asyncpg 
 from discord.ext import commands
 
 from classes.bot import Bot

@@ -47,10 +47,7 @@ class Snippet(commands.Cog):
 
     @commands.command(name="snippetuse", description="use a snippet", usage = "snippetuse <name> [user] (user is optional)")
     async def snippetuse(self, ctx, name:str, user:converters.GlobalUser=None):
-        print(user)
         tar = user or ctx.author 
-        
-        print(tar,user,ctx.author)
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", tar.id)
         snippets = str()
@@ -68,7 +65,6 @@ class Snippet(commands.Cog):
         except:
             msg.author = tar 
         msg.content = ctx.prefix + s[name]
-        print(msg)
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
 
@@ -107,7 +103,6 @@ class Snippet(commands.Cog):
 
         except:
             await ctx.send("You do not have a snippet named that!")
-        print(s)
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
