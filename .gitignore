@@ -108,5 +108,4 @@ venv.bak/
 
 # Custom
 backup.sh
-config.py
 temp.py
