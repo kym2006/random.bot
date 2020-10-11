@@ -9,7 +9,7 @@ class Snippet(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="snippetadd", description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.", usage = "snippetadd")
+    @commands.command(name="snippetadd", description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.", usage = "snippetadd <name> <command to run without prefix>")
     async def snippetadd(self, ctx, name: str, *, content: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -45,9 +45,12 @@ class Snippet(commands.Cog):
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="snippetuse", description="use a snippet")
-    async def snippetuse(self, ctx, user: Optional[converters.GlobalUser], name: str):
+    @commands.command(name="snippetuse", description="use a snippet", usage = "snippetuse [user] <name> (user is optional)")
+    async def snippetuse(self, ctx, name:str, user:converters.GlobalUser=None):
+        print(user)
         tar = user or ctx.author 
+        
+        print(tar,user,ctx.author)
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", tar.id)
         snippets = str()
@@ -60,13 +63,16 @@ class Snippet(commands.Cog):
         s = json.loads(snippets)
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel 
-        msg.author = ctx.channel.guild.get_member(tar.id) or tar
+        try:
+            msg.author = ctx.channel.guild.get_member(tar.id) or tar
+        except:
+            msg.author = tar 
         msg.content = ctx.prefix + s[name]
         print(msg)
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
 
-    @commands.command(name="snippetview", description = "View a snippet")
+    @commands.command(name="snippetview", description = "View a snippet", usage ="snippetview <name")
     async def snippetview(self, ctx, name:str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", ctx.author.id)
