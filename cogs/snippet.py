@@ -1,8 +1,9 @@
 import json
 import copy 
 from discord.ext import commands
-import discord 
-
+import discord
+from typing import Optional
+from classes import converters
 class Snippet(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -44,20 +45,21 @@ class Snippet(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="snippetuse", description="use a snippet")
-    async def snippetuse(self, ctx, name: str):
+    async def snippetuse(self, ctx, user: Optional[converters.GlobalUser], name: str):
+        tar = user or ctx.author 
         async with self.bot.pool.acquire() as conn:
-            res = await conn.fetch("SELECT * FROM snippet where userid=$1", ctx.author.id)
+            res = await conn.fetch("SELECT * FROM snippet where userid=$1", tar.id)
         snippets = str()
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id,json.dumps(snippets))
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", tar.id,json.dumps(snippets))
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel 
-        msg.author = ctx.channel.guild.get_member(ctx.author.id) or ctx.author
+        msg.author = ctx.channel.guild.get_member(tar.id) or tar
         msg.content = ctx.prefix + s[name]
         print(msg)
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
