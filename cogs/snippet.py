@@ -4,6 +4,7 @@ from discord.ext import commands
 import discord
 from typing import Optional
 from classes import converters
+import config 
 class Snippet(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
