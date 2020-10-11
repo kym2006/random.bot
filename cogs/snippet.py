@@ -45,7 +45,7 @@ class Snippet(commands.Cog):
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="snippetuse", description="use a snippet", usage = "snippetuse [user] <name> (user is optional)")
+    @commands.command(name="snippetuse", description="use a snippet", usage = "snippetuse <name> [user] (user is optional)")
     async def snippetuse(self, ctx, name:str, user:converters.GlobalUser=None):
         print(user)
         tar = user or ctx.author 
