@@ -1,6 +1,7 @@
 # Random.bot
 [![Discord](https://img.shields.io/discord/725303414220914758.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/ZatYnsX)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/kym2006/random.bot/blob/master/README.md)
+[![License](https://img.shields.io/github/license/kym2006/random.bot.svg)](https://github.com/kym2006/random.bot/blob/master/README.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/kym2006/random.bot/blob/master/CODE_OF_CONDUCT.md)
 
 Bot for randomness.
 

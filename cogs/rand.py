@@ -135,7 +135,7 @@ class Random(commands.Cog):
             "Don't count on it.",
             "My reply is no.",
             "My sources say no.",
-            "Very doubtful."
+            "Very doubtful.",
         ]
         await ctx.send(":8ball: " + random.choice(li))
 

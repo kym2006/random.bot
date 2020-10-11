@@ -58,14 +58,14 @@ class General(commands.Cog):
         page.set_footer(text="Use the reactions to flip pages. Help menu from CHamburr#2591(Thank you!)")
         page.add_field(
             name="Invite",
-            value=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374"
+            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374"
             + "&permissions=314374&scope=bot\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
         page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
         all_pages.append(page)
         page = discord.Embed(
-            title=f"Commands Menu",
+            title="Commands Menu",
             description="See all commmands briefly, use flip pages to see the more detailed versions.",
             colour=self.bot.primary_colour,
         )
@@ -121,7 +121,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374)",
+            value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374)",
         )
         page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
         page.set_thumbnail(url=self.bot.user.avatar_url)
@@ -181,15 +181,34 @@ class General(commands.Cog):
 
     @commands.command(description="Support random.bot!", usage="donate")
     async def donate(self, ctx):
-        embed = discord.Embed(title="Looking to donate?", description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/waterflamev8).", colour=self.bot.primary_colour)
+        embed = discord.Embed(
+            title="Looking to donate?",
+            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/waterflamev8).",
+            colour=self.bot.primary_colour,
+        )
 
-        embed.add_field(inline=False, name="Snippet storage space", value="Patrons get additional storage space for snippets\nPatrons: 20000\nSuper patrons: 50000\nSuper duper patrons: 100000")
-        embed.add_field(inline=False, name="Priority support", value="If you are a patron, we would definitely support you first! (Then again, support for our normal members are rather fast as well) :)")
-        embed.add_field(inline=False, name="Test beta features", value="Beta features will be released to patrons exclusively in the development phase :)")
-        embed.add_field(inline=False, name="Other patrons exclusive features", value="More features are on the way, stay tuned for that!")
+        embed.add_field(
+            inline=False,
+            name="Snippet storage space",
+            value="Patrons get additional storage space for snippets\nPatrons: 20000\nSuper patrons: 50000\nSuper duper patrons: 100000",
+        )
+        embed.add_field(
+            inline=False,
+            name="Priority support",
+            value="If you are a patron, we would definitely support you first! (Then again, support for our normal members are rather fast as well) :)",
+        )
+        embed.add_field(
+            inline=False,
+            name="Test beta features",
+            value="Beta features will be released to patrons exclusively in the development phase :)",
+        )
+        embed.add_field(
+            inline=False,
+            name="Other patrons exclusive features",
+            value="More features are on the way, stay tuned for that!",
+        )
 
         await ctx.send(embed=embed)
-    
 
     def get_bot_uptime(self, *, brief=False):
         hours, remainder = divmod(int(self.bot.uptime.total_seconds()), 3600)
@@ -222,7 +241,6 @@ class General(commands.Cog):
         )
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
-        # embed.add_field(name="Clusters", value=f"{self.bot.cluster}/{self.bot.cluster_count}")
         if ctx.guild:
             embed.add_field(name="Shards", value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}")
         else:
@@ -237,7 +255,7 @@ class General(commands.Cog):
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name="Statcord", value="https://statcord.com/bot/606402391314530319")
         embed.set_footer(
-            text="Made with ❤ using discord.py",
+            text="</> with ❤ using discord.py",
             icon_url="https://www.python.org/static/opengraph-icon-200x200.png",
         )
         await ctx.send(embed=embed)
@@ -247,7 +265,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Invite Link",
-                description=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374",
+                description="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374",
                 colour=self.bot.primary_colour,
             )
         )
@@ -276,7 +294,7 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description = "Top.gg site for random.bot", usage="vote")
+    @commands.command(description="Top.gg site for random.bot", usage="vote")
     async def vote(self, ctx):
         await ctx.send(
             embed=discord.Embed(

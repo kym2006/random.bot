@@ -1,15 +1,23 @@
+import copy
 import json
-import copy 
-from discord.ext import commands
-import discord
 from typing import Optional
+
+import discord
+from discord.ext import commands
+
+import config
 from classes import converters
-import config 
+
+
 class Snippet(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="snippetadd", description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.", usage = "snippetadd <name> <command to run without prefix>")
+    @commands.command(
+        name="snippetadd",
+        description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.",
+        usage="snippetadd <name> <command to run without prefix>",
+    )
     async def snippetadd(self, ctx, name: str, *, content: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -18,7 +26,9 @@ class Snippet(commands.Cog):
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
+                await conn.execute(
+                    "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
+                )
         else:
             snippets = res[0]["content"]
 
@@ -36,56 +46,62 @@ class Snippet(commands.Cog):
             if patron3 in member.roles:
                 limit = 100000
 
-        if(len(snippets) + len(content) > limit):
+        if len(snippets) + len(content) > limit:
             await ctx.send(f"Limit of {limit} exceeded.")
-            return 
+            return
         s = json.loads(snippets)
         s[name] = content
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="snippetuse", description="use a snippet", usage = "snippetuse <name> [user] (user is optional)")
-    async def snippetuse(self, ctx, name:str, user:converters.GlobalUser=None):
-        tar = user or ctx.author 
+    @commands.command(
+        name="snippetuse", description="use a snippet", usage="snippetuse <name> [user] (user is optional)"
+    )
+    async def snippetuse(self, ctx, name: str, user: converters.GlobalUser = None):
+        tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", tar.id)
         snippets = str()
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", tar.id,json.dumps(snippets))
+                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", tar.id, json.dumps(snippets))
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
         msg = copy.copy(ctx.message)
-        msg.channel = ctx.channel 
+        msg.channel = ctx.channel
         try:
             msg.author = ctx.channel.guild.get_member(tar.id) or tar
         except:
-            msg.author = tar 
+            msg.author = tar
         msg.content = ctx.prefix + s[name]
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
 
-    @commands.command(name="snippetview", description = "View a snippet", usage ="snippetview <name")
-    async def snippetview(self, ctx, name:str):
+    @commands.command(name="snippetview", description="View a snippet", usage="snippetview <name")
+    async def snippetview(self, ctx, name: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", ctx.author.id)
         snippets = str()
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
+                await conn.execute(
+                    "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
+                )
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
         if name in s:
-            await ctx.send(embed=discord.Embed(title = f"Snippet name: {name}", description = f"{ctx.prefix}{s[name]}"))
+            await ctx.send(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}"))
         else:
-            await ctx.send(embed=discord.Embed(title = "Error", description = "No snippet of that name is found."))
+            await ctx.send(embed=discord.Embed(title="Error", description="No snippet of that name is found."))
 
-    @commands.command(name="snippetremove", description="remove a snippet", aliases = ["snippetdelete"], usage = "snippetremove <name>")
+    @commands.command(
+        name="snippetremove", description="remove a snippet", aliases=["snippetdelete"], usage="snippetremove <name>"
+    )
     async def snippetremove(self, ctx, name: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -94,7 +110,9 @@ class Snippet(commands.Cog):
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
+                await conn.execute(
+                    "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
+                )
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
@@ -107,8 +125,7 @@ class Snippet(commands.Cog):
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
 
-
-    @commands.command(name ="snippetall", description = "View all the names of your snippets", usage = "snippetall")
+    @commands.command(name="snippetall", description="View all the names of your snippets", usage="snippetall")
     async def snippetall(self, ctx):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -117,25 +134,38 @@ class Snippet(commands.Cog):
         if res == []:
             snippets = " {} "
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets))
+                await conn.execute(
+                    "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
+                )
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
         res = ""
         for i in s.keys():
-            res += i + '\n'
-        await ctx.send(embed = discord.Embed(title="All snippets", description = res))
+            res += i + "\n"
+        await ctx.send(embed=discord.Embed(title="All snippets", description=res))
 
-    @commands.command(name = "snippetabout", description = "How to use snippets", usage = "snippetabout")
+    @commands.command(name="snippetabout", description="How to use snippets", usage="snippetabout")
     async def snippetabout(self, ctx):
-        embed = discord.Embed(title="How to use snippets in random.bot", description="Simple! Just store a snippet with snippetadd, then you can use that snippet with snippetuse! Check out other snippet related commands by flipping through the help menu.")
+        embed = discord.Embed(
+            title="How to use snippets in random.bot",
+            description="Simple! Just store a snippet with snippetadd, then you can use that snippet with snippetuse! Check out other snippet related commands by flipping through the help menu.",
+        )
 
-        embed.add_field(name="Example", value="For example, after doing\n ``@snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``@snippetuse letter``\nand it'll choose a random letter for me! ")
-        embed.add_field(name="Other commands", value="Do @help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do @help <command> to get more information.")
-        embed.add_field(name="Snippet", value="If you want a dedicated bot to store snippet, then **Snippet** may be the right bot for you! You can check it out via [this link](https://snippetsite.netlify.app/)")
+        embed.add_field(
+            name="Example",
+            value="For example, after doing\n ``@snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``@snippetuse letter``\nand it'll choose a random letter for me! ",
+        )
+        embed.add_field(
+            name="Other commands",
+            value="Do @help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do @help <command> to get more information.",
+        )
+        embed.add_field(
+            name="Snippet",
+            value="If you want a dedicated bot to store snippet, then **Snippet** may be the right bot for you! You can check it out via [this link](https://snippetsite.netlify.app/)",
+        )
 
         await ctx.send(embed=embed)
-
 
 
 def setup(bot):

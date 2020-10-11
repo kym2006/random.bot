@@ -9,8 +9,9 @@ from datetime import timezone
 from typing import Optional
 
 import discord
-from classes import converters
 from discord.ext import commands
+
+from classes import converters
 from utils import checks
 
 log = logging.getLogger(__name__)
@@ -27,7 +28,6 @@ class Owner(commands.Cog):
         self.bot = bot
         self._last_result = None
 
-    
     @checks.is_owner()
     @commands.command(description="Load a module.", usage="load <cog>", hidden=True)
     async def load(self, ctx, *, cog: str):
@@ -42,7 +42,6 @@ class Owner(commands.Cog):
         except Exception:
             await ctx.send(embed=discord.Embed(description=f"Error", colour=self.bot.error_colour))
 
-    
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
@@ -151,7 +150,7 @@ class Owner(commands.Cog):
                 embed=discord.Embed(
                     title="⚠ Error",
                     description=f"```py\n{error.__class__.__name__}: {error}\n```",
-                    colour=self.bot.error_colour
+                    colour=self.bot.error_colour,
                 )
             )
 
