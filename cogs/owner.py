@@ -27,7 +27,7 @@ class Owner(commands.Cog):
         self.bot = bot
         self._last_result = None
 
-    '''
+    
     @checks.is_owner()
     @commands.command(description="Load a module.", usage="load <cog>", hidden=True)
     async def load(self, ctx, *, cog: str):
@@ -42,7 +42,7 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
 
-
+    '''
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
