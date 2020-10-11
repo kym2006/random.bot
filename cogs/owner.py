@@ -39,10 +39,10 @@ class Owner(commands.Cog):
                     colour=self.bot.primary_colour,
                 )
             )
-        except Exception as e:
-            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
+        except Exception:
+            await ctx.send(embed=discord.Embed(description=f"Error", colour=self.bot.error_colour))
 
-    '''
+    
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
@@ -55,9 +55,8 @@ class Owner(commands.Cog):
                 )
             )
         except Exception as e:
-            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour)
+            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
 
-    '''
     @checks.is_owner()
     @commands.command(name="eval", description="Evaluate code.", usage="eval <code>", hidden=True)
     async def _eval(self, ctx, *, body: str):
