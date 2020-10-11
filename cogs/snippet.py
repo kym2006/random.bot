@@ -28,7 +28,7 @@ class Snippet(commands.Cog):
             patron1 = discord.utils.find(lambda r: r.id == config.patron1, guild.roles)
             patron2 = discord.utils.find(lambda r: r.id == config.patron2, guild.roles)
             patron3 = discord.utils.find(lambda r: r.id == config.patron3, guild.roles)
-            member = await guild.get_member(ctx.author.id)
+            member = guild.get_member(ctx.author.id)
             if patron1 in member.roles:
                 limit = 20000
             if patron2 in member.roles:
