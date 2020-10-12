@@ -1,11 +1,11 @@
 import statcord
 from discord.ext import commands
-
+import config
 
 class StatcordPost(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.key = "statcord.com-PN8kafCzmjygU4YNYha7"
+        self.key = config.statcord
         self.api = statcord.Client(self.bot, self.key)
         self.api.start_loop()
 

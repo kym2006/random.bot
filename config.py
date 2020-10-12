@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv("TOKEN")
 database_url = os.getenv("DB_URL")
+statcord = os.getenv("statcord")
 
 # Additional shards to launch
 additional_shards = 0
