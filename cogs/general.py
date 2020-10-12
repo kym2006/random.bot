@@ -183,7 +183,7 @@ class General(commands.Cog):
     async def donate(self, ctx):
         embed = discord.Embed(
             title="Looking to donate?",
-            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/waterflamev8).",
+            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/kym2k06).",
             colour=self.bot.primary_colour,
         )
 
