@@ -13,7 +13,7 @@ waterflamev8
 # Links about us
 [Website](https://randomweb.netlify.app/)\
 [Support server](https://discord.gg/ZatYnsX)\
-[Donate](https://paypal.me/waterflamev8)
+[Donate](https://paypal.me/kym2k06)
 
 # Commands
 Do @help in a server with random.bot, or in DM.\
