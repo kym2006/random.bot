@@ -13,18 +13,20 @@ additional_shards = 0
 # The default prefix for commands
 default_prefix = "@"
 
-# The main bot owner
+# Permissions to eval
 owners = [
     298661966086668290,
-    723794074498367498,
+    316213967485665281,
+    412969691276115968,
+    488283878189039626,
+    446290930723717120
 ]
 
 # Bot admins that have access to admin commands
 admins = [
     412969691276115968,
     685456111259615252,
-    488283878189039626,
-    446290930723717120,
+    723794074498367498
 ]
 
 # Channels to send logs
