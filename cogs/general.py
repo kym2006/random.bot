@@ -179,7 +179,7 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Support random.bot!", usage="donate")
+    @commands.command(description="Support random.bot!", usage="donate", aliases = ["paypal"])
     async def donate(self, ctx):
         embed = discord.Embed(
             title="Looking to donate?",
