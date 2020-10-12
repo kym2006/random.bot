@@ -6,7 +6,9 @@
 Bot for randomness.
 
 # Developers
-Made by: kym2006, [waterflamev8](https://github.com/waterflamev8), SquiddyPoos
+Made by: kym2006, SquiddyPoos
+# Ex-developers
+waterflamev8
 
 # Links about us
 [Website](https://randomweb.netlify.app/)\
