@@ -142,13 +142,7 @@ class General(commands.Cog):
 
         await ctx.send(embed=page)
 
-    @commands.command(description="post a command")
-    async def posthuggin(self, ctx, *, content: str):
-        async with aiohttp.ClientSession() as session:
-            await session.post(
-                "https://huginn.chamburr.xyz/users/1/web_requests/12/ae7cf81ab0f456972fb91ce8dc4c5d46",
-                data={"content": content},
-            )
+    
 
     @commands.command(description="Look at my partners", usage="partners")
     async def partners(self, ctx):

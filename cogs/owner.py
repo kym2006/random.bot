@@ -57,6 +57,15 @@ class Owner(commands.Cog):
             await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
 
     @checks.is_owner()
+    @commands.command(description="post a command")
+    async def posthuggin(self, ctx, *, content: str):
+        async with aiohttp.ClientSession() as session:
+            await session.post(
+                "https://huginn.chamburr.xyz/users/1/web_requests/12/ae7cf81ab0f456972fb91ce8dc4c5d46",
+                data={"content": content},
+            )
+
+    @checks.is_owner()
     @commands.command(name="eval", description="Evaluate code.", usage="eval <code>", hidden=True)
     async def _eval(self, ctx, *, body: str):
         env = {
