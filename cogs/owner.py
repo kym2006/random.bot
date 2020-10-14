@@ -32,21 +32,21 @@ class Owner(commands.Cog):
     @commands.command(description="Load a module.", usage="load <cog>", hidden=True)
     async def load(self, ctx, *, cog: str):
         try:
-            self.bot.load_extension(f"cogs.{cog}.py")
+            self.bot.load_extension(f"cogs.{cog}")
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully loaded the module.",
                     colour=self.bot.primary_colour,
                 )
             )
-        except Exception:
-            await ctx.send(embed=discord.Embed(description=f"Error", colour=self.bot.error_colour))
+        except Exception as e:
+            await ctx.send(embed=discord.Embed(description=f"Error {e}", colour=self.bot.error_colour))
 
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
         try:
-            self.bot.unload_extension(f"cogs.{cog}.py")
+            self.bot.unload_extension(f"cogs.{cog}")
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully unloaded the module.",
