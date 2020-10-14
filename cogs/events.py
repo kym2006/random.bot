@@ -20,6 +20,11 @@ class Events(commands.Cog):
             timestamp=datetime.datetime.utcnow(),
         )
         await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+            )
+        )
 
     @commands.Cog.listener()
     async def on_shard_ready(self, shard):
@@ -68,7 +73,12 @@ class Events(commands.Cog):
         guilds = len(self.bot.guilds)
         embed.set_footer(text=f"{guilds} servers")
         await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
-
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+            )
+        )
+        
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         embed = discord.Embed(
@@ -80,7 +90,11 @@ class Events(commands.Cog):
         guilds = len(self.bot.guilds)
         embed.set_footer(text=f"{guilds} servers")
         await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
-
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+            )
+        )
 
 def setup(bot):
     bot.add_cog(Events(bot))
