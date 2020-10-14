@@ -1,9 +1,8 @@
 import datetime
 import logging
-import platform
 
 import discord
-import psutil
+
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -15,52 +14,72 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(
-            activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
-            )
+        embed = discord.Embed(
+            title="Bot Ready",
+            colour=0x00FF00,
+            timestamp=datetime.datetime.utcnow(),
         )
+        await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
+
+    @commands.Cog.listener()
+    async def on_shard_ready(self, shard):
+        embed = discord.Embed(
+            title=f"Shard {shard} Ready",
+            colour=0x00FF00,
+            timestamp=datetime.datetime.utcnow(),
+        )
+        await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
+
+    @commands.Cog.listener()
+    async def on_shard_connect(self, shard):
+        embed = discord.Embed(
+            title=f"Shard {shard} Connected",
+            colour=0x00FF00,
+            timestamp=datetime.datetime.utcnow(),
+        )
+        await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
+
+    @commands.Cog.listener()
+    async def on_shard_disconnect(self, shard):
+        embed = discord.Embed(
+            title=f"Shard {shard} Disconnected",
+            colour=0xFF0000,
+            timestamp=datetime.datetime.utcnow(),
+        )
+        await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
+
+    @commands.Cog.listener()
+    async def on_shard_resumed(self, shard):
+        embed = discord.Embed(
+            title=f"Shard {shard} Resumed",
+            colour=self.bot.config.primary_colour,
+            timestamp=datetime.datetime.utcnow(),
+        )
+        await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         embed = discord.Embed(
             title="Server Join",
             description=f"{guild.name} ({guild.id}): {guild.member_count} members",
-            colour=discord.Colour.green(),
+            colour=0x00FF00,
             timestamp=datetime.datetime.utcnow(),
         )
-        embed.set_footer(text=f"{len(self.bot.guilds)} servers, {len(self.bot.users)} users")
-        await self.bot.http.send_message(725303414916907043, None, embed=embed.to_dict())
-        await self.bot.change_presence(
-            activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
-        )
-        txtchannel = self.bot.get_channel(725303414363390018)
-        for i in guild.channels:
-            if i.type == txtchannel.type:
-                try:
-                    await i.send(
-                        """Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX for monthly giveaways!
-Type @help to view all commands! 
-Type @leaderboard to see who's the richest users for random.bot! Note that the richer you are, the more likely you are to be chosen for the giveaway!
-Type @prefix to change the prefix."""
-                    )
-                    return
-                except:
-                    continue
+        guilds = len(self.bot.guilds)
+        embed.set_footer(text=f"{guilds} servers")
+        await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         embed = discord.Embed(
             title="Server Leave",
             description=f"{guild.name} ({guild.id}): {guild.member_count} members",
-            colour=discord.Colour.red(),
+            colour=0xFF0000,
             timestamp=datetime.datetime.utcnow(),
         )
-        embed.set_footer(text=f"{len(self.bot.guilds)} servers, {len(self.bot.users)} users")
-        await self.bot.http.send_message(725303414916907043, None, embed=embed.to_dict())
-        await self.bot.change_presence(
-            activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
-        )
+        guilds = len(self.bot.guilds)
+        embed.set_footer(text=f"{guilds} servers")
+        await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
 
 
 def setup(bot):

@@ -31,8 +31,9 @@ admins = [
 ]
 
 # Channels to send logs
-event_channel = 725303414916907043
-admin_channel = 725303414916907042
+join_channel = 725303414916907043
+event_channel = 725303414916907044
+admin_channel = 765896211139788830
 
 # This is where patron roles are at
 main_server = 725303414220914758
