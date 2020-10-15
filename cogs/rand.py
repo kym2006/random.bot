@@ -1,7 +1,6 @@
 import asyncio
 import random
 import typing
-
 import discord
 from discord.ext import commands
 
@@ -105,6 +104,22 @@ class Random(commands.Cog):
             embed = discord.Embed(description=f"Final winner: {random.choice(finals).mention}")
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
+
+    @commands.command(name="card", description = "Draw a random poker card", usage = "card", aliases = ["poker"])
+    async def card(self, ctx):
+        suit = random.choice(["diamonds", "clubs", "hearts", "spades"])
+        num = random.choice(["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"])
+        r = random.randint(1,54)
+        res = f"{num} of {suit}"
+        if r == 1:
+            res =  "Red Joker"
+        elif r == 2:
+            res = "Black Joker"
+        await ctx.send(embed=discord.Embed(
+            title="Card chosen",
+            description=res,
+            colour=self.bot.config.primary_colour
+        ))
 
     @commands.command(name="somerole", description="Ping a user with that role in your server")
     async def somerole(self, ctx, role: str):
