@@ -9,6 +9,17 @@ from discord.ext import commands
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+    
+    @commands.command(name = "colour", aliases = ["color","randomcolour", "randomcolor", "gencolor", "gencolour"], description = "Pick a random colour", usage = "colour")
+    async def colour(self, ctx):
+        c = discord.Colour.from_rgb(random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        await ctx.send(embed=discord.Embed(
+            title="Colour codes",
+            description=f"6 digit Hexadecimal: ``{c.__str__()}``\n"
+                        f"RGB Values: ``{c.to_rgb()}``",
+            colour=c
+
+        ))
 
     @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
     async def rnd(self, ctx, arg1: int, arg2: int):
