@@ -7,7 +7,7 @@ import traceback
 from contextlib import redirect_stdout
 from datetime import timezone
 from typing import Optional
-
+import aiohttp
 import discord
 from discord.ext import commands
 
