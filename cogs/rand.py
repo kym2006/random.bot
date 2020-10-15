@@ -9,6 +9,10 @@ from discord.ext import commands
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(name="choose", description="Choose something")
+    async def choose(self, ctx, *args):
+        await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
     
     @commands.command(name = "colour", aliases = ["color","randomcolour", "randomcolor", "gencolor", "gencolour"], description = "Pick a random colour", usage = "colour")
     async def colour(self, ctx):
@@ -18,29 +22,7 @@ class Random(commands.Cog):
             description=f"6 digit Hexadecimal: ``{c.__str__()}``\n"
                         f"RGB Values: ``{c.to_rgb()}``",
             colour=c
-
         ))
-
-    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
-    async def rnd(self, ctx, arg1: int, arg2: int):
-        await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2))
-
-    @commands.command(name="name", description="Send the name of someone in the server")
-    async def name(self, ctx, allow_bots: str = "0", *, msg: str = ""):
-        try:
-            allow_bots = int(allow_bots)
-            if allow_bots:
-                user = random.choice(ctx.channel.guild.members)
-                await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
-            else:
-                raise KeyboardInterrupt
-        except:
-            potential = []
-            for i in ctx.channel.guild.members:
-                if not i.bot:
-                    potential.append(i)
-            user = random.choice(potential)
-            await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
 
     @commands.command(name="someone", usage="someone", description="ping someone at random")
     async def mention(self, ctx, allow_bots: str = "0", *, msg: str = ""):
@@ -74,6 +56,29 @@ class Random(commands.Cog):
                 embed = discord.Embed(description="Picked <@!{}>".format(user.id))
                 embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
                 await ctx.send(embed=embed)
+
+    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
+    async def rnd(self, ctx, arg1: int, arg2: int):
+        await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2))
+
+    @commands.command(name="name", description="Send the name of someone in the server")
+    async def name(self, ctx, allow_bots: str = "0", *, msg: str = ""):
+        try:
+            allow_bots = int(allow_bots)
+            if allow_bots:
+                user = random.choice(ctx.channel.guild.members)
+                await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
+            else:
+                raise KeyboardInterrupt
+        except:
+            potential = []
+            for i in ctx.channel.guild.members:
+                if not i.bot:
+                    potential.append(i)
+            user = random.choice(potential)
+            await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
+
+    
 
     @commands.command(name="wheel", description="@someone but more dramatic")
     async def wheel(self, ctx, *, msg: str = ""):
@@ -178,9 +183,7 @@ class Random(commands.Cog):
         else:
             await ctx.send("The coin landed on {}. You have guessed wrong".format(side))
 
-    @commands.command(name="choose", description="Choose something")
-    async def choose(self, ctx, *args):
-        await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
+    
 
     @commands.command(name="shuffle", description="Shuffle a list.")
     async def shuffle(self, ctx, *args):
