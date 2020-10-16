@@ -147,7 +147,7 @@ class General(commands.Cog):
         channel=self.bot.get_channel(766642940323037214)
         embed=discord.Embed(description=content)
         embed.set_author(name=f"{ctx.author.name}#{ctx.author.discriminator}", icon_url=f"{ctx.author.avatar_url}")
-        await channel.send(embed=embed, colour=bot.config.primary_colour)
+        await channel.send(embed=embed, colour=self.bot.config.primary_colour)
 
     @commands.command(description="Look at my partners", usage="partners")
     async def partners(self, ctx):
