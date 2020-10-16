@@ -142,7 +142,12 @@ class General(commands.Cog):
 
         await ctx.send(embed=page)
 
-    
+    @commands.command(description="Suggest a feature!", name="suggest", usage="suggest")
+    async def suggest(self, ctx, content:str):
+        channel=self.bot.get_channel(766642940323037214)
+        embed=discord.Embed(description=content)
+        embed.set_author(name=f"{ctx.author.name}#{ctx.author.discriminator}", icon_url=f"{ctx.author.avatar_url}")
+        await channel.send(embed=embed)
 
     @commands.command(description="Look at my partners", usage="partners")
     async def partners(self, ctx):
