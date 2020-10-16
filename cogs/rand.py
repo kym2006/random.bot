@@ -212,7 +212,7 @@ class Random(commands.Cog):
 
     @commands.command(
         name="iamveryrandom",
-        usage="@iamveryrandom <ban|kick>",
+        usage="iamveryrandom <ban|kick>",
         description="Randomly ban or kick a user, depending on what you input",
     )
     async def iamveryrandom(self, ctx, kick_or_ban: str = "ban"):
@@ -273,7 +273,7 @@ class Random(commands.Cog):
     @commands.command(
         name="team",
         description="Assign random teams players",
-        usage="@team {number of teams} [players]",
+        usage="team {number of teams} [players]",
     )
     async def teams(self, ctx, num: typing.Optional[int] = 2, *players):
         num = min(num, len(players))
