@@ -214,6 +214,7 @@ class Random(commands.Cog):
         name="iamveryrandom",
         usage="iamveryrandom <ban|kick>",
         description="Randomly ban or kick a user, depending on what you input. Person calling this command must have kicking/banning permissions.",
+        aliases=["byebye"]
     )
     async def iamveryrandom(self, ctx, kick_or_ban: str = "ban"):
         if kick_or_ban.lower() != "ban" and kick_or_ban.lower() != "kick":
