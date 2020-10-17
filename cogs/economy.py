@@ -121,9 +121,7 @@ class Economy(commands.Cog):
         payload = payload.replace("<:gold:635020560249913394>", "gold")
         async with aiohttp.ClientSession() as session:
             async with session.post("https://hasteb.in/documents", data=payload.encode("utf-8")) as r:
-                print(r.status)
                 if r.status == 200:
-                    print("hi")
                     js = await r.json()
                     key = js["key"]
                     await ctx.send(

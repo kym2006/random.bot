@@ -24,6 +24,7 @@ async def _get_prefix(bot, message):
 bot = Bot(
     command_prefix=_get_prefix,
     heartbeat_timeout=300,
+    shard_count=2
 )
 
 
