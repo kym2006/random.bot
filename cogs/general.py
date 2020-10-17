@@ -151,7 +151,6 @@ class General(commands.Cog):
 
     @commands.command(description="Look at my partners", usage="partners")
     async def partners(self, ctx):
-
         all_pages = []
         page = discord.Embed(
             title="Snippet",
@@ -162,6 +161,37 @@ class General(commands.Cog):
         page.set_thumbnail(
             url="https://cdn.discordapp.com/avatars/726673431143383090/bd4e791fbfc8f7cd7662a281989c15f4.png"
         )
+        all_pages.append(page)
+        page = discord.Embed(
+            title="The Orgainsation Without A Cool Acronym", 
+            description="""
+        Phineas and Ferb Fan?
+        Join our server because why not?
+
+        **Benefits of joining the server**
+        1. Chat with the community of Phineas And Ferb, Milo Murphy’s Law.
+        2. Be an Agent, Villain.
+        3. Play some music using bot commands of Groovy.
+        4. Share memes with the community.
+
+        **Help Needed**
+        How to contact the Mod Team
+        DM the ModMail bot to contact the Mod Team
+        The Mod Team will respond within 24 hours of your query. You will receive a dm from the ModMail bot with the response from the bots.
+
+        **Our Mod Team**
+        Perry The Platypus#6896 also known as SomeoneRandom – Server Owner
+        Major Monogram#3339 also known as Kendall
+        SpongeBobFanatic1995#9058 also known as Dylan Dubeault
+        Karl The Intern#6339 also known as Jeffery
+        Aloyse Von Roddenstein#7322 also known as Darth Ferb
+        Dr Heinz Doofenshmirtz#5796
+        Mr.Black#1524
+
+        **Link**
+        https://discord.gg/nEJ8FMY
+        """, colour=self.bot.primary_colour)
+        page.set_thumbnail(url="https://cdn.discordapp.com/icons/754311436104106055/39aa5a30c5e28731418cbba1dddfe64d.webp?size=1024")
         all_pages.append(page)
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
@@ -186,7 +216,6 @@ class General(commands.Cog):
             description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/kym2k06).",
             colour=self.bot.primary_colour,
         )
-
         embed.add_field(
             inline=False,
             name="Snippet storage space",
