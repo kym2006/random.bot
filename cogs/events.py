@@ -2,7 +2,6 @@ import datetime
 import logging
 
 import discord
-
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -82,15 +81,18 @@ class Events(commands.Cog):
         for i in guild.channels:
             if i.type == txtchannel.type:
                 try:
-                    await i.send(embed=discord.Embed(description=
-                        """Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX if you need help.
+                    await i.send(
+                        embed=discord.Embed(
+                            description="""Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX if you need help.
 The default prefix for the bot is @, but you can change it with the prefix command.
-Type @commands for a brief menu of all the commands, or @help for a more detailed version.""", colour=self.bot.primary_colour
-                    ))
+Type @commands for a brief menu of all the commands, or @help for a more detailed version.""",
+                            colour=self.bot.primary_colour,
+                        )
+                    )
                     return
                 except:
                     continue
-        
+
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         embed = discord.Embed(
@@ -107,6 +109,7 @@ Type @commands for a brief menu of all the commands, or @help for a more detaile
                 type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
             )
         )
+
 
 def setup(bot):
     bot.add_cog(Events(bot))

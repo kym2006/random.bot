@@ -150,7 +150,7 @@ class Snippet(commands.Cog):
         embed = discord.Embed(
             title="How to use snippets in random.bot",
             description="Simple! Just store a snippet with snippetadd, then you can use that snippet with snippetuse! Check out other snippet related commands by flipping through the help menu.",
-            colour=self.bot.primary_colour
+            colour=self.bot.primary_colour,
         )
         embed.add_field(
             name="Example",

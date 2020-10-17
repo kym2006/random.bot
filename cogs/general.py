@@ -142,9 +142,9 @@ class General(commands.Cog):
         await ctx.send(embed=page)
 
     @commands.command(description="Suggest a feature!", name="suggest", usage="suggest")
-    async def suggest(self, ctx, *, content:str):
-        channel=self.bot.get_channel(766642940323037214)
-        embed=discord.Embed(description=content,colour=self.bot.config.primary_colour)
+    async def suggest(self, ctx, *, content: str):
+        channel = self.bot.get_channel(766642940323037214)
+        embed = discord.Embed(description=content, colour=self.bot.config.primary_colour)
         embed.set_author(name=f"{ctx.author.name}#{ctx.author.discriminator}", icon_url=f"{ctx.author.avatar_url}")
         await channel.send(embed=embed)
 
@@ -162,7 +162,7 @@ class General(commands.Cog):
         )
         all_pages.append(page)
         page = discord.Embed(
-            title="The Orgainsation Without A Cool Acronym", 
+            title="The Orgainsation Without A Cool Acronym",
             description="""
         Phineas and Ferb Fan?
         Join our server because why not?
@@ -189,8 +189,12 @@ class General(commands.Cog):
 
         **Link**
         https://discord.gg/nEJ8FMY
-        """, colour=self.bot.primary_colour)
-        page.set_thumbnail(url="https://cdn.discordapp.com/icons/754311436104106055/39aa5a30c5e28731418cbba1dddfe64d.webp?size=1024")
+        """,
+            colour=self.bot.primary_colour,
+        )
+        page.set_thumbnail(
+            url="https://cdn.discordapp.com/icons/754311436104106055/39aa5a30c5e28731418cbba1dddfe64d.webp?size=1024"
+        )
         all_pages.append(page)
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
@@ -208,7 +212,7 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Support random.bot!", usage="donate", aliases = ["paypal"])
+    @commands.command(description="Support random.bot!", usage="donate", aliases=["paypal"])
     async def donate(self, ctx):
         embed = discord.Embed(
             title="Looking to donate?",

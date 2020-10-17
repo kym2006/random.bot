@@ -1,10 +1,12 @@
 import asyncio
 import random
 import typing
+
 import discord
-from discord.ext import commands
-import names 
 import namegenerator
+import names
+from discord.ext import commands
+
 
 class Random(commands.Cog):
     def __init__(self, bot):
@@ -13,16 +15,22 @@ class Random(commands.Cog):
     @commands.command(name="choose", description="Choose something")
     async def choose(self, ctx, *args):
         await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
-    
-    @commands.command(name = "colour", aliases = ["color","randomcolour", "randomcolor", "gencolor", "gencolour"], description = "Pick a random colour", usage = "colour")
+
+    @commands.command(
+        name="colour",
+        aliases=["color", "randomcolour", "randomcolor", "gencolor", "gencolour"],
+        description="Pick a random colour",
+        usage="colour",
+    )
     async def colour(self, ctx):
-        c = discord.Colour.from_rgb(random.randint(0,255), random.randint(0,255), random.randint(0,255))
-        await ctx.send(embed=discord.Embed(
-            title="Colour codes",
-            description=f"6 digit Hexadecimal: ``{c.__str__()}``\n"
-                        f"RGB Values: ``{c.to_rgb()}``",
-            colour=c
-        ))
+        c = discord.Colour.from_rgb(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        await ctx.send(
+            embed=discord.Embed(
+                title="Colour codes",
+                description=f"6 digit Hexadecimal: ``{c.__str__()}``\n" f"RGB Values: ``{c.to_rgb()}``",
+                colour=c,
+            )
+        )
 
     @commands.command(name="someone", usage="someone", description="ping someone at random")
     async def mention(self, ctx, allow_bots: str = "0", *, msg: str = ""):
@@ -79,30 +87,21 @@ class Random(commands.Cog):
             await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
 
     @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
-    async def name(self, ctx, gender:str="Both"):
-        gender=gender.lower()
-        res=""
-        if gender=="male":
-            res=names.get_full_name(gender="male")
-        elif gender=="female":
-            res=names.get_full_name(gender="female")
+    async def name(self, ctx, gender: str = "Both"):
+        gender = gender.lower()
+        res = ""
+        if gender == "male":
+            res = names.get_full_name(gender="male")
+        elif gender == "female":
+            res = names.get_full_name(gender="female")
         else:
-            res=names.get_full_name()
-        await ctx.send(embed=discord.Embed(
-            title="Random Name",
-            description=res,
-            colour=self.bot.primary_colour
-        ))
+            res = names.get_full_name()
+        await ctx.send(embed=discord.Embed(title="Random Name", description=res, colour=self.bot.primary_colour))
 
     @commands.command(name="ign", usage="ign", description="Get an in game name", aliases=["gamename"])
     async def ign(self, ctx):
-        res=namegenerator.gen()
-        await ctx.send(embed=discord.Embed(
-            title="Random Game Name",
-            description=res,
-            colour=self.bot.primary_colour
-        ))
-
+        res = namegenerator.gen()
+        await ctx.send(embed=discord.Embed(title="Random Game Name", description=res, colour=self.bot.primary_colour))
 
     @commands.command(name="wheel", description="@someone but more dramatic")
     async def wheel(self, ctx, *, msg: str = ""):
@@ -130,29 +129,27 @@ class Random(commands.Cog):
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
-    @commands.command(name="card", description = "Draw a random poker card", usage = "card", aliases = ["poker"])
+    @commands.command(name="card", description="Draw a random poker card", usage="card", aliases=["poker"])
     async def card(self, ctx):
-        cards=self.bot.get_guild(623564336052568065).emojis
+        cards = self.bot.get_guild(623564336052568065).emojis
         suit = random.choice(["eclubs", "espades", "ehearts", "ediamonds"])
-        num = random.choice(["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"])    
+        num = random.choice(["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"])
         if suit in ["eclubs", "espades"]:
-            num = "b"+num 
+            num = "b" + num
         else:
-            num = "r"+num
+            num = "r" + num
         p1, p2 = None, None
         for i in cards:
-            if i.name==num:
-                p1=i 
+            if i.name == num:
+                p1 = i
         for i in cards:
-            if i.name==suit:
-                p2=i 
-        p1=str(p1)
-        p2=str(p2)
-        await ctx.send(embed=discord.Embed(
-            title="Card chosen",
-            description=p1+'\n'+p2,
-            colour=self.bot.config.primary_colour
-        ))
+            if i.name == suit:
+                p2 = i
+        p1 = str(p1)
+        p2 = str(p2)
+        await ctx.send(
+            embed=discord.Embed(title="Card chosen", description=p1 + "\n" + p2, colour=self.bot.config.primary_colour)
+        )
 
     @commands.command(name="somerole", description="Ping a user with that role in your server")
     async def somerole(self, ctx, role: str):
@@ -231,8 +228,6 @@ class Random(commands.Cog):
         else:
             await ctx.send("The coin landed on {}. You have guessed wrong".format(side))
 
-    
-
     @commands.command(name="shuffle", description="Shuffle a list.")
     async def shuffle(self, ctx, *args):
         args = list(args)
@@ -247,7 +242,7 @@ class Random(commands.Cog):
         name="iamveryrandom",
         usage="iamveryrandom <ban|kick>",
         description="Randomly ban or kick a user, depending on what you input. Person calling this command must have kicking/banning permissions.",
-        aliases=["byebye"]
+        aliases=["byebye"],
     )
     async def iamveryrandom(self, ctx, kick_or_ban: str = "ban"):
         if kick_or_ban.lower() != "ban" and kick_or_ban.lower() != "kick":
