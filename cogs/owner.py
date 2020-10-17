@@ -57,6 +57,21 @@ class Owner(commands.Cog):
             await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
 
     @checks.is_owner()
+    @commands.command(description="Reload a module.", usage="reload <cog>", hidden=True)
+    async def reload(self, ctx, *, cog: str):
+        try:
+            self.bot.unload_extension(f"cogs.{cog}")
+            self.bot.load_extension(f"cogs.{cog}")
+            await ctx.send(
+                embed=discord.Embed(
+                    description="Successfully reloaded the module.",
+                    colour=self.bot.primary_colour,
+                )
+            )
+        except Exception as e:
+            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
+
+    @checks.is_owner()
     @commands.command(description="post a command")
     async def posthuggin(self, ctx, *, content: str):
         async with aiohttp.ClientSession() as session:
