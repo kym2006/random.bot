@@ -162,7 +162,7 @@ class General(commands.Cog):
         )
         all_pages.append(page)
         page = discord.Embed(
-            title="The Orgainsation Without A Cool Acronym",
+            title="The Organisation Without A Cool Acronym",
             description="""
         Phineas and Ferb Fan?
         Join our server because why not?
