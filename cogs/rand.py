@@ -139,7 +139,7 @@ class Random(commands.Cog):
             num = "b"+num 
         else:
             num = "r"+num
-        p1=None,p2=None
+        p1, p2 = None, None
         for i in cards:
             if i.name==num:
                 p1=i 
