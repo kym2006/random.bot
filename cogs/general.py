@@ -120,7 +120,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374)",
+            value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=511047)",
         )
         page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
         page.add_field(name="Donate", value="paypal.me/kym2k06", inline=False)
