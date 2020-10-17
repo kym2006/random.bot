@@ -150,8 +150,8 @@ class Snippet(commands.Cog):
         embed = discord.Embed(
             title="How to use snippets in random.bot",
             description="Simple! Just store a snippet with snippetadd, then you can use that snippet with snippetuse! Check out other snippet related commands by flipping through the help menu.",
+            colour=self.bot.primary_colour
         )
-
         embed.add_field(
             name="Example",
             value="For example, after doing\n ``@snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``@snippetuse letter``\nand it'll choose a random letter for me! ",
