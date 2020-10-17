@@ -4,7 +4,7 @@ from discord.ext import commands
 import config
 
 
-class StatcordPost(commands.Cog):
+class Statcord(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.key = config.statcord
@@ -17,4 +17,4 @@ class StatcordPost(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(StatcordPost(bot))
+    bot.add_cog(Statcord(bot))
