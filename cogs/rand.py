@@ -3,7 +3,7 @@ import random
 import typing
 import discord
 from discord.ext import commands
-
+import names 
 
 class Random(commands.Cog):
     def __init__(self, bot):
@@ -60,8 +60,8 @@ class Random(commands.Cog):
     async def rnd(self, ctx, arg1: int, arg2: int):
         await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2))
 
-    @commands.command(name="name", description="Send the name of someone in the server")
-    async def name(self, ctx, allow_bots: str = "0", *, msg: str = ""):
+    @commands.command(name="username", description="Send the name of someone in the server")
+    async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
         try:
             allow_bots = int(allow_bots)
             if allow_bots:
@@ -77,7 +77,22 @@ class Random(commands.Cog):
             user = random.choice(potential)
             await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
 
-    
+    @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
+    async def name(self, ctx, gender:str="Both"):
+        gender=gender.lower()
+        res=""
+        if gender=="male":
+            res=names.get_full_name(gender="male")
+        elif gender=="female":
+            res=names.get_full_name(gender="female")
+        else:
+            res=names.get_full_name()
+        await ctx.send(embed=discord.Embed(
+            title="Random Name",
+            description=res,
+            colour=self.bot.primary_colour
+        ))
+
 
     @commands.command(name="wheel", description="@someone but more dramatic")
     async def wheel(self, ctx, *, msg: str = ""):
