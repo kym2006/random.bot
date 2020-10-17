@@ -4,6 +4,7 @@ import typing
 import discord
 from discord.ext import commands
 import names 
+import namegenerator
 
 class Random(commands.Cog):
     def __init__(self, bot):
@@ -89,6 +90,15 @@ class Random(commands.Cog):
             res=names.get_full_name()
         await ctx.send(embed=discord.Embed(
             title="Random Name",
+            description=res,
+            colour=self.bot.primary_colour
+        ))
+
+    @commands.command(name="ign", usage="ign", description="Get an in game name", aliases=["gamename"])
+    async def ign(self, ctx):
+        res=namegenerator.gen()
+        await ctx.send(embed=discord.Embed(
+            title="Random Game Name",
             description=res,
             colour=self.bot.primary_colour
         ))
