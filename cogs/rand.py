@@ -132,17 +132,25 @@ class Random(commands.Cog):
 
     @commands.command(name="card", description = "Draw a random poker card", usage = "card", aliases = ["poker"])
     async def card(self, ctx):
-        suit = random.choice(["diamonds", "clubs", "hearts", "spades"])
-        num = random.choice(["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"])
-        r = random.randint(1,54)
-        res = f"{num} of {suit}"
-        if r == 1:
-            res =  "Red Joker"
-        elif r == 2:
-            res = "Black Joker"
+        cards=bot.get_guild(623564336052568065).emojis
+        suit = random.choice(["eclubs", "espades", "ehearts", "ediamonds"])
+        num = random.choice(["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"])    
+        if suit in ["eclubs", "espades"]:
+            num = "b"+num 
+        else:
+            num = "r"+num
+        p1=None,p2=None
+        for i in cards:
+            if i.name==num:
+                p1=i 
+        for i in cards:
+            if i.name==suit:
+                p2=i 
+        p1=str(p1)
+        p2=str(p2)
         await ctx.send(embed=discord.Embed(
             title="Card chosen",
-            description=res,
+            description=p1+'\n'+p2,
             colour=self.bot.config.primary_colour
         ))
 
