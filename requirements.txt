@@ -36,3 +36,4 @@ tzlocal==2.1
 urllib3==1.25.10
 yarl==1.6.0
 names
+namegenerator
