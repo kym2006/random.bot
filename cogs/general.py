@@ -57,7 +57,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374"
+            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=511047"
             + "\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
@@ -297,7 +297,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Invite Link",
-                description="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=314374",
+                description="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=511047",
                 colour=self.bot.primary_colour,
             )
         )
