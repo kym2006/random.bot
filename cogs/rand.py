@@ -132,7 +132,7 @@ class Random(commands.Cog):
 
     @commands.command(name="card", description = "Draw a random poker card", usage = "card", aliases = ["poker"])
     async def card(self, ctx):
-        cards=bot.get_guild(623564336052568065).emojis
+        cards=self.bot.get_guild(623564336052568065).emojis
         suit = random.choice(["eclubs", "espades", "ehearts", "ediamonds"])
         num = random.choice(["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"])    
         if suit in ["eclubs", "espades"]:
