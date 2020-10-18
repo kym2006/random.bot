@@ -6,6 +6,7 @@ import aiohttp
 import discord
 import namegenerator
 import names
+import json
 from discord.ext import commands
 
 
@@ -327,7 +328,10 @@ class Random(commands.Cog):
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(url) as data:
-                    await ctx.send(embed=discord.Embed(description=data.text(), colour=self.bot.primary_colour))
+                    res = json.loads(await data.text())
+                    embed = discord.Embed(description=res["value"], colour=self.bot.primary_colour)
+                    embed.set_author(name="Donald Trump")
+                    await ctx.send(embed=embed)
             except Exception:
                 return
 
