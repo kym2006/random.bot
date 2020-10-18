@@ -1,6 +1,5 @@
 import copy
 import json
-from typing import Optional
 
 import discord
 from discord.ext import commands
@@ -74,7 +73,7 @@ class Snippet(commands.Cog):
         msg.channel = ctx.channel
         try:
             msg.author = ctx.channel.guild.get_member(tar.id) or tar
-        except:
+        except Exception:
             msg.author = tar
         msg.content = ctx.prefix + s[name]
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
@@ -118,8 +117,7 @@ class Snippet(commands.Cog):
         s = json.loads(snippets)
         try:
             del s[name]
-
-        except:
+        except Exception:
             await ctx.send("You do not have a snippet named that!")
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)

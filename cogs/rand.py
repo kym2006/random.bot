@@ -2,6 +2,7 @@ import asyncio
 import random
 import typing
 
+import aiohttp
 import discord
 import namegenerator
 import names
@@ -36,7 +37,7 @@ class Random(commands.Cog):
     async def mention(self, ctx, allow_bots: str = "0", *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
-        if row and row["ping"] != None and row["ping"] == 1:
+        if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
@@ -52,7 +53,7 @@ class Random(commands.Cog):
                     await ctx.send(embed=embed)
             else:
                 raise KeyboardInterrupt
-        except:
+        except Exception:
             potential = []
             for i in ctx.channel.guild.members:
                 if not i.bot:
@@ -78,7 +79,7 @@ class Random(commands.Cog):
                 await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
             else:
                 raise KeyboardInterrupt
-        except:
+        except Exception:
             potential = []
             for i in ctx.channel.guild.members:
                 if not i.bot:
@@ -107,7 +108,7 @@ class Random(commands.Cog):
     async def wheel(self, ctx, *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
-        if row and row["ping"] != None and row["ping"] == 1:
+        if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
@@ -118,7 +119,7 @@ class Random(commands.Cog):
         finals = []
         for i in range(random.randint(2, 8)):
             user = random.choice(potential)
-            msg = await ctx.send(f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw.")
+            await ctx.send(f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw.")
             finals.append(user)
             await asyncio.sleep(10)
         user = random.choice(potential)
@@ -155,7 +156,7 @@ class Random(commands.Cog):
     async def somerole(self, ctx, role: str):
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
-        if row and row["ping"] != None and row["ping"] == 1:
+        if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
@@ -272,7 +273,7 @@ class Random(commands.Cog):
                     reason=f"Random ban requested by {ctx.author.name}#{ctx.author.discriminator}",
                     delete_message_days=0,
                 )
-            except:
+            except Exception:
                 await ctx.send("I need higher perms than that person.")
                 return
             await ctx.send("Goodbye!")
@@ -291,7 +292,7 @@ class Random(commands.Cog):
                     user,
                     reason=f"Random kick requested by {ctx.author.name}#{ctx.author.discriminator}",
                 )
-            except:
+            except Exception:
                 await ctx.send("I need higher perms than that person.")
                 return
             await ctx.send("Goodbye!")
@@ -308,7 +309,6 @@ class Random(commands.Cog):
         num = min(num, len(players))
         players = list(players)
         random.shuffle(players)
-        n = len(players)
         teams = [[] for i in players]
         for i in range(len(players)):
             teams[i % num].append(players[i])
@@ -320,6 +320,16 @@ class Random(commands.Cog):
             res = res[:-2]
             embed.add_field(name=f"Team {i+1}", value=res, inline=False)
         await ctx.send(embed=embed)
+
+    @commands.command(name="trump", description="Sends a random quote by Trump", usage="trump")
+    async def trump(self, ctx):
+        url = "https://api.tronalddump.io/random/quote"
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.get(url) as data:
+                    await ctx.send(embed=discord.Embed(description=data.text(), colour=self.bot.primary_colour))
+            except Exception:
+                return
 
 
 def setup(bot):

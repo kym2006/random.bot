@@ -5,7 +5,6 @@ import subprocess
 import textwrap
 import traceback
 from contextlib import redirect_stdout
-from datetime import timezone
 from typing import Optional
 
 import aiohttp
@@ -97,7 +96,7 @@ class Owner(commands.Cog):
         to_compile = f'async def func():\n  try:\n{textwrap.indent(body, "    ")}\n  except:\n    raise'
         try:
             exec(to_compile, env)
-        except:
+        except Exception:
             await ctx.send(
                 embed=discord.Embed(
                     description=f"```py\n{traceback.format_exc()}\n```",
@@ -139,7 +138,7 @@ class Owner(commands.Cog):
                                 colour=discord.Color.green(),
                             )
                         )
-                except:
+                except Exception:
                     await ctx.send(
                         embed=discord.Embed(
                             description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
@@ -156,7 +155,7 @@ class Owner(commands.Cog):
                                 colour=discord.Color.green(),
                             )
                         )
-                except:
+                except Exception:
                     await ctx.send(
                         embed=discord.Embed(
                             description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
