@@ -57,7 +57,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=511047"
+            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=519239"
             + "\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
@@ -120,7 +120,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=511047)",
+            value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=519239)",
         )
         page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
         page.add_field(name="Donate", value="paypal.me/kym2k06", inline=False)
@@ -297,7 +297,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Invite Link",
-                description="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=511047",
+                description="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=519239",
                 colour=self.bot.primary_colour,
             )
         )
