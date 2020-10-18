@@ -13,6 +13,8 @@ from discord.ext import commands
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        with open("./quotes.json") as f:
+            self.quotes = json.load(f)
 
     @commands.command(name="choose", description="Choose something")
     async def choose(self, ctx, *args):
@@ -322,18 +324,22 @@ class Random(commands.Cog):
             embed.add_field(name=f"Team {i+1}", value=res, inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(name="trump", description="Sends a random quote by Trump", usage="trump")
+    @commands.command(description="Sends a random quote by Trump", usage="trump")
     async def trump(self, ctx):
         url = "https://api.tronalddump.io/random/quote"
         async with aiohttp.ClientSession() as session:
-            try:
-                async with session.get(url) as data:
-                    res = json.loads(await data.text())
-                    embed = discord.Embed(description=res["value"], colour=self.bot.primary_colour)
-                    embed.set_author(name="Donald Trump")
-                    await ctx.send(embed=embed)
-            except Exception:
-                return
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                embed = discord.Embed(description=res["value"], colour=self.bot.primary_colour)
+                embed.set_author(name="Donald Trump")
+                await ctx.send(embed=embed)
+
+    @commands.command(description="Sends a random (inspirational?) quote", usage="quote")
+    async def quote(self, ctx):
+        chosen_quote = random.choice(self.quotes)
+        embed = discord.Embed(description=chosen_quote["text"], colour=self.bot.primary_colour)
+        embed.set_author(name=chosen_quote["author"])
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

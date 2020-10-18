@@ -17,6 +17,8 @@ isort==5.5.0
 mccabe==0.6.1
 multidict==4.7.6
 mypy-extensions==0.4.3
+namegenerator==1.0.6
+names==0.3.0
 pathspec==0.8.0
 psutil==5.7.2
 pycodestyle==2.6.0
@@ -35,5 +37,3 @@ typing-extensions==3.7.4.3
 tzlocal==2.1
 urllib3==1.25.10
 yarl==1.6.0
-names
-namegenerator

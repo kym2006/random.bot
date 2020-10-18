@@ -5,15 +5,15 @@
 
 Bot for randomness.
 
-# Developers
+## Developers
 Made by: kym2006, SquiddyPoos, waterflamev8
 
-# Links about us
+## Links about us
 [Website](https://randomweb.netlify.app/)\
 [Support server](https://discord.gg/ZatYnsX)\
 [Donate](https://paypal.me/kym2k06)
 
-# Commands
+## Commands
 Do @help in a server with random.bot, or in DM.\
 Some commands include:\
 @someone - Ping someone in your server\
@@ -26,3 +26,6 @@ Some commands include:\
 @name - Random name of someone in your server\
 @team - Put everyone in teams\
 Do note that the bot is still under development.
+
+## Acknowledgements
+[quotes.json](https://github.com/dwyl/quotes/blob/master/quotes.json)
