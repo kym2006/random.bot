@@ -1,4 +1,5 @@
 import asyncio
+import json
 import random
 import typing
 
@@ -6,7 +7,6 @@ import aiohttp
 import discord
 import namegenerator
 import names
-import json
 from discord.ext import commands
 
 
@@ -211,14 +211,14 @@ class Random(commands.Cog):
             await ctx.send("The coin landed perfectly on it's side! What a miracle!")
 
         guild = self.bot.get_guild(725303414220914758)
-        heads = [e for e in guild.emojis if e.name=="washingtonheads"][0]
-        tails = [e for e in guild.emojis if e.name=="washingtontails"][0]
-        await ctx.send(str(random.choice([heads,tails])))
+        heads = [e for e in guild.emojis if e.name == "washingtonheads"][0]
+        tails = [e for e in guild.emojis if e.name == "washingtontails"][0]
+        await ctx.send(str(random.choice([heads, tails])))
 
     @commands.command(name="dice", description="Throw a 6 side dice!", usage="dice")
     async def dice(self, ctx):
         guild = self.bot.get_guild(725303414220914758)
-        res=random.randint(1,6)
+        res = random.randint(1, 6)
         guild = self.bot.get_guild(725303414220914758)
         emoji = [e for e in guild.emojis if e.name == f"dice{res}"][0]
         await ctx.send(emoji)
@@ -306,7 +306,7 @@ class Random(commands.Cog):
         teams = [[] for i in players]
         for i in range(len(players)):
             teams[i % num].append(players[i])
-        embed = discord.Embed(title="Random Teams")
+        embed = discord.Embed(title="Random Teams", colour=self.bot.primary_colour)
         for i in range(num):
             res = ""
             for j in teams[i]:
