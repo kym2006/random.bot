@@ -238,7 +238,9 @@ class Random(commands.Cog):
             await self.bot.change_presence(activity=discord.Game("Banning someone"))
             await asyncio.sleep(10)
             await self.bot.change_presence(
-                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                )
             )
             try:
                 await ctx.channel.guild.ban(
@@ -251,14 +253,18 @@ class Random(commands.Cog):
                 return
             await ctx.send("Goodbye!")
             await self.bot.change_presence(
-                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                )
             )
         else:
             await ctx.send("Kicking in 10 seconds... ")
             await self.bot.change_presence(activity=discord.Game("Kicking someone"))
             await asyncio.sleep(10)
             await self.bot.change_presence(
-                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                )
             )
             try:
                 await ctx.channel.guild.kick(
@@ -270,7 +276,9 @@ class Random(commands.Cog):
                 return
             await ctx.send("Goodbye!")
             await self.bot.change_presence(
-                activity=discord.Game("@help | @someone | being random on {} servers".format(len(self.bot.guilds)))
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                )
             )
 
     @commands.command(
