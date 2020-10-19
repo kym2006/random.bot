@@ -204,33 +204,24 @@ class Random(commands.Cog):
         ]
         await ctx.send(":8ball: " + random.choice(li))
 
-    @commands.command(name="coinflip", description="Flip a coin. Input a side to bet.")
-    async def coinflip(self, ctx, chosen: str = "null"):
+    @commands.command(name="coinflip", description="Flip a coin", usage="coinflip")
+    async def coinflip(self, ctx):
         notland = random.randint(1, 6000)  # this chance
         if notland == 1:
             await ctx.send("The coin landed perfectly on it's side! What a miracle!")
-            owner = self.bot.get_user(298661966086668290)
-            await owner.send(str(ctx.author.id) + " got a perfect coinflip!")
-            return
-        if chosen == "null":
-            sideint = random.randint(1, 2)
-            if sideint == 1:
-                await ctx.send("The coin landed on tails")
-            else:
-                await ctx.send("The coin landed on heads")
-            return
-        if chosen != "heads" and chosen != "tails":
-            await ctx.send("Please choose heads or tails only.")
-            return
-        sideint = random.randint(1, 2)
-        side = "heads"
 
-        if sideint == 1:
-            side = "tails"
-        if side == chosen:
-            await ctx.send("The coin landed on {}. You have guessed correct".format(side))
-        else:
-            await ctx.send("The coin landed on {}. You have guessed wrong".format(side))
+        guild = self.bot.get_guild(725303414220914758)
+        heads = [e for e in guild.emojis if e.name=="washingtonheads"][0]
+        tails = [e for e in guild.emojis if e.name=="washingtontails"][0]
+        await ctx.send(str(random.choice([heads,tails])))
+
+    @commands.command(name="dice", description="Throw a 6 side dice!", usage="dice")
+    async def dice(self, ctx):
+        guild = self.bot.get_guild(725303414220914758)
+        res=random.randint(1,6)
+        guild = self.bot.get_guild(725303414220914758)
+        emoji = [e for e in guild.emojis if e.name == f"dice{res}"][0]
+        await ctx.send(emoji)
 
     @commands.command(name="shuffle", description="Shuffle a list.")
     async def shuffle(self, ctx, *args):

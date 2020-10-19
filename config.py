@@ -8,6 +8,9 @@ token = os.getenv("TOKEN")
 database_url = os.getenv("DB_URL")
 statcord = os.getenv("statcord")
 
+if "testing" in os.environ:
+    token=os.getenv("TEST_TOKEN")
+
 # Additional shards to launch
 additional_shards = 0
 
