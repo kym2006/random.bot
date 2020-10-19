@@ -12,7 +12,7 @@ statcord = os.getenv("statcord")
 additional_shards = 0
 
 # The default prefix for commands
-default_prefix = "@"
+default_prefix = "?"
 
 # Permissions to eval
 owners = [
