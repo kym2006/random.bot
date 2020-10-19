@@ -62,20 +62,12 @@ class Random(commands.Cog):
 
     @commands.command(name="username", description="Send the name of someone in the server")
     async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
-        try:
-            allow_bots = int(allow_bots)
-            if allow_bots:
-                user = random.choice(ctx.channel.guild.members)
-                await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
-            else:
-                raise KeyboardInterrupt
-        except Exception:
-            potential = []
-            for i in ctx.channel.guild.members:
-                if not i.bot:
-                    potential.append(i)
-            user = random.choice(potential)
-            await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
+        potential = []
+        for i in ctx.channel.guild.members:
+            if not i.bot:
+                potential.append(i)
+        user = random.choice(potential)
+        await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
 
     @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
     async def name(self, ctx, gender: str = "Both"):
