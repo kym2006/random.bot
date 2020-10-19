@@ -152,11 +152,11 @@ class Snippet(commands.Cog):
         )
         embed.add_field(
             name="Example",
-            value="For example, after doing\n ``@snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``@snippetuse letter``\nand it'll choose a random letter for me! ",
+            value="For example, after doing\n ``?snippetadd letter choose a b c d e f g h i j k l m n o p q r s t u v w x y z``\nI can call it by doing\n``?snippetuse letter``\nand it'll choose a random letter for me! ",
         )
         embed.add_field(
             name="Other commands",
-            value="Do @help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do @help <command> to get more information.",
+            value="Do ?help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do ?help <command> to get more information.",
         )
         embed.add_field(
             name="Snippet",

@@ -21,7 +21,7 @@ class Events(commands.Cog):
         await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
         await self.bot.change_presence(
             activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+                type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
             )
         )
 
@@ -74,7 +74,7 @@ class Events(commands.Cog):
         await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
         await self.bot.change_presence(
             activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+                type=discord.ActivityType.watching, name=f"?help | ?someone on {len(self.bot.guilds)} servers"
             )
         )
         txtchannel = self.bot.get_channel(725303414363390018)
@@ -84,8 +84,8 @@ class Events(commands.Cog):
                     await i.send(
                         embed=discord.Embed(
                             description="""Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX if you need help.
-The default prefix for the bot is @, but you can change it with the prefix command.
-Type @commands for a brief menu of all the commands, or @help for a more detailed version.""",
+The default prefix for the bot is ?, but you can change it with the prefix command.
+Type ?commands for a brief menu of all the commands, or ?help for a more detailed version.""",
                             colour=self.bot.primary_colour,
                         )
                     )
@@ -106,7 +106,7 @@ Type @commands for a brief menu of all the commands, or @help for a more detaile
         await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
         await self.bot.change_presence(
             activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"@help | @someone on {len(self.bot.guilds)} servers"
+                type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
             )
         )
 
