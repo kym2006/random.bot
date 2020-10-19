@@ -25,7 +25,7 @@ class Animals(commands.Cog):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as data:
                 res = json.loads(await data.text())
-                await ctx.send(embed=discord.Embed(description=res["facts"], colour=self.bot.primary_colour))
+                await ctx.send(embed=discord.Embed(description=res["facts"][0], colour=self.bot.primary_colour))
 
     @commands.command(description="Sends a random cat image", usage="cat")
     async def cat(self, ctx):
@@ -43,9 +43,7 @@ class Animals(commands.Cog):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as data:
                 res = json.loads(await data.text())
-                embed = discord.Embed(colour=self.bot.primary_colour)
-                embed.set_image(url=res["fact"])
-                await ctx.send(embed=embed)
+                await ctx.send(embed=discord.Embed(description=res["fact"], colour=self.bot.primary_colour))
 
 
 def setup(bot):
