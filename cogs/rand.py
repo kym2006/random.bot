@@ -37,37 +37,24 @@ class Random(commands.Cog):
         )
 
     @commands.command(name="someone", usage="someone", description="ping someone at random")
-    async def mention(self, ctx, allow_bots: str = "0", *, msg: str = ""):
+    async def mention(self, ctx, *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
-        try:
-            allow_bots = int(allow_bots)
-            if allow_bots:
-                user = random.choice(ctx.channel.guild.members)
-                if canping:
-                    await ctx.send("Picked <@!{}>".format(user.id))
-                else:
-                    embed = discord.Embed(description="Picked <@!{}>".format(user.id))
-                    embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-                    await ctx.send(embed=embed)
-            else:
-                raise KeyboardInterrupt
-        except Exception:
-            potential = []
-            for i in ctx.channel.guild.members:
-                if not i.bot:
-                    potential.append(i)
-            user = random.choice(potential)
-            if canping:
-                await ctx.send("Picked <@!{}>".format(user.id))
-            else:
-                embed = discord.Embed(description="Picked <@!{}>".format(user.id))
-                embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-                await ctx.send(embed=embed)
+        potential = []
+        for i in ctx.channel.guild.members:
+            if not i.bot:
+                potential.append(i)
+        user = random.choice(potential)
+        if canping:
+            await ctx.send("Picked <@!{}>".format(user.id))
+        else:
+            embed = discord.Embed(description="Picked <@!{}>".format(user.id))
+            embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+            await ctx.send(embed=embed)
 
     @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
     async def rnd(self, ctx, arg1: int, arg2: int):
