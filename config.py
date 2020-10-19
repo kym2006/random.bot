@@ -1,4 +1,4 @@
-# Bot's token
+# Bot Info
 import os
 
 from dotenv import load_dotenv
@@ -9,7 +9,7 @@ database_url = os.getenv("DB_URL")
 statcord = os.getenv("statcord")
 
 if "testing" in os.environ:
-    token=os.getenv("TEST_TOKEN")
+    token = os.getenv("TEST_TOKEN")
 
 # Additional shards to launch
 additional_shards = 0

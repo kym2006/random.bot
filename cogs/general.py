@@ -2,7 +2,6 @@ import logging
 import platform
 import time
 
-import aiohttp
 import discord
 import psutil
 from discord.ext import commands
@@ -321,7 +320,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Website",
-                description=f"https://randomweb.netlify.app/",
+                description="https://randomweb.netlify.app/",
                 colour=self.bot.primary_colour,
             )
         )
