@@ -53,7 +53,9 @@ class More(commands.Cog):
                 res = json.loads(await data.text())
                 await ctx.send(
                     embed=discord.Embed(
-                        title=res["type"], description=f'Setup: {res["setup"]}\nPunchline: {res["punchline"]}'
+                        title=res["type"], 
+                        description=f'Setup: {res["setup"]}\nPunchline: {res["punchline"]}',
+                        colour=self.bot.primary_colour
                     )
                 )
 
