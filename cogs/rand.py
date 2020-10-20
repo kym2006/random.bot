@@ -208,7 +208,7 @@ class Random(commands.Cog):
         res = ""
         for i in args:
             res += i + " "
-        await ctx.send(embed=discord.Embed(title="Shuffled List", description="{res}", colour=self.bot.primary_colour))
+        await ctx.send(embed=discord.Embed(title="Shuffled List", description=f"{res}", colour=self.bot.primary_colour))
 
     @commands.command(
         name="iamveryrandom",
