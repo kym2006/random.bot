@@ -185,7 +185,7 @@ class Random(commands.Cog):
 
     @commands.command(name="coinflip", description="Flip a coin", usage="coinflip")
     async def coinflip(self, ctx):
-        notland = random.randint(1, 6000)  # this chance
+        notland = random.randint(1, 6000)
         if notland == 1:
             await ctx.send("The coin landed perfectly on it's side! What a miracle!")
 
@@ -196,7 +196,6 @@ class Random(commands.Cog):
 
     @commands.command(name="dice", description="Throw a 6 side dice!", usage="dice")
     async def dice(self, ctx):
-        guild = self.bot.get_guild(725303414220914758)
         res = random.randint(1, 6)
         guild = self.bot.get_guild(725303414220914758)
         emoji = [e for e in guild.emojis if e.name == f"dice{res}"][0]

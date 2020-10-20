@@ -81,6 +81,8 @@ class General(commands.Cog):
                 if cmd.hidden is False:
                     cmds += cmd.name + "\n"
             cmds += "```"
+            if cog_name == "More":
+                cog_name = "More random commands"
             page.add_field(name=cog_name, value=cmds)
         all_pages.append(page)
         for _, cog_name in enumerate(self.bot.cogs):
@@ -90,6 +92,8 @@ class General(commands.Cog):
             cog_commands = cog.get_commands()
             if len(cog_commands) == 0:
                 continue
+            if cog_name == "More":
+                cog_name = "More random commands"
             page = discord.Embed(
                 title=cog_name,
                 description=f"My prefix is `{ctx.prefix}`. Use `{ctx.prefix}"
@@ -136,6 +140,8 @@ class General(commands.Cog):
                 if cmd.hidden is False:
                     cmds += cmd.name + "\n"
             cmds += "```"
+            if cog_name == "More":
+                cog_name = "More random commands"
             page.add_field(name=cog_name, value=cmds)
 
         await ctx.send(embed=page)

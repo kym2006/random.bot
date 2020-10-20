@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 
-class Animals(commands.Cog):
+class More(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -47,4 +47,4 @@ class Animals(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Animals(bot))
+    bot.add_cog(More(bot))
