@@ -18,7 +18,7 @@ class Random(commands.Cog):
 
     @commands.command(name="choose", description="Choose something")
     async def choose(self, ctx, *args):
-        await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
+        await ctx.send(embed=discord.Embed(description="The wheel has chosen {}!".format(random.choice(args))))
 
     @commands.command(
         name="colour",
@@ -30,7 +30,7 @@ class Random(commands.Cog):
         c = discord.Colour.from_rgb(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         await ctx.send(
             embed=discord.Embed(
-                title="Colour codes",
+                title="Colour Codes",
                 description=f"6 digit Hexadecimal: ``{c.__str__()}``\n" f"RGB Values: ``{c.to_rgb()}``",
                 colour=c,
             )
@@ -52,13 +52,13 @@ class Random(commands.Cog):
         if canping:
             await ctx.send("Picked <@!{}>".format(user.id))
         else:
-            embed = discord.Embed(description="Picked <@!{}>".format(user.id))
+            embed = discord.Embed(description="Picked <@!{}>".format(user.id), colour=self.bot.primary_colour)
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
     @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
     async def rnd(self, ctx, arg1: int, arg2: int):
-        await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2))
+        await ctx.send(embed=discord.Embed(description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2), colour=self.bot.primary_colour))
 
     @commands.command(name="username", description="Send the name of someone in the server")
     async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
@@ -67,7 +67,7 @@ class Random(commands.Cog):
             if not i.bot:
                 potential.append(i)
         user = random.choice(potential)
-        await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
+        await ctx.send(embed=discord.Embed(description="Picked {}".format(user.name + "#" + str(user.discriminator)), colour=self.bot.primary_colour))
 
     @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
     async def name(self, ctx, gender: str = "Both"):
@@ -108,7 +108,7 @@ class Random(commands.Cog):
         if canping:
             await ctx.send(f"Final winner: {random.choice(finals).mention}")
         else:
-            embed = discord.Embed(description=f"Final winner: {random.choice(finals).mention}")
+            embed = discord.Embed(description=f"Final winner: {random.choice(finals).mention}", colour=self.bot.primary_colour)
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
@@ -181,13 +181,13 @@ class Random(commands.Cog):
             "My sources say no.",
             "Very doubtful.",
         ]
-        await ctx.send(":8ball: " + random.choice(li))
+        await ctx.send(embed=discord.Embed(description=":8ball: " + random.choice(li), colour=self.bot.primary_colour))
 
     @commands.command(name="coinflip", description="Flip a coin", usage="coinflip")
     async def coinflip(self, ctx):
         notland = random.randint(1, 6000)
         if notland == 1:
-            await ctx.send("The coin landed perfectly on it's side! What a miracle!")
+            await ctx.send(embed=discord.Embed(description="The coin landed perfectly on it's side! What a miracle!", colour=self.bot.primary_colour))
 
         guild = self.bot.get_guild(725303414220914758)
         heads = [e for e in guild.emojis if e.name == "washingtonheads"][0]
@@ -208,8 +208,7 @@ class Random(commands.Cog):
         res = ""
         for i in args:
             res += i + " "
-
-        await ctx.send(f"Shuffled list: {res}")
+        await ctx.send(embed=discord.Embed(title="Shuffled List", description="{res}", colour=self.bot.primary_colour))
 
     @commands.command(
         name="iamveryrandom",
