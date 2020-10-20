@@ -56,9 +56,19 @@ class Random(commands.Cog):
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
-    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>", usage="randint <start> <end>")
+    @commands.command(
+        name="randint",
+        aliases=["rnd"],
+        description="Pick a number in range <st> to <en>",
+        usage="randint <start> <end>",
+    )
     async def rnd(self, ctx, arg1: int, arg2: int):
-        await ctx.send(embed=discord.Embed(description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2), colour=self.bot.primary_colour))
+        await ctx.send(
+            embed=discord.Embed(
+                description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2),
+                colour=self.bot.primary_colour,
+            )
+        )
 
     @commands.command(name="username", description="Send the name of someone in the server")
     async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
@@ -67,7 +77,12 @@ class Random(commands.Cog):
             if not i.bot:
                 potential.append(i)
         user = random.choice(potential)
-        await ctx.send(embed=discord.Embed(description="Picked {}".format(user.name + "#" + str(user.discriminator)), colour=self.bot.primary_colour))
+        await ctx.send(
+            embed=discord.Embed(
+                description="Picked {}".format(user.name + "#" + str(user.discriminator)),
+                colour=self.bot.primary_colour,
+            )
+        )
 
     @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
     async def name(self, ctx, gender: str = "Both"):
@@ -108,7 +123,9 @@ class Random(commands.Cog):
         if canping:
             await ctx.send(f"Final winner: {random.choice(finals).mention}")
         else:
-            embed = discord.Embed(description=f"Final winner: {random.choice(finals).mention}", colour=self.bot.primary_colour)
+            embed = discord.Embed(
+                description=f"Final winner: {random.choice(finals).mention}", colour=self.bot.primary_colour
+            )
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
@@ -187,7 +204,12 @@ class Random(commands.Cog):
     async def coinflip(self, ctx):
         notland = random.randint(1, 6000)
         if notland == 1:
-            await ctx.send(embed=discord.Embed(description="The coin landed perfectly on it's side! What a miracle!", colour=self.bot.primary_colour))
+            await ctx.send(
+                embed=discord.Embed(
+                    description="The coin landed perfectly on it's side! What a miracle!",
+                    colour=self.bot.primary_colour,
+                )
+            )
 
         guild = self.bot.get_guild(725303414220914758)
         heads = [e for e in guild.emojis if e.name == "washingtonheads"][0]

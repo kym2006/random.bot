@@ -82,7 +82,7 @@ class General(commands.Cog):
                     cmds += cmd.name + "\n"
             cmds += "```"
             if cog_name == "More":
-                cog_name = "More random commands"
+                cog_name = "Random 2.0"
             page.add_field(name=cog_name, value=cmds)
         all_pages.append(page)
         for _, cog_name in enumerate(self.bot.cogs):
@@ -93,7 +93,7 @@ class General(commands.Cog):
             if len(cog_commands) == 0:
                 continue
             if cog_name == "More":
-                cog_name = "More random commands"
+                cog_name = "Random 2.0"
             page = discord.Embed(
                 title=cog_name,
                 description=f"My prefix is `{ctx.prefix}`. Use `{ctx.prefix}"
@@ -141,7 +141,7 @@ class General(commands.Cog):
                     cmds += cmd.name + "\n"
             cmds += "```"
             if cog_name == "More":
-                cog_name = "More random commands"
+                cog_name = "Random 2.0"
             page.add_field(name=cog_name, value=cmds)
 
         await ctx.send(embed=page)

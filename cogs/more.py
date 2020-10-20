@@ -45,6 +45,18 @@ class More(commands.Cog):
                 res = json.loads(await data.text())
                 await ctx.send(embed=discord.Embed(description=res["fact"], colour=self.bot.primary_colour))
 
+    @commands.command(description="Sends a random joke", usage="joke")
+    async def joke(self, ctx):
+        url = "https://official-joke-api.appspot.com/jokes/random"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                await ctx.send(
+                    embed=discord.Embed(
+                        title=res["type"], description=f'Setup: {res["setup"]}\nPunchline: {res["punchline"]}'
+                    )
+                )
+
 
 def setup(bot):
     bot.add_cog(More(bot))
