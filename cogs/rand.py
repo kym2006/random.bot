@@ -56,7 +56,7 @@ class Random(commands.Cog):
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
-    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
+    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>", usage="randint <start> <end>")
     async def rnd(self, ctx, arg1: int, arg2: int):
         await ctx.send(embed=discord.Embed(description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2), colour=self.bot.primary_colour))
 
@@ -208,7 +208,7 @@ class Random(commands.Cog):
         res = ""
         for i in args:
             res += i + " "
-        await ctx.send(embed=discord.Embed(title="Shuffled List", description="{res}", colour=self.bot.primary_colour))
+        await ctx.send(embed=discord.Embed(title="Shuffled List", description=f"{res}", colour=self.bot.primary_colour))
 
     @commands.command(
         name="iamveryrandom",
