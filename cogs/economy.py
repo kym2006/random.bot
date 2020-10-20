@@ -87,8 +87,10 @@ class Economy(commands.Cog):
                     id,
                 )
         await ctx.send(
-            embed=discord.Embed(f"You got {newval-row['silver']} silver. You now have {newval} silver."),
-            colour=self.bot.primary_colour,
+            embed=discord.Embed(
+                description=f"You got {newval-row['silver']} silver. You now have {newval} silver.",
+                colour=self.bot.primary_colour,
+            ),
         )
 
     @commands.command(name="leaderboard", description="See the richest people", usage="leaderboard")
