@@ -322,23 +322,6 @@ class Random(commands.Cog):
             embed.add_field(name=f"Team {i+1}", value=res, inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(description="Sends a random quote by Trump", usage="trump")
-    async def trump(self, ctx):
-        url = "https://api.tronalddump.io/random/quote"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as data:
-                res = json.loads(await data.text())
-                embed = discord.Embed(description=res["value"], colour=self.bot.primary_colour)
-                embed.set_author(name="Donald Trump")
-                await ctx.send(embed=embed)
-
-    @commands.command(description="Sends a random (inspirational?) quote", usage="quote")
-    async def quote(self, ctx):
-        chosen_quote = random.choice(self.quotes)
-        embed = discord.Embed(description=chosen_quote["text"], colour=self.bot.primary_colour)
-        embed.set_author(name=chosen_quote["author"])
-        await ctx.send(embed=embed)
-
 
 def setup(bot):
     bot.add_cog(Random(bot))

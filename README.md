@@ -26,6 +26,3 @@ Some commands include:\
 @name - Random name of someone in your server\
 @team - Put everyone in teams\
 Do note that the bot is still under development.
-
-## Acknowledgements
-[quotes.json](https://github.com/dwyl/quotes/blob/master/quotes.json)
