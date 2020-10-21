@@ -1,13 +1,8 @@
-import datetime
-import json
 import logging
-import platform
 import random
 
 import aiohttp
-import asyncpg
 import discord
-import psutil
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -22,7 +17,7 @@ class Economy(commands.Cog):
         id = ctx.message.author.id
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM credit WHERE userid = $1", id)
-        if row == None:
+        if row is None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     """
@@ -46,7 +41,9 @@ class Economy(commands.Cog):
                 )
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM credit WHERE userid = $1", id)
-            await ctx.send(f"You now have {row['silver']} silver.")
+            await ctx.send(
+                embed=discord.Embed(description=f"You now have {row['silver']} silver.", colour=self.bot.primary_colour)
+            )
 
     @commands.command(
         name="bet",
@@ -61,7 +58,7 @@ class Economy(commands.Cog):
         id = ctx.message.author.id
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM credit WHERE userid = $1", id)
-        if row == None:
+        if row is None:
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     """
@@ -89,7 +86,12 @@ class Economy(commands.Cog):
                     newval,
                     id,
                 )
-        await ctx.send(f"You got {newval-row['silver']} silver. You now have {newval} silver.")
+        await ctx.send(
+            embed=discord.Embed(
+                description=f"You got {newval-row['silver']} silver. You now have {newval} silver.",
+                colour=self.bot.primary_colour,
+            ),
+        )
 
     @commands.command(name="leaderboard", description="See the richest people", usage="leaderboard")
     async def leaderboard(self, ctx):
@@ -116,7 +118,7 @@ class Economy(commands.Cog):
         partial = ""
         for i in payload.split("\n")[:10]:
             partial += i + "\n"
-        await ctx.send(embed=discord.Embed(header="Top 5", description=partial))
+        await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
         payload = payload.replace("<:silver:635020537349013519>", "silver")
         payload = payload.replace("<:gold:635020560249913394>", "gold")
         async with aiohttp.ClientSession() as session:
@@ -125,7 +127,10 @@ class Economy(commands.Cog):
                     js = await r.json()
                     key = js["key"]
                     await ctx.send(
-                        embed=discord.Embed(description="Full leaderboard: {}".format("https://hasteb.in/" + key))
+                        embed=discord.Embed(
+                            description="Full leaderboard: {}".format("https://hasteb.in/" + key),
+                            colour=self.bot.primary_colour,
+                        )
                     )
 
 

@@ -1,4 +1,5 @@
 import asyncio
+import json
 import random
 import typing
 
@@ -6,7 +7,6 @@ import aiohttp
 import discord
 import namegenerator
 import names
-import json
 from discord.ext import commands
 
 
@@ -18,7 +18,7 @@ class Random(commands.Cog):
 
     @commands.command(name="choose", description="Choose something")
     async def choose(self, ctx, *args):
-        await ctx.send("The wheel has chosen {}!".format(random.choice(args)))
+        await ctx.send(embed=discord.Embed(description="The wheel has chosen {}!".format(random.choice(args))))
 
     @commands.command(
         name="colour",
@@ -30,7 +30,7 @@ class Random(commands.Cog):
         c = discord.Colour.from_rgb(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         await ctx.send(
             embed=discord.Embed(
-                title="Colour codes",
+                title="Colour Codes",
                 description=f"6 digit Hexadecimal: ``{c.__str__()}``\n" f"RGB Values: ``{c.to_rgb()}``",
                 colour=c,
             )
@@ -52,13 +52,23 @@ class Random(commands.Cog):
         if canping:
             await ctx.send("Picked <@!{}>".format(user.id))
         else:
-            embed = discord.Embed(description="Picked <@!{}>".format(user.id))
+            embed = discord.Embed(description="Picked <@!{}>".format(user.id), colour=self.bot.primary_colour)
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
-    @commands.command(name="randint", aliases=["rnd"], description="Pick a number in range <st> to <en>")
+    @commands.command(
+        name="randint",
+        aliases=["rnd"],
+        description="Pick a number in range <st> to <en>",
+        usage="randint <start> <end>",
+    )
     async def rnd(self, ctx, arg1: int, arg2: int):
-        await ctx.send("Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2))
+        await ctx.send(
+            embed=discord.Embed(
+                description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2),
+                colour=self.bot.primary_colour,
+            )
+        )
 
     @commands.command(name="username", description="Send the name of someone in the server")
     async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
@@ -67,7 +77,12 @@ class Random(commands.Cog):
             if not i.bot:
                 potential.append(i)
         user = random.choice(potential)
-        await ctx.send("Picked {}".format(user.name + "#" + str(user.discriminator)))
+        await ctx.send(
+            embed=discord.Embed(
+                description="Picked {}".format(user.name + "#" + str(user.discriminator)),
+                colour=self.bot.primary_colour,
+            )
+        )
 
     @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
     async def name(self, ctx, gender: str = "Both"):
@@ -108,7 +123,9 @@ class Random(commands.Cog):
         if canping:
             await ctx.send(f"Final winner: {random.choice(finals).mention}")
         else:
-            embed = discord.Embed(description=f"Final winner: {random.choice(finals).mention}")
+            embed = discord.Embed(
+                description=f"Final winner: {random.choice(finals).mention}", colour=self.bot.primary_colour
+            )
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
@@ -181,23 +198,27 @@ class Random(commands.Cog):
             "My sources say no.",
             "Very doubtful.",
         ]
-        await ctx.send(":8ball: " + random.choice(li))
+        await ctx.send(embed=discord.Embed(description=":8ball: " + random.choice(li), colour=self.bot.primary_colour))
 
     @commands.command(name="coinflip", description="Flip a coin", usage="coinflip")
     async def coinflip(self, ctx):
-        notland = random.randint(1, 6000)  # this chance
+        notland = random.randint(1, 6000)
         if notland == 1:
-            await ctx.send("The coin landed perfectly on it's side! What a miracle!")
+            await ctx.send(
+                embed=discord.Embed(
+                    description="The coin landed perfectly on it's side! What a miracle!",
+                    colour=self.bot.primary_colour,
+                )
+            )
 
         guild = self.bot.get_guild(725303414220914758)
-        heads = [e for e in guild.emojis if e.name=="washingtonheads"][0]
-        tails = [e for e in guild.emojis if e.name=="washingtontails"][0]
-        await ctx.send(str(random.choice([heads,tails])))
+        heads = [e for e in guild.emojis if e.name == "washingtonheads"][0]
+        tails = [e for e in guild.emojis if e.name == "washingtontails"][0]
+        await ctx.send(str(random.choice([heads, tails])))
 
     @commands.command(name="dice", description="Throw a 6 side dice!", usage="dice")
     async def dice(self, ctx):
-        guild = self.bot.get_guild(725303414220914758)
-        res=random.randint(1,6)
+        res = random.randint(1, 6)
         guild = self.bot.get_guild(725303414220914758)
         emoji = [e for e in guild.emojis if e.name == f"dice{res}"][0]
         await ctx.send(emoji)
@@ -209,8 +230,7 @@ class Random(commands.Cog):
         res = ""
         for i in args:
             res += i + " "
-
-        await ctx.send(f"Shuffled list: {res}")
+        await ctx.send(embed=discord.Embed(title="Shuffled List", description=f"{res}", colour=self.bot.primary_colour))
 
     @commands.command(
         name="iamveryrandom",
@@ -293,7 +313,7 @@ class Random(commands.Cog):
         teams = [[] for i in players]
         for i in range(len(players)):
             teams[i % num].append(players[i])
-        embed = discord.Embed(title="Random Teams")
+        embed = discord.Embed(title="Random Teams", colour=self.bot.primary_colour)
         for i in range(num):
             res = ""
             for j in teams[i]:
