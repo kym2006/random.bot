@@ -61,7 +61,7 @@ class General(commands.Cog):
             + "\nKudos to you if you don't leave within a minute.",
             inline=False,
         )
-        page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
+        page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
         all_pages.append(page)
         page = discord.Embed(
             title="Commands Menu",
@@ -122,7 +122,7 @@ class General(commands.Cog):
             name="Invite",
             value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=519239)",
         )
-        page.add_field(name="Support Server", value="https://invite.gg/randombot", inline=False)
+        page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
         page.add_field(name="Donate", value="paypal.me/kym2k06", inline=False)
         page.set_thumbnail(url=self.bot.user.avatar_url)
         for _, cog_name in enumerate(self.bot.cogs):
@@ -311,7 +311,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Support Server",
-                description="https://invite.gg/randombot",
+                description="https://discord.gg/ZatYnsX",
                 colour=self.bot.primary_colour,
             )
         )
