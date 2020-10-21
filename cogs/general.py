@@ -126,7 +126,7 @@ class General(commands.Cog):
             value="[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=519239)",
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
-        page.add_field(name="Donate", value="paypal.me/kym2k06", inline=False)
+        page.add_field(name="Donate", value="https://paypal.me/kym2k06", inline=False)
         page.set_thumbnail(url=self.bot.user.avatar_url)
         for _, cog_name in enumerate(self.bot.cogs):
             if cog_name in ["Owner", "Admin"]:
