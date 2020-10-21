@@ -15,7 +15,7 @@ class More(commands.Cog):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as data:
                 res = json.loads(await data.text())
-                embed = discord.Embed(description=res["advice"], colour=self.bot.primary_colour)
+                embed = discord.Embed(description=res["slip"]["advice"], colour=self.bot.primary_colour)
                 await ctx.send(embed=embed)
 
     @commands.command(description="Sends a random cat image", usage="cat")
