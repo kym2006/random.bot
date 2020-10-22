@@ -13,8 +13,6 @@ from discord.ext import commands
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        with open("./quotes.json") as f:
-            self.quotes = json.load(f)
 
     @commands.command(name="choose", description="Choose something")
     async def choose(self, ctx, *args):
