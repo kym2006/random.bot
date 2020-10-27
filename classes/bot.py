@@ -44,6 +44,10 @@ class Bot(commands.AutoShardedBot):
     def error_colour(self):
         return self.config.error_colour
 
+    @property
+    def down_commands(self):
+        return self.config.down_commands
+
     async def get_data(self, guild):
         async with self.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", guild)

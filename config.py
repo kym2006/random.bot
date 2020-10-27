@@ -51,3 +51,7 @@ patron3 = 725303414220914765
 primary_colour = 0x8125DA
 success_colour = 0x00FF00
 error_colour = 0xFF0000
+
+down_commands=[
+    "iamveryrandom", "someone", "username", "wheel", "somerole"
+]
