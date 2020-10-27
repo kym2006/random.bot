@@ -24,9 +24,8 @@ class Snippet(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
 
-        snippets = str()
+        snippets = dict()
         if res == []:
-            snippets = {}
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
@@ -51,6 +50,7 @@ class Snippet(commands.Cog):
         if len(snippets) + len(content) > limit:
             await ctx.send(f"Limit of {limit} exceeded.")
             return
+        print(snippets)
         s = json.loads(snippets)
         s[name] = content
         async with self.bot.pool.acquire() as conn:
