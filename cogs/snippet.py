@@ -63,8 +63,8 @@ class Snippet(commands.Cog):
     async def snippetuse(self, ctx,times: typing.Optional[int], name: str, user:converters.GlobalUser=None):
         if times is None:
             times = 1 
-        if times > 5:
-            await ctx.send("The limit for amount of times is 5.")
+        if times > 10:
+            await ctx.send("The limit for amount of times is 10.")
             return 
         tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
