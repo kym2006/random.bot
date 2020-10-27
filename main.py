@@ -26,6 +26,5 @@ bot = Bot(
     heartbeat_timeout=300,
 )
 
-
 loop = asyncio.get_event_loop()
 loop.run_until_complete(bot.start_bot())
