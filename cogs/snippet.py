@@ -19,7 +19,7 @@ class Snippet(commands.Cog):
     )
     async def snippetadd(self, ctx, name: str, *, content: str):
         if content.find("snippetuse") != -1:
-            await ctx.send("Please do not try and cause a snippet-ception!")
+            await ctx.send(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
             return 
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
