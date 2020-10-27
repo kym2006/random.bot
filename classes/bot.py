@@ -55,7 +55,7 @@ class Bot(commands.AutoShardedBot):
     all_prefix = {}
 
     async def connect_postgres(self):
-        self.pool = await asyncpg.create_pool(self.config.database_url, max_size=20, command_timeout=60)
+        self.pool = await asyncpg.create_pool(self.config.database_url, max_size=20, command_timeout=10)
 
     async def start_bot(self):
         await self.connect_postgres()

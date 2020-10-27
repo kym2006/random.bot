@@ -3,7 +3,7 @@ import json
 
 import discord
 from discord.ext import commands
-
+import typing 
 import config
 from classes import converters
 
@@ -18,6 +18,9 @@ class Snippet(commands.Cog):
         usage="snippetadd <name> <command to run without prefix>",
     )
     async def snippetadd(self, ctx, name: str, *, content: str):
+        if content.find("snippetuse") != -1:
+            await ctx.send("Please do not try and cause a snippet-ception!")
+            return 
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
 
@@ -57,7 +60,12 @@ class Snippet(commands.Cog):
     @commands.command(
         name="snippetuse", description="use a snippet", usage="snippetuse <name> [user] (user is optional)"
     )
-    async def snippetuse(self, ctx, name: str, user: converters.GlobalUser = None):
+    async def snippetuse(self, ctx,times: typing.Optional[int], name: str, user:converters.GlobalUser=None):
+        if times is None:
+            times = 1 
+        if times > 5:
+            await ctx.send("The limit for amount of times is 5.")
+            return 
         tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", tar.id)
@@ -76,8 +84,9 @@ class Snippet(commands.Cog):
         except Exception:
             msg.author = tar
         msg.content = ctx.prefix + s[name]
-        new_ctx = await self.bot.get_context(msg, cls=type(ctx))
-        await self.bot.invoke(new_ctx)
+        for i in range(times):
+            new_ctx = await self.bot.get_context(msg, cls=type(ctx))
+            await self.bot.invoke(copy.copy(new_ctx))
 
     @commands.command(name="snippetview", description="View a snippet", usage="snippetview <name")
     async def snippetview(self, ctx, name: str):
