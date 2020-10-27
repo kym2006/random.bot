@@ -19,7 +19,7 @@ class Snippet(commands.Cog):
     )
     async def snippetadd(self, ctx, name: str, *, content: str):
         if content.find("snippetuse") != -1:
-            await ctx.send("Please do not try and cause a snippet-ception!")
+            await ctx.send(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
             return 
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -64,7 +64,7 @@ class Snippet(commands.Cog):
         if times is None:
             times = 1 
         if times > 10:
-            await ctx.send("The limit for amount of times is 10.")
+            await ctx.send(embed=discord.Embed(description="The limit for amount of times is 10.", colour=self.bot.primary_colour))
             return 
         tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
