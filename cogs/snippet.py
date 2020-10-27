@@ -64,7 +64,7 @@ class Snippet(commands.Cog):
         if times is None:
             times = 1 
         if times > 10:
-            await ctx.send("The limit for amount of times is 10.")
+            await ctx.send(embed=discord.Embed(description="The limit for amount of times is 10.", colour=self.bot.primary_colour))
             return 
         tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
