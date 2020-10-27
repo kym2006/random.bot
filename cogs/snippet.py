@@ -69,9 +69,8 @@ class Snippet(commands.Cog):
         tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", tar.id)
-        snippets = str()
+        snippets = dict()
         if res == []:
-            snippets = " {} "
             async with self.bot.pool.acquire() as conn:
                 await conn.execute("INSERT INTO snippet(userid,content) VALUES($1,$2)", tar.id, json.dumps(snippets))
         else:
@@ -92,9 +91,9 @@ class Snippet(commands.Cog):
     async def snippetview(self, ctx, name: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", ctx.author.id)
-        snippets = str()
+        snippets = dict()
         if res == []:
-            snippets = " {} "
+            
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
@@ -114,9 +113,9 @@ class Snippet(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
 
-        snippets = str()
+        snippets = dict()
         if res == []:
-            snippets = " {} "
+            
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
@@ -137,9 +136,8 @@ class Snippet(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
 
-        snippets = str()
+        snippets = dict()
         if res == []:
-            snippets = " {} "
             async with self.bot.pool.acquire() as conn:
                 await conn.execute(
                     "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
