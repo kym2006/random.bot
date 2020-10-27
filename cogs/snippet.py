@@ -58,7 +58,7 @@ class Snippet(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @commands.command(
-        name="snippetuse", description="use a snippet", usage="snippetuse <name> [user] (user is optional)"
+        name="snippetuse", description="use a snippet", usage="snippetuse [times] <name> [user] (user and times is optional)"
     )
     async def snippetuse(self, ctx,times: typing.Optional[int], name: str, user:converters.GlobalUser=None):
         if times is None:
