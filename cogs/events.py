@@ -14,7 +14,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         if str(ctx.command) in self.bot.down_commands:
-            await ctx.send(embed=discord.Embed(description="That command is down right now. Join the [support server](https://discord.gg/ZatYnsX) to find out more why. We are already working on a fix :)"))
+            await ctx.send(embed=discord.Embed(description="That command is down right now. Join the [support server](https://discord.gg/ZatYnsX) and read the announcements to find out why. We are already working on a fix :)"))
             return 
     @commands.Cog.listener()
     async def on_ready(self):
