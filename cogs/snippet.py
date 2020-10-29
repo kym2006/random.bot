@@ -102,9 +102,9 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
         s = json.loads(snippets)
         if name in s:
-            await ctx.send(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}"))
+            await ctx.send(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}", colour=self.bot.primary_colour))
         else:
-            await ctx.send(embed=discord.Embed(title="Error", description="No snippet of that name is found."))
+            await ctx.send(embed=discord.Embed(title="Error", description="No snippet of that name is found.", colour=self.bot.primary_colour))
 
     @commands.command(
         name="snippetremove", description="remove a snippet", aliases=["snippetdelete"], usage="snippetremove <name>"
@@ -148,7 +148,7 @@ class Snippet(commands.Cog):
         res = ""
         for i in s.keys():
             res += i + "\n"
-        await ctx.send(embed=discord.Embed(title="All snippets", description=res))
+        await ctx.send(embed=discord.Embed(title="All snippets", description=res, colour=self.bot.primary_colour))
 
     @commands.command(name="snippetabout", description="How to use snippets", usage="snippetabout")
     async def snippetabout(self, ctx):
