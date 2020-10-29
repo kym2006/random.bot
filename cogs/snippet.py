@@ -87,7 +87,7 @@ class Snippet(commands.Cog):
             new_ctx = await self.bot.get_context(msg, cls=type(ctx))
             await self.bot.invoke(copy.copy(new_ctx))
 
-    @commands.command(name="snippetview", description="View a snippet", usage="snippetview <name")
+    @commands.command(name="snippetview", description="View a snippet", usage="snippetview <name>")
     async def snippetview(self, ctx, name: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", ctx.author.id)
