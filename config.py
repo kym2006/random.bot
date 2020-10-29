@@ -53,5 +53,5 @@ success_colour = 0x00FF00
 error_colour = 0xFF0000
 
 down_commands=[
-    "iamveryrandom", "someone", "username", "wheel", "somerole"
+
 ]
