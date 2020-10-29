@@ -1,6 +1,6 @@
 import asyncio
 import logging
-
+import discord 
 from discord.ext import commands
 
 from classes.bot import Bot
@@ -20,10 +20,12 @@ async def _get_prefix(bot, message):
     prefix = await get_prefix(bot, message.guild)
     return commands.when_mentioned_or(prefix)(bot, message)
 
-
+intents=discord.Intents.default()
+intents.members=True 
 bot = Bot(
     command_prefix=_get_prefix,
     heartbeat_timeout=300,
+    intents=intents,
 )
 
 loop = asyncio.get_event_loop()
