@@ -274,7 +274,7 @@ class General(commands.Cog):
         embed = discord.Embed(title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour)
         embed.add_field(
             name="Owners",
-            value="kym2006#6342\nwaterflamev8#4123\nSquiddyPoos#6795",
+            value="kym2006#6342\nSquiddyPoos#6795",
         )
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
