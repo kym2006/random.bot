@@ -3,8 +3,6 @@ import logging
 import sys
 import traceback
 from pathlib import Path
-from randomapi import RandomJSONRPC
-
 import asyncpg
 from discord.ext import commands
 
