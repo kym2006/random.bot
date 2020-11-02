@@ -14,7 +14,7 @@ class Org(commands.Cog):
         self.bot = bot
 
     #@checks.is_patron()
-    @commands.group(usage="?org", description="A group of commands whereby random.org api is used to generate more cryptographically secure results")
+    @commands.group(usage="org", description="A group of commands whereby random.org api is used to generate more cryptographically secure results")
     async def org(self,ctx):
         if ctx.invoked_subcommand is None:
             cog=self.bot.get_cog("Org")
