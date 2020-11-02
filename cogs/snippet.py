@@ -36,9 +36,9 @@ class Snippet(commands.Cog):
         guild = self.bot.get_guild(725303414220914758)
         limit = 10000
         if ctx.author.id in [g.id for g in guild.members]:
-            patron1 = discord.utils.find(lambda r: r.id == config.patron1, guild.roles)
-            patron2 = discord.utils.find(lambda r: r.id == config.patron2, guild.roles)
-            patron3 = discord.utils.find(lambda r: r.id == config.patron3, guild.roles)
+            patron1 = discord.utils.find(lambda r: r.id == self.bot.config.patron1, guild.roles)
+            patron2 = discord.utils.find(lambda r: r.id == self.bot.config.patron2, guild.roles)
+            patron3 = discord.utils.find(lambda r: r.id == self.bot.config.patron3, guild.roles)
             member = guild.get_member(ctx.author.id)
             if patron1 in member.roles:
                 limit = 20000
