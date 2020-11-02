@@ -4,7 +4,7 @@ import random
 import aiohttp
 import discord
 from discord.ext import commands
-
+from classes import converters
 log = logging.getLogger(__name__)
 
 
@@ -65,7 +65,7 @@ class Economy(commands.Cog):
             INSERT INTO credit(userid, silver, gold) VALUES($1, $2, $3)
         """,
                     id,
-                    1,
+                    0,
                     0,
                 )
             await ctx.send("You cannot bet anything due to your lack of funds")
@@ -89,6 +89,46 @@ class Economy(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 description=f"You got {newval-row['silver']} silver. You now have {newval} silver.",
+                colour=self.bot.primary_colour,
+            ),
+        )
+    
+    @commands.command(name="give", description="Give money to someone", usage="give <user> <amount>")
+    async def give(self, ctx,  user: converters.GlobalUser, amount:int):
+        if amount < 0:
+            await ctx.send(embed=discord.Embed(description="That would be stealing!"))
+            return 
+        async with self.bot.pool.acquire() as conn:
+            row = await conn.fetchrow("SELECT * FROM credit WHERE userid = $1", ctx.author.id)
+        if row is None:
+            async with self.bot.pool.acquire() as conn:
+                await conn.execute(
+                    """
+            INSERT INTO credit(userid, silver, gold) VALUES($1, $2, $3)
+        """,
+                    ctx.author.id,
+                    1,
+                    0,
+                )
+            await ctx.send("You cannot give anything due to your lack of funds")
+            return
+        have = row["silver"]
+        if amount > have:
+            await ctx.send("You do not have enough money to give that much")
+            return
+        else:
+            newval = row["silver"] - amount
+            async with self.bot.pool.acquire() as conn:
+                await conn.execute("UPDATE credit SET silver=$1 where userid=$2", newval, ctx.author.id)
+                given = await conn.fetchrow("SELECT * FROM credit where userid=$1", user.id)
+                if given is None:
+                    await conn.execute("INSERT INTO credit(userid, silver, gold) VALUES($1,$2,$3)",user.id, amount, 0)
+                else:
+
+                    await conn.execute("UPDATE credit SET silver=$1 where userid=$2", given['silver']+amount, user.id)
+        await ctx.send(
+            embed=discord.Embed(
+                description=f"You gave {amount} silver to {user.name}#{user.discriminator}. You now have {newval} silver.",
                 colour=self.bot.primary_colour,
             ),
         )
