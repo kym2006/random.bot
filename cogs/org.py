@@ -18,7 +18,7 @@ class Randomdotorg(commands.Cog):
     @commands.group(usage="org", description="A group of commands whereby random.org api is used to generate more cryptographically secure results")
     async def org(self,ctx):
         if ctx.invoked_subcommand is None:
-            cog=self.bot.get_cog("Org")
+            cog=self.bot.get_cog("Randomdotorg")
             commands=[c.qualified_name for c in cog.walk_commands()]
             res="```\nCommands using random.org api:\n"
             for i in commands:
