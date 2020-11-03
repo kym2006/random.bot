@@ -15,6 +15,7 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     @commands.bot_has_permissions(add_reactions=True)
     @commands.command(
         description="Shows the help menu or information for a specific command when specified.",
@@ -223,6 +224,11 @@ class General(commands.Cog):
             title="Looking to donate?",
             description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/kym2k06).",
             colour=self.bot.primary_colour,
+        )
+        embed.add_field(
+            inline=False,
+            name="Using random.org api functions",
+            value=f"Patrons also get access to functions that use the random.org api directly. Run `{ctx.prefix}org` to view a list of functions that have already been implemented. RANDOM.ORG offers true random numbers to anyone on the Internet. The randomness comes from atmospheric noise, which for many purposes is better than the pseudo-random number algorithms typically used in computer programs. People use RANDOM.ORG for holding drawings, lotteries and sweepstakes, to drive online games, for scientific applications and for art and music. Visit https://random.org to learn more."
         )
         embed.add_field(
             inline=False,
