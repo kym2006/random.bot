@@ -73,6 +73,14 @@ class Bot(commands.AutoShardedBot):
                 return await self.get_data(guild)
             return res
 
+    async def get_user_data(self, user):
+        async with self.pool.acquire() as conn:
+            res=await conn.fetchrow("SELECT * FROM credit where userid=$1",user)
+            if not res:
+                await conn.execute("INSERT INTO data VALUES ($1, $2, $3, $4)", user, 0, 0, None)
+                return await self.get_user_data(user)
+            return res 
+
     all_prefix = {}
 
     async def connect_postgres(self):
