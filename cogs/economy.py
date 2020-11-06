@@ -132,9 +132,9 @@ class Economy(commands.Cog):
 
     @commands.command(name="displaytext", description="Set what you would like your text to be displayed as", usage="displaytext <text>")
     async def displaytext(self,ctx,*,content):
-        row=await self.bot.get_user_data(ctx.author.id)
-        if len(content) > 30:
-            await ctx.send("Max characters of text is 30!")
+        await self.bot.get_user_data(ctx.author.id)
+        if len(content) > 50:
+            await ctx.send("Max characters of text is 50!")
             return 
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE credit set displaytext=$1 where userid=$2", content, ctx.author.id)
