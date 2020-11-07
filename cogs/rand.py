@@ -36,7 +36,7 @@ class Random(commands.Cog):
     @commands.command(name = "avatar", description="Get a random avatar! Note: May be subjected to copyright, please contact owner of that avatar before using it.", usage= "avatar")
     async def avatar(self, ctx):
         user = random.choice(self.bot.users)
-        embed=discord.Embed(description="Here's a random avatar! Please do not use it without permission from the original creator.")
+        embed=discord.Embed(colour=self.bot.config.primary_colour,description="Here's a random avatar! Please do not use it without permission from the original creator.")
         embed.set_thumbnail(url=user.avatar_url)
         embed.set_author(name=f"{user.name}#{user.discriminator}")
         await ctx.send(embed=embed)
