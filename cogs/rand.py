@@ -250,11 +250,9 @@ class Random(commands.Cog):
             return
         member = ctx.guild.get_member(ctx.author.id)
         if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members:
-            await ctx.send("You do not have permissions in this server to use this command.")
-            return
+            raise commands.MissingPermissions(["ban_members"])
         if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members:
-            await ctx.send("You do not have permissions in this server to use this command.")
-            return
+            raise commands.MissingPermissions(["kick_members"])
         user = random.choice(ctx.channel.guild.members)
         await ctx.send("Picked <@!{}>".format(user.id))
         await ctx.send("Say your goodbyes...")
