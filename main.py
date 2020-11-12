@@ -26,7 +26,6 @@ bot = Bot(
     command_prefix=_get_prefix,
     heartbeat_timeout=300,
     intents=intents,
-    shard_count=2
 )
 
 loop = asyncio.get_event_loop()
