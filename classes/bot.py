@@ -88,14 +88,13 @@ class Bot(commands.AutoShardedBot):
 
     async def start_bot(self):
         await self.connect_postgres()
-        cogs = [x.stem for x in Path("cogs").glob("*.py")]
         async with self.pool.acquire() as conn:
             data = await conn.fetch("SELECT guild, prefix from data")
         for row in data:
             self.all_prefix[row[0]] = row[1]
-        for extension in cogs:
+        for extension in self.config.initial_extensions:
             try:
-                self.load_extension(f"cogs.{extension}")
+                self.load_extension(extension)
             except Exception:
                 log.error(f"Failed to load extension {extension}.")
                 log.error(traceback.print_exc())

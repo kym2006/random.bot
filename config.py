@@ -52,6 +52,22 @@ primary_colour = 0x8125DA
 success_colour = 0x00FF00
 error_colour = 0xFF0000
 
+initial_extensions = [
+    "cogs.admin",
+    "cogs.owner",
+    "cogs.rand",
+    "cogs.more",
+    "cogs.org",
+    "cogs.snippet",
+    "cogs.economy",
+    "cogs.configuration",
+    "cogs.error_handler",
+    "cogs.events",
+    "cogs.general",
+    "cogs.miscellaneous",
+    "cogs.statcord"
+]
+
 down_commands=[
 
 ]
