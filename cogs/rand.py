@@ -164,7 +164,7 @@ class Random(commands.Cog):
 
     @commands.command(name="somerole", description="Ping a user with that role in your server", usage="somerole <@role>")
     async def somerole(self, ctx, role: str):
-        row = self.bot.get_data(ctx.guild.id)
+        row = await self.bot.get_data(ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
