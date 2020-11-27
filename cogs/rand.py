@@ -162,7 +162,7 @@ class Random(commands.Cog):
             embed=discord.Embed(title="Card chosen", description=p1 + "\n" + p2, colour=self.bot.config.primary_colour)
         )
 
-    @commands.command(name="somerole", description="Ping a user with that role in your server")
+    @commands.command(name="somerole", description="Ping a user with that role in your server", usage="somerole <@role>")
     async def somerole(self, ctx, role: str):
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
