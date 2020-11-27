@@ -34,7 +34,7 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
 
         guild = self.bot.get_guild(725303414220914758)
-        limit = 10000
+        limit = 50000
         if ctx.author.id in [g.id for g in guild.members]:
             patron1 = discord.utils.find(lambda r: r.id == self.bot.config.patron1, guild.roles)
             patron2 = discord.utils.find(lambda r: r.id == self.bot.config.patron2, guild.roles)
