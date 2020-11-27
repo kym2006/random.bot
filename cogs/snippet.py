@@ -41,11 +41,11 @@ class Snippet(commands.Cog):
             patron3 = discord.utils.find(lambda r: r.id == self.bot.config.patron3, guild.roles)
             member = guild.get_member(ctx.author.id)
             if patron1 in member.roles:
-                limit = 20000
+                limit += 10000
             if patron2 in member.roles:
-                limit = 50000
+                limit += 20000
             if patron3 in member.roles:
-                limit = 100000
+                limit += 100000
 
         if len(snippets) + len(content) > limit:
             await ctx.send(f"Limit of {limit} exceeded.")
