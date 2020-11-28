@@ -16,6 +16,7 @@ class Snippet(commands.Cog):
         name="snippetadd",
         description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.",
         usage="snippetadd <name> <command to run without prefix>",
+        aliases=["snippetnew", "addsnippet", "newsnippet", "snadd"]
     )
     async def snippetadd(self, ctx, name: str, *, content: str):
         if content.find("snippetuse") != -1:
@@ -58,7 +59,10 @@ class Snippet(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @commands.command(
-        name="snippetuse", description="use a snippet", usage="snippetuse [times] <name> [user] (user and times is optional)"
+        name="snippetuse", 
+        description="use a snippet", 
+        usage="snippetuse [times] <name> [user] (user and times is optional)",
+        aliases=["run", "snuse", "use"]
     )
     async def snippetuse(self, ctx,times: typing.Optional[int], name: str, user:converters.GlobalUser=None):
         if times is None:
@@ -76,6 +80,9 @@ class Snippet(commands.Cog):
         else:
             snippets = res[0]["content"]
         s = json.loads(snippets)
+        if name not in s:
+            await ctx.send(embed=discord.Embed(title="No note of that name found", description="Are you sure you have the correct spelling/added the snippet?", coluor=self.bot.config.primary_colour))
+            return 
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel
         try:
@@ -87,7 +94,11 @@ class Snippet(commands.Cog):
             new_ctx = await self.bot.get_context(msg, cls=type(ctx))
             await self.bot.invoke(copy.copy(new_ctx))
 
-    @commands.command(name="snippetview", description="View a snippet", usage="snippetview <name")
+    @commands.command(
+        name="snippetview", 
+        description="View a snippet", 
+        usage="snippetview <name", 
+        aliases=["view", "snview"])
     async def snippetview(self, ctx, name: str):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet where userid=$1", ctx.author.id)
@@ -102,12 +113,15 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
         s = json.loads(snippets)
         if name in s:
-            await ctx.send(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}"))
+            await ctx.send(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}", colour=self.bot.config.primary_colour))
         else:
-            await ctx.send(embed=discord.Embed(title="Error", description="No snippet of that name is found."))
+            await ctx.send(embed=discord.Embed(title="Error", description="No snippet of that name is found.", colour=self.bot.config.primary_colour))
 
     @commands.command(
-        name="snippetremove", description="remove a snippet", aliases=["snippetdelete"], usage="snippetremove <name>"
+        name="snippetremove", 
+        description="remove a snippet", 
+        aliases=["snippetdelete", "snremove", "sndelete"], 
+        usage="snippetremove <name>"
     )
     async def snippetremove(self, ctx, name: str):
         async with self.bot.pool.acquire() as conn:
@@ -131,7 +145,11 @@ class Snippet(commands.Cog):
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="snippetall", description="View all the names of your snippets", usage="snippetall")
+    @commands.command(
+        name="snippetall", 
+        description="View all the names of your snippets", 
+        usage="snippetall", 
+        aliases=["snall"])
     async def snippetall(self, ctx):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -148,7 +166,7 @@ class Snippet(commands.Cog):
         res = ""
         for i in s.keys():
             res += i + "\n"
-        await ctx.send(embed=discord.Embed(title="All snippets", description=res))
+        await ctx.send(embed=discord.Embed(title="All snippets", description=res, colour=self.bot.config.primary_colour))
 
     @commands.command(name="snippetabout", description="How to use snippets", usage="snippetabout")
     async def snippetabout(self, ctx):
