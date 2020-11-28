@@ -14,6 +14,8 @@ class ErrorHandler(commands.Cog):
         self.client = None
 
     async def _on_command_error(self, ctx, error, bypass=False):
+        channel =self.bot.get_channel(782156413090529301)
+        await channel.send(embed=discord.Embed(title="Error!", description=f"Content:{ctx.message.content}\nAuthor:{ctx.message.author.id}\n", colour=discord.Color.red()))
         if (
             hasattr(ctx.command, "on_error")
             or (ctx.command and hasattr(ctx.cog, f"_{ctx.command.cog_name}__error"))
