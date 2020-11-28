@@ -6,7 +6,7 @@ import textwrap
 import traceback
 from contextlib import redirect_stdout
 from typing import Optional
-
+import json 
 import aiohttp
 import discord
 from discord.ext import commands
@@ -22,11 +22,19 @@ def cleanup_code(content):
         return "\n".join(content.split("\n")[1:-1])
     return content.strip("` \n")
 
-
+def get_json(obj):
+  return json.loads(
+    json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o)))
+)
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
+
+    @checks.is_owner()
+    @commands.command(name="test")
+    async def test(self,ctx):
+        print(get_json(self.bot))
 
     @checks.is_owner()
     @commands.command(description="Load a module.", usage="load <cog>", hidden=True)

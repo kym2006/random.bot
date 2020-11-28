@@ -7,7 +7,7 @@ load_dotenv()
 token = os.getenv("TOKEN")
 database_url = os.getenv("DB_URL")
 statcord = os.getenv("statcord")
-
+randomorg = os.getenv("RANDOMORGTOKEN")
 if "testing" in os.environ:
     token = os.getenv("TEST_TOKEN")
 
@@ -24,8 +24,8 @@ owners = [
     412969691276115968,
     488283878189039626,
     446290930723717120,
-    723794074498367498,
     685456111259615252,
+    
 ]
 
 # Bot admins that have access to admin commands
@@ -51,6 +51,22 @@ patron3 = 725303414220914765
 primary_colour = 0x8125DA
 success_colour = 0x00FF00
 error_colour = 0xFF0000
+
+initial_extensions = [
+    "cogs.admin",
+    "cogs.owner",
+    "cogs.rand",
+    "cogs.more",
+    "cogs.org",
+    "cogs.snippet",
+    "cogs.economy",
+    "cogs.configuration",
+    "cogs.error_handler",
+    "cogs.events",
+    "cogs.general",
+    "cogs.miscellaneous",
+    "cogs.statcord"
+]
 
 down_commands=[
 

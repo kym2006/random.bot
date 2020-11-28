@@ -33,6 +33,19 @@ class Random(commands.Cog):
                 colour=c,
             )
         )
+    @commands.command(name = "avatar", description="Get a random avatar! Note: May be subjected to copyright, please contact owner of that avatar before using it.", usage= "avatar")
+    async def avatar(self, ctx):
+        user = random.choice(self.bot.users)
+        default_avatars=[]
+        for i in range(5):
+            default_avatars.append(f"https://cdn.discordapp.com/embed/avatars/{i}.png")
+        while str(user.avatar_url) in default_avatars:
+            user=random.choice(self.bot.users)
+        embed=discord.Embed(colour=self.bot.config.primary_colour,description="Here's a random avatar! Please do not use it without permission from the original creator.")
+        embed.set_thumbnail(url=user.avatar_url)
+        embed.set_author(name=f"{user.name}#{user.discriminator}")
+        await ctx.send(embed=embed)
+
 
     @commands.command(name="someone", usage="someone", description="ping someone at random")
     async def mention(self, ctx, *, msg: str = ""):
@@ -149,10 +162,9 @@ class Random(commands.Cog):
             embed=discord.Embed(title="Card chosen", description=p1 + "\n" + p2, colour=self.bot.config.primary_colour)
         )
 
-    @commands.command(name="somerole", description="Ping a user with that role in your server")
+    @commands.command(name="somerole", description="Ping a user with that role in your server", usage="somerole <@role>")
     async def somerole(self, ctx, role: str):
-        async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+        row = await self.bot.get_data(ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
@@ -242,11 +254,9 @@ class Random(commands.Cog):
             return
         member = ctx.guild.get_member(ctx.author.id)
         if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members:
-            await ctx.send("You do not have permissions in this server to use this command.")
-            return
+            raise commands.MissingPermissions(["ban_members"])
         if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members:
-            await ctx.send("You do not have permissions in this server to use this command.")
-            return
+            raise commands.MissingPermissions(["kick_members"])
         user = random.choice(ctx.channel.guild.members)
         await ctx.send("Picked <@!{}>".format(user.id))
         await ctx.send("Say your goodbyes...")

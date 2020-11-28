@@ -6,7 +6,9 @@
 Bot for randomness.
 
 ## Developers
-Made by: kym2006, SquiddyPoos, waterflamev8
+Made by: kym2006, SquiddyPoos
+# Contributors
+waterflamev8
 
 ## Links about us
 [Website](https://randomweb.netlify.app/)\
@@ -16,13 +18,13 @@ Made by: kym2006, SquiddyPoos, waterflamev8
 ## Commands
 Do @help in a server with random.bot, or in DM.\
 Some commands include:\
-@someone - Ping someone in your server\
-@iamveryrandom - Randomly kick someone from your server\
-@eightball - Classic 8ball\
-@rnd - Random number generator\
-@coinflip - Flip a coin!\
-@choose - Choose something out of everything\
-@shuffle - Shuffle things given!\
-@name - Random name of someone in your server\
-@team - Put everyone in teams\
+?someone - Ping someone in your server\
+?iamveryrandom - Randomly kick someone from your server\
+?eightball - Classic 8ball\
+?rnd - Random number generator\
+?coinflip - Flip a coin!\
+?choose - Choose something out of everything\
+?shuffle - Shuffle things given!\
+?name - Random name of someone in your server\
+?team - Put everyone in teams\
 Do note that the bot is still under development.

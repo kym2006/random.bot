@@ -12,9 +12,10 @@ class Configuration(commands.Cog):
     )
     async def prefix(self, ctx, *, prefix: str = None):
         if prefix is None:
+            res = self.bot.config.default_prefix if self.bot.all_prefix[ctx.guild.id] is None else self.bot.all_prefix[ctx.guild.id]
             await ctx.send(
                 embed=discord.Embed(
-                    description=f"The prefix for this server is `{ctx.prefix}`.",
+                    description=f"The prefix for this server is `{res}`.",
                     colour=self.bot.primary_colour,
                 )
             )

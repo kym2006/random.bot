@@ -15,6 +15,7 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     @commands.bot_has_permissions(add_reactions=True)
     @commands.command(
         description="Shows the help menu or information for a specific command when specified.",
@@ -226,6 +227,11 @@ class General(commands.Cog):
         )
         embed.add_field(
             inline=False,
+            name="Using random.org api functions",
+            value=f"Patrons also get access to functions that use the random.org api directly. Run `{ctx.prefix}org` to view a list of functions that have already been implemented. RANDOM.ORG offers true random numbers to anyone on the Internet. The randomness comes from atmospheric noise, which for many purposes is better than the pseudo-random number algorithms typically used in computer programs. People use RANDOM.ORG for holding drawings, lotteries and sweepstakes, to drive online games, for scientific applications and for art and music. Visit https://random.org to learn more."
+        )
+        embed.add_field(
+            inline=False,
             name="Snippet storage space",
             value="Patrons get additional storage space for snippets\nPatrons: 20000\nSuper patrons: 50000\nSuper duper patrons: 100000",
         )
@@ -274,7 +280,7 @@ class General(commands.Cog):
         embed = discord.Embed(title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour)
         embed.add_field(
             name="Owners",
-            value="kym2006#6342\nwaterflamev8#4123\nSquiddyPoos#6795",
+            value="kym2006#6342\nSquiddyPoos#6795",
         )
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
