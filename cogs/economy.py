@@ -5,16 +5,30 @@ import aiohttp
 import discord
 from discord.ext import commands
 from classes import converters
+import time 
+cooldown = dict({"mine": dict()})
 log = logging.getLogger(__name__)
-
+cdtime = 5
 
 class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    def on_cooldown(self, cmd, id):
+        if id not in cooldown[cmd]:
+            return False 
+        dif = time.time() - cooldown[cmd][id]
+        return dif < cdtime 
+
     @commands.command(name="mine", description="mine for ~~bit~~silver coins", usage="mine")
     async def mine(self, ctx):
-        id = ctx.message.author.id
+        id = ctx.author.id 
+        if self.on_cooldown("mine", id):
+            dif = time.time() - cooldown["mine"][id]
+            await ctx.send(embed=discord.Embed(title="You are rate-limited!", description=f"Try again in {round(cdtime-dif,1)} seconds!", colour=self.bot.config.primary_colour))
+            return 
+        cooldown["mine"][id] = time.time()
+        
         row=await self.bot.get_user_data(ctx.author.id)
         newval = row["silver"] + 1
         async with self.bot.pool.acquire() as conn:
