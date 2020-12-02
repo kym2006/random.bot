@@ -31,6 +31,7 @@ class Snippet(commands.Cog):
                 await conn.execute(
                     "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
                 )
+                snippets=json.dumps(snippets)
         else:
             snippets = res[0]["content"]
 
