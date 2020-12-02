@@ -76,13 +76,14 @@ class Events(commands.Cog):
         )
         guilds = len(self.bot.guilds)
         embed.set_footer(text=f"{guilds} servers")
-        await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
+        joinchannel = self.bot.get_channel(self.bot.config.join_channel)
+        await joinchannel.send(embed=embed)
         await self.bot.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching, name=f"?help | ?someone on {len(self.bot.guilds)} servers"
             )
         )
-        txtchannel = self.bot.get_channel(725303414363390018)
+        txtchannel = self.bot.get_channel(self.bot.config.join_channel)
         for i in guild.channels:
             if i.type == txtchannel.type:
                 try:
@@ -111,7 +112,7 @@ Type ?commands for a brief menu of all the commands, or ?help for a more detaile
         await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
         await self.bot.change_presence(
             activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                type=discord.ActivityType.watching, name=f"?help | ?someone on {len(self.bot.guilds)} servers"
             )
         )
 
