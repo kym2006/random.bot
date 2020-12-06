@@ -68,7 +68,7 @@ class Snippet(commands.Cog):
     async def snippetuse(self, ctx,times: typing.Optional[int], name: str, user:converters.GlobalUser=None):
         if times is None:
             times = 1 
-        if times > 10:
+        if times > 10 and ctx.author.id not in self.bot.config.owners:
             await ctx.send(embed=discord.Embed(description="The limit for amount of times is 10.", colour=self.bot.primary_colour))
             return 
         tar = user or ctx.author
