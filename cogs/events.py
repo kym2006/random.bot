@@ -16,6 +16,18 @@ class Events(commands.Cog):
         if str(ctx.command) in self.bot.down_commands:
             await ctx.send(embed=discord.Embed(description="That command is down right now. Join the [support server](https://discord.gg/ZatYnsX) and read the announcements to find out why. We are already working on a fix :)"))
             return 
+        if ctx.command.cog_name in ["Owner", "Admin"] and (
+            ctx.author.id in self.bot.config.admins or ctx.author.id in self.bot.config.owners
+            ):
+            embed = discord.Embed(
+                title=ctx.command.name.title(),
+                description=ctx.message.content,
+                colour=self.bot.primary_colour,
+                timestamp=datetime.datetime.utcnow(),
+            )
+            embed.set_author(name=f"{ctx.author} ({ctx.author.id})", icon_url=ctx.author.avatar_url)
+
+            await self.bot.get_channel(self.bot.config.admin_channel).send(embed=embed)
     @commands.Cog.listener()
     async def on_ready(self):
         embed = discord.Embed(
@@ -115,6 +127,7 @@ Type ?commands for a brief menu of all the commands, or ?help for a more detaile
                 type=discord.ActivityType.watching, name=f"?help | ?someone on {len(self.bot.guilds)} servers"
             )
         )
+    
 
 
 def setup(bot):
