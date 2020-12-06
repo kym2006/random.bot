@@ -124,7 +124,7 @@ class Economy(commands.Cog):
         gold = self.bot.get_emoji(635020560249913394)
         silver = self.bot.get_emoji(635020537349013519)
         for i in data:
-            payload += f"{i[2]} - {i[3]} : {i[0]} {silver}, {i[1]} {gold}\n"
+            payload += f"{i[2]} - ** {i[3]} ** : {i[0]} {silver}, {i[1]} {gold}\n"
         partial = ""
         for i in payload.split("\n")[:10]:
             partial += i + "\n"
