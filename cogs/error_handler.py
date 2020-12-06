@@ -13,6 +13,25 @@ class ErrorHandler(commands.Cog):
         bot.on_command_error = self._on_command_error
         self.client = None
 
+    async def get_permissions(self, member, channel):
+        permissions = channel.permissions_for(member)
+        embed = discord.Embed(
+            title=f"Permissions for {member.name}#{member.discriminator}",
+            colour=self.bot.primary_colour,
+        )
+        allowed, denied = [], []
+        for name, value in permissions:
+            name = self.bot.tools.perm_format(name)
+            if value:
+                allowed.append(name)
+            else:
+                denied.append(name)
+
+        embed.add_field(name="Allowed", value="\n".join(allowed))
+        embed.add_field(name="Denied", value="\n".join(denied))
+        return embed
+
+
     async def _on_command_error(self, ctx, error, bypass=False):
         if (
             hasattr(ctx.command, "on_error")
@@ -22,8 +41,21 @@ class ErrorHandler(commands.Cog):
             return
         if isinstance(error, commands.CommandNotFound):
             return
-        channel =self.bot.get_channel(782156413090529301)
-        await channel.send(embed=discord.Embed(title="Error!", description=f"Content:{ctx.message.content}\nAuthor:{ctx.message.author.id}\n", colour=discord.Color.red()))
+        if ctx.guild is not None: 
+            embed = await self.get_permissions(ctx.guild.me, ctx.channel) 
+        else:
+            embed = discord.Embed()
+        errorchannel = self.bot.get_channel(782156413090529301)
+        embed.add_field(
+            name="Content", value=f"{ctx.message.content}\n", inline=False 
+        )
+        embed.add_field(
+            name="Author", value=f"{ctx.message.author.id}", inline=False
+        )
+        
+        await errorchannel.send(embed=embed)
+
+
         if isinstance(error, commands.NoPrivateMessage):
             await ctx.send(
                 embed=discord.Embed(
