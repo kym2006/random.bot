@@ -131,7 +131,7 @@ class Economy(commands.Cog):
         await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
         payload = payload.replace("<:silver:635020537349013519>", "silver")
         payload = payload.replace("<:gold:635020560249913394>", "gold")
-        payload = payload.replace('`', '')
+        payload = payload.replace('**', '')
         async with aiohttp.ClientSession() as session:
             async with session.post("https://hasteb.in/documents", data=payload.encode("utf-8")) as r:
                 if r.status == 200:
