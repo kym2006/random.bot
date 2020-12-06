@@ -8,7 +8,7 @@ from classes import converters
 import time 
 cooldown = dict({"mine": dict()})
 log = logging.getLogger(__name__)
-cdtime = 5
+cdtime = 3
 
 class Economy(commands.Cog):
     def __init__(self, bot):
