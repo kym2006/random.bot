@@ -186,6 +186,29 @@ class Random(commands.Cog):
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
+    @commands.command(name="someroledm", description="Dm a user with that role in your server", usage="someroledm <@role>")
+    async def someroledm(self, ctx, role: str):
+        row = await self.bot.get_data(ctx.guild.id)
+        if row and row["ping"] is not None and row["ping"] == 1:
+            canping = 1
+        else:
+            canping = 0
+        users = []
+        role = role.replace("<", "")
+        role = role.replace(">", "")
+        role = role.replace("@", "")
+        role = role.replace("&", "")
+        role = discord.utils.get(ctx.message.guild.roles, id=int(role))
+        for member in ctx.message.guild.members:
+            if role in member.roles:
+                users.append(member)
+        user = random.choice(users)
+        try:
+            await user.send(f"You have been chosen in {ctx.guild.name} for the someroledm command!")
+        except:
+            await ctx.send("Are you sure that you allowed dms?")
+
+
     @commands.command(name="8ball", description="classic 8ball", aliases=["eightball"])
     async def eightball(self, ctx, question: str):
         li = [
