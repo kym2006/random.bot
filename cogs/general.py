@@ -171,35 +171,47 @@ class General(commands.Cog):
             title="The Organisation Without A Cool Acronym",
             description="""
         Phineas and Ferb Fan?
-        Join our server because why not?
+
+        Join our server cause why not?
 
         **Benefits of joining the server**
         1. Chat with the community of Phineas And Ferb, Milo Murphy’s Law.
         2. Be an Agent, Villain.
         3. Play some music using bot commands of Groovy.
         4. Share memes with the community.
+        5. Get to participate in our Monthly Quizzes and have great fun
+        6. We have a great Phineas and Ferb Community
 
-        **Help Needed**
-        How to contact the Mod Team
-        DM the ModMail bot to contact the Mod Team
-        The Mod Team will respond within 24 hours of your query. You will receive a dm from the ModMail bot with the response from the bots.
+
+        **Our Server Owners**
+        Owner - Major Monogram#3339/ Kendall#5259
+        Co-Owner - Darth Ferb#8114
 
         **Our Mod Team**
-        Perry The Platypus#6896 also known as SomeoneRandom – Server Owner
-        Major Monogram#3339 also known as Kendall
-        SpongeBobFanatic1995#9058 also known as Dylan Dubeault
-        Karl The Intern#6339 also known as Jeffery
-        Aloyse Von Roddenstein#7322 also known as Darth Ferb
-        Dr Heinz Doofenshmirtz#5796
-        Mr.Black#1524
+        Mraxadil#6694
+        Candar#1984
+        Irving#5978
+        Gamer Danger#6896 - Former Server Owner
+        snoopy#5026
+        Grinch Omar Steals Christmas#0468
+        CJKindaBasedThough (Jeff)#6339
 
-        **Link**
+        **Our Admins Alts**
+        Bradley the part Pistachion#8922
+        Candace-2#0714
+        Kendall#5259
+        Mrax#7677
+        ThatOneFanboy#8978
+
+        Make sure you join us today and have great fun.
+
+        Link
         https://discord.gg/nEJ8FMY
         """,
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(
-            url="https://cdn.discordapp.com/icons/754311436104106055/39aa5a30c5e28731418cbba1dddfe64d.webp?size=1024"
+            url="https://cdn.discordapp.com/icons/754311436104106055/daa2cf48eb68b97db316cea02a580750.webp?size=1024"
         )
         all_pages.append(page)
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
