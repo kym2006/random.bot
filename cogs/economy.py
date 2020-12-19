@@ -132,14 +132,18 @@ class Economy(commands.Cog):
         payload = payload.replace("<:silver:635020537349013519>", "silver")
         payload = payload.replace("<:gold:635020560249913394>", "gold")
         payload = payload.replace('**', '')
+        data = {
+            "api_dev_key":self.bot.config.pastebin,
+            "api_option":"paste",
+            "api_paste_code":payload
+        }
         async with aiohttp.ClientSession() as session:
-            async with session.post("https://hasteb.in/documents", data=payload.encode("utf-8")) as r:
+            async with session.post("https://pastebin.com/api/api_post.php", data=data) as r:
                 if r.status == 200:
-                    js = await r.json()
-                    key = js["key"]
+                    res = await r.text()
                     await ctx.send(
                         embed=discord.Embed(
-                            description="Full leaderboard: {}".format("https://hasteb.in/" + key),
+                            description="Full leaderboard: {}".format(res),
                             colour=self.bot.primary_colour,
                         )
                     )

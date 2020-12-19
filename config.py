@@ -8,6 +8,7 @@ token = os.getenv("TOKEN")
 database_url = os.getenv("DB_URL")
 statcord = os.getenv("statcord")
 randomorg = os.getenv("RANDOMORGTOKEN")
+pastebin = os.getenv("PASTEBIN")
 if "testing" in os.environ:
     token = os.getenv("TEST_TOKEN")
 
