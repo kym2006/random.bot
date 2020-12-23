@@ -255,6 +255,9 @@ class Random(commands.Cog):
         guild = self.bot.get_guild(725303414220914758)
         emoji = [e for e in guild.emojis if e.name == f"dice{res}"][0]
         await ctx.send(emoji)
+    @commands.command(name="d20", description="Throw a 20 sided dice.", usage="d20")
+    async def d20(self, ctx):
+        await ctx.send(file=discord.File(f"cogs/d20/dice{random.randint(1,20)}.png"))
 
     @commands.command(name="shuffle", description="Shuffle a list.")
     async def shuffle(self, ctx, *args):
