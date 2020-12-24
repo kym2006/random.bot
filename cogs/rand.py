@@ -16,8 +16,14 @@ class Random(commands.Cog):
 
     @commands.command(name="choose", description="Choose something", usage="choose <item1 item2 item3...>")
     async def choose(self, ctx, *args):
-        await ctx.send(embed=discord.Embed(description="The wheel has chosen {}!".format(random.choice(args)), colour=self.bot.primary_colour))
+        await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(args)), colour=self.bot.primary_colour))
 
+    @commands.command(name="chose", description="Choose, but rigged to always pick the second item", usage="coose <item1 item2 item3 ... >")
+    async def chose(self, ctx, *args):
+        if len(args) == 1:
+            await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[0]), colour=self.bot.primary_colour))
+        else:
+            await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[1]), colour=self.bot.primary_colour))
     @commands.command(
         name="colour",
         aliases=["color", "randomcolour", "randomcolor", "gencolor", "gencolour"],
