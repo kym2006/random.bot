@@ -8,6 +8,16 @@ from discord.ext import commands
 class More(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        
+    @commands.command(description="Sends a random activity", usage="activity")
+    async def activity(self, ctx):
+        url = "https://boredapi.com/api/activity"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                embed = discord.Embed(description=res["activity"], colour=self.bot.primary_colour)
+                embed.set_footer(text=f"Type: {res['type']}")
+                await ctx.send(embed=embed)
 
     @commands.command(description="Sends a random piece of advice", usage="advice")
     async def advice(self, ctx):
