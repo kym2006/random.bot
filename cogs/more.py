@@ -97,6 +97,15 @@ class More(commands.Cog):
                 embed = discord.Embed(description=res["value"], colour=self.bot.primary_colour)
                 embed.set_author(name="Donald Trump")
                 await ctx.send(embed=embed)
+                              
+    @commands.command(description="Sends a random word", usage="word")
+    async def word(self, ctx):
+        url = "https://random-word-api.herokuapp.com/word"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                embed = discord.Embed(description=res[0], colour=self.bot.primary_colour)
+                await ctx.send(embed=embed)
 
 
 def setup(bot):
