@@ -61,6 +61,7 @@ class Random(commands.Cog):
 
     @commands.command(name="someone", usage="someone", description="ping someone at random")
     async def mention(self, ctx, *, msg: str = ""):
+        await self.bot.get_data(ctx.guild.id) 
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
