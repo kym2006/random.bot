@@ -294,6 +294,10 @@ class General(commands.Cog):
             name="Owners",
             value="kym2006#6342\nSquiddyPoos#6795",
         )
+        embed.add_field(
+            name="Contributers",
+            value="waterflamev8#4123",
+        )
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
         if ctx.guild:
