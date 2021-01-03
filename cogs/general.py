@@ -292,7 +292,7 @@ class General(commands.Cog):
         embed = discord.Embed(title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour)
         embed.add_field(
             name="Owners",
-            value="kym2006#6342\nSquiddyPoos#6795",
+            value="kym#6342\nSquiddyPoos#6795",
         )
         embed.add_field(
             name="Contributers",
