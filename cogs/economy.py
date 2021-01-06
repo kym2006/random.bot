@@ -116,7 +116,7 @@ class Economy(commands.Cog):
         for i in rows:
             user = self.bot.get_user(i["userid"])
             try:
-                data.append((i["silver"], i["gold"], f"{user.name}#{user.discriminator}", i['displaytext']))
+                data.append((i["silver"], i["gold"], user.id, i['displaytext']))
             except AttributeError:
                 pass
 
@@ -124,11 +124,22 @@ class Economy(commands.Cog):
         gold = self.bot.get_emoji(635020560249913394)
         silver = self.bot.get_emoji(635020537349013519)
         for i in data:
-            payload += f"{i[2]} - ** {i[3]} ** : {i[0]} {silver}, {i[1]} {gold}\n"
+            payload += f"{self.bot.get_user(i[2]).name}#{self.bot.get_user(i[2]).discriminator} - ** {i[3]} ** : {i[0]} {silver}, {i[1]} {gold}\n"
         partial = ""
         for i in payload.split("\n")[:10]:
             partial += i + "\n"
-        await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
+        rank = 1
+        found = False
+        for i in data:
+            if ctx.author.id == i[2]:
+                found = True 
+                partial += f"Your rank: {rank}/{len(data)}\n"
+                await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
+                break 
+            else:
+                rank += 1
+        if found == False:
+            await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
         payload = payload.replace("<:silver:635020537349013519>", "silver")
         payload = payload.replace("<:gold:635020560249913394>", "gold")
         payload = payload.replace('**', '')
