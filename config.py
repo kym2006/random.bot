@@ -26,7 +26,7 @@ owners = [
     488283878189039626,
     446290930723717120,
     685456111259615252,
-    
+    723794074498367498
 ]
 
 # Bot admins that have access to admin commands
