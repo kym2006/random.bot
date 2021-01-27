@@ -14,7 +14,7 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="choose", description="Choose something", usage="choose <item1 item2 item3...>")
+    @commands.command(name="choose", description="Choose something. To add choices with many words, wrap each choice in quotes", usage="choose <item1 item2 item3...>")
     async def choose(self, ctx, *args):
         await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(args)), colour=self.bot.primary_colour))
     @commands.command(name="emoji", description="Send a random emoji", usage="emoji")
