@@ -28,6 +28,9 @@ class Events(commands.Cog):
             embed.set_author(name=f"{ctx.author} ({ctx.author.id})", icon_url=ctx.author.avatar_url)
 
             await self.bot.get_channel(self.bot.config.admin_channel).send(embed=embed)
+        if ctx.prefix == f"<@{self.bot.user.id}> " or ctx.prefix == f"<@!{self.bot.user.id}> ":
+            ctx.prefix = self.bot.tools.get_prefix(self.bot, ctx.message.guild)
+            
     @commands.Cog.listener()
     async def on_ready(self):
         embed = discord.Embed(
@@ -116,7 +119,6 @@ Type ?commands for a brief menu of all the commands, or ?help for a more detaile
         guilds = len(self.bot.guilds)
         embed.set_footer(text=f"{guilds} servers")
         await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
-    
 
 
 def setup(bot):
