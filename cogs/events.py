@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+    '''
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
@@ -40,6 +40,7 @@ class Events(commands.Cog):
         if ctx.prefix == f"<@{self.bot.user.id}> " or ctx.prefix == f"<@!{self.bot.user.id}> ":
             ctx.prefix = self.bot.tools.get_prefix(self.bot, message.guild)
         await self.bot.invoke(ctx)
+    '''
     '''
     @commands.Cog.listener()
     async def on_command(self, ctx):
