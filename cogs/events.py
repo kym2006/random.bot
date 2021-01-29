@@ -12,6 +12,36 @@ class Events(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        ctx = await self.bot.get_context(message)
+        if not ctx.command:
+            return
+        if message.guild:
+            permissions = message.channel.permissions_for(message.guild.me)
+            if permissions.send_messages is False:
+                return
+            elif permissions.embed_links is False:
+                await message.channel.send("The Embed Links permission is needed for basic commands to work.")
+                return
+        if ctx.command.cog_name in ["Owner", "Admin"] and (
+            ctx.author.id in self.bot.config.admins or ctx.author.id in self.bot.config.owners
+        ):
+            embed = discord.Embed(
+                title=ctx.command.name.title(),
+                description=ctx.message.content,
+                colour=self.bot.primary_colour,
+                timestamp=datetime.datetime.utcnow(),
+            )
+            embed.set_author(name=f"{ctx.author} ({ctx.author.id})", icon_url=ctx.author.avatar_url)
+            if self.bot.config.admin_channel:
+                await self.bot.http.send_message(self.bot.config.admin_channel, None, embed=embed.to_dict())
+        if ctx.prefix == f"<@{self.bot.user.id}> " or ctx.prefix == f"<@!{self.bot.user.id}> ":
+            ctx.prefix = self.bot.tools.get_prefix(self.bot, message.guild)
+        await self.bot.invoke(ctx)
+    '''
+    @commands.Cog.listener()
     async def on_command(self, ctx):
         if str(ctx.command) in self.bot.down_commands:
             await ctx.send(embed=discord.Embed(description="That command is down right now. Join the [support server](https://discord.gg/ZatYnsX) and read the announcements to find out why. We are already working on a fix :)"))
@@ -28,9 +58,8 @@ class Events(commands.Cog):
             embed.set_author(name=f"{ctx.author} ({ctx.author.id})", icon_url=ctx.author.avatar_url)
 
             await self.bot.get_channel(self.bot.config.admin_channel).send(embed=embed)
-        if ctx.prefix == f"<@{self.bot.user.id}> " or ctx.prefix == f"<@!{self.bot.user.id}> ":
-            ctx.prefix = self.bot.tools.get_prefix(self.bot, ctx.message.guild)
-            
+        
+    '''
     @commands.Cog.listener()
     async def on_ready(self):
         embed = discord.Embed(

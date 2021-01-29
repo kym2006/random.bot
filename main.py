@@ -16,7 +16,7 @@ logger.addHandler(handler)
 log = logging.getLogger(__name__)
 
 async def _get_prefix(bot, message):
-    prefix = await get_prefix(bot, message.guild)
+    prefix = get_prefix(bot, message.guild)
     return commands.when_mentioned_or(prefix)(bot, message)
 
 intents=discord.Intents.default()

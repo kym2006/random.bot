@@ -272,7 +272,7 @@ class Random(commands.Cog):
     async def d20(self, ctx):
         await ctx.send(file=discord.File(f"cogs/d20/dice{random.randint(1,20)}.png"))
 
-    @commands.command(name="shuffle", description="Shuffle a list.")
+    @commands.command(name="shuffle", description="Shuffle a list.", usage="shuffle <item1 item2 item3...>")
     async def shuffle(self, ctx, *args):
         args = list(args)
         random.shuffle(args)

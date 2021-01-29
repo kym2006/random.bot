@@ -1,4 +1,4 @@
-async def get_prefix(bot, guild):
+def get_prefix(bot, guild):
     if not guild:
         return bot.config.default_prefix
     try:
