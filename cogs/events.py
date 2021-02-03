@@ -41,7 +41,7 @@ class Events(commands.Cog):
             ctx.prefix = self.bot.tools.get_prefix(self.bot, message.guild)
         await self.bot.invoke(ctx)
     '''
-    '''
+    
     @commands.Cog.listener()
     async def on_command(self, ctx):
         if str(ctx.command) in self.bot.down_commands:
@@ -60,7 +60,7 @@ class Events(commands.Cog):
 
             await self.bot.get_channel(self.bot.config.admin_channel).send(embed=embed)
         
-    '''
+    
     @commands.Cog.listener()
     async def on_ready(self):
         embed = discord.Embed(
