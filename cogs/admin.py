@@ -1,9 +1,10 @@
 import logging
 from typing import Optional
-
+import os 
+import sys 
 import discord
 from discord.ext import commands
-
+from pathlib import Path 
 from classes import converters
 from utils import checks
 from utils.paginator import Paginator
@@ -14,6 +15,16 @@ log = logging.getLogger(__name__)
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @checks.is_admin()
+    @commands.command(
+        description="Restart",
+        usage="restart",
+        hidden=True,
+    )
+    async def restart(self,ctx):
+        os.execl(sys.executable, "../main.py")
+
 
     @checks.is_admin()
     @commands.command(
