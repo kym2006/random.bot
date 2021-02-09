@@ -129,7 +129,7 @@ class Random(commands.Cog):
         res = namegenerator.gen()
         await ctx.send(embed=discord.Embed(title="Random Game Name", description=res, colour=self.bot.primary_colour))
 
-    @commands.command(name="wheel", description="@someone but more dramatic")
+    @commands.command(name="wheel", description="@someone but more dramatic", usage="wheel")
     async def wheel(self, ctx, *, msg: str = ""):
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
