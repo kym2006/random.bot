@@ -295,7 +295,7 @@ class Random(commands.Cog):
         if kick_or_ban.lower() != "ban" and kick_or_ban.lower() != "kick":
             await ctx.send("Do you want me to ban or kick?")
             return
-        member = ctx.guild.get_member(ctx.author.id)
+        member = ctx.author
         auth = 0
         data=await self.bot.get_data(ctx.guild.id)
         for r in ctx.author.roles:
