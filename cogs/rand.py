@@ -296,10 +296,16 @@ class Random(commands.Cog):
             await ctx.send("Do you want me to ban or kick?")
             return
         member = ctx.guild.get_member(ctx.author.id)
-        if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members:
+        auth = 0
+        data=await self.bot.get_data(ctx.guild.id)
+        for r in ctx.author.roles:
+            if data['byebyeroles'] is not None and r.id in data['byebyeroles']:
+                auth = 1
+        if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members and not auth:
             raise commands.MissingPermissions(["ban_members"])
-        if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members:
+        if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members and not auth:
             raise commands.MissingPermissions(["kick_members"])
+
         user = random.choice(ctx.channel.guild.members)
         await ctx.send("Picked <@!{}>".format(user.id))
         await ctx.send("Say your goodbyes...")
@@ -323,11 +329,6 @@ class Random(commands.Cog):
                 await ctx.send("I need higher perms than that person.")
                 return
             await ctx.send("Goodbye!")
-            await self.bot.change_presence(
-                activity=discord.Activity(
-                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
-                )
-            )
         else:
             await ctx.send("Kicking in 10 seconds... ")
             await self.bot.change_presence(activity=discord.Game("Kicking someone"))
@@ -346,11 +347,6 @@ class Random(commands.Cog):
                 await ctx.send("I need higher perms than that person.")
                 return
             await ctx.send("Goodbye!")
-            await self.bot.change_presence(
-                activity=discord.Activity(
-                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
-                )
-            )
 
     @commands.command(
         name="team",

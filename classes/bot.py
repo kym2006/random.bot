@@ -49,7 +49,7 @@ class Bot(commands.AutoShardedBot):
         async with self.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", guild)
             if not res:
-                await conn.execute("INSERT INTO data VALUES ($1, $2, $3)", guild, None, None)
+                await conn.execute("INSERT INTO data VALUES ($1, $2, $3, $4)", guild, None, None, None)
                 return await self.get_data(guild)
             return res
 
