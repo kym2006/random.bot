@@ -113,15 +113,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        embed = discord.Embed(
-            title="Server Join",
-            description=f"{guild.name} ({guild.id}): {guild.member_count} members",
-            colour=0x00FF00,
-            timestamp=datetime.datetime.utcnow(),
-        )
-        guilds = len(self.bot.guilds)
-        embed.set_footer(text=f"{guilds} servers")
-        await self.bot.get_channel(self.bot.config.join_channel).send(embed=embed)
+        content = f"New guild: {guild.name}! Now at **{len(self.bot.guilds)}** guilds!"
+        await self.bot.get_channel(self.bot.config.join_channel).send(content,allowed_mentions=discord.AllowedMentions.none())
         txtchannel = self.bot.get_channel(self.bot.config.join_channel)
         for i in guild.channels:
             if i.type == txtchannel.type:
@@ -140,15 +133,8 @@ Type ?commands for a brief menu of all the commands, or ?help for a more detaile
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        embed = discord.Embed(
-            title="Server Leave",
-            description=f"{guild.name} ({guild.id}): {guild.member_count} members",
-            colour=0xFF0000,
-            timestamp=datetime.datetime.utcnow(),
-        )
-        guilds = len(self.bot.guilds)
-        embed.set_footer(text=f"{guilds} servers")
-        await self.bot.http.send_message(self.bot.config.join_channel, None, embed=embed.to_dict())
+       content = f"Guild leave: {guild.name}... Now at **{len(self.bot.guilds)}** guilds"
+       await self.bot.get_channel(self.bot.config.join_channel).send(content,allowed_mentions=discord.AllowedMentions.none())
 
 
 def setup(bot):
