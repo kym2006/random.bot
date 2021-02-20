@@ -25,8 +25,13 @@ bot = Bot(
     command_prefix=_get_prefix,
     heartbeat_timeout=300,
     intents=intents,
-    shard_count=2
+    shard_count=2,
+    case_insensitive=True,
 )
+
+@bot.event
+async def on_message(_):
+    pass
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(bot.start_bot())

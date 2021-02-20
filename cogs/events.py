@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    '''
+    
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
@@ -40,8 +40,8 @@ class Events(commands.Cog):
         if ctx.prefix == f"<@{self.bot.user.id}> " or ctx.prefix == f"<@!{self.bot.user.id}> ":
             ctx.prefix = self.bot.tools.get_prefix(self.bot, message.guild)
         await self.bot.invoke(ctx)
-    '''
     
+    '''
     @commands.Cog.listener()
     async def on_command(self, ctx):
         if str(ctx.command) in self.bot.down_commands:
@@ -59,7 +59,7 @@ class Events(commands.Cog):
             embed.set_author(name=f"{ctx.author} ({ctx.author.id})", icon_url=ctx.author.avatar_url)
 
             await self.bot.get_channel(self.bot.config.admin_channel).send(embed=embed)
-        
+    '''
     
     @commands.Cog.listener()
     async def on_ready(self):
