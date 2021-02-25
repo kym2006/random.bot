@@ -27,6 +27,8 @@ bot = Bot(
     intents=intents,
     shard_count=2,
     case_insensitive=True,
+    chunk_guilds_at_startup=True,
+    help_command=None,
 )
 
 @bot.event
