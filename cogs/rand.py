@@ -14,6 +14,44 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(name="makegame", description="make a mafia like mystery game where each player will be assigned a role", usage="makegame")
+    async def makegame(self, ctx):
+        def check(msg):
+            return msg.author.id == ctx.author.id and msg.channel.id == ctx.channel.id
+        botmsg = await ctx.send(embed=discord.Embed(description="React to this message to join the game!", colour=self.bot.config.primary_colour))
+        await botmsg.add_reaction("✅")
+        cd = await ctx.send(10*'◻️')
+        for i in range(9,-1,-1):
+            await asyncio.sleep(1)
+            await cd.edit(content=i*'◻️'+(10-i)*'◼️')
+        cache_msg = discord.utils.get(self.bot.cached_messages, id=botmsg.id) 
+        users=[]
+        for i in cache_msg.reactions:
+            li = await i.users().flatten()
+            for i in li:
+                if i.id != self.bot.user.id:
+                    users.append(i.id)
+        users=list(set(users))
+        print(users)
+        roles=[]
+        while len(roles) != len(users):
+            await ctx.send(f"Input the roles separated with ,  .Input {len(users)} roles for all players! (The same user that made the game)")
+            rep = await self.bot.wait_for("message", timeout=60, check=check)
+            rep=rep.content
+            try:
+                roles=rep.split(',')
+            except:
+                roles=[rep]
+        random.shuffle(roles)
+        random.shuffle(users)
+        for i in range(len(roles)):
+            try:
+                await self.bot.get_user(users[i]).send(f"You were chosen to be the {roles[i]}")
+            except:
+                await ctx.send("Are you sure you allowed dms?")
+
+
+
     @commands.command(name="yesno", description="Say yes or no. ", usage="yesno")
     async def yesno(self, ctx):
         await ctx.send(random.choice(["Yes", "No"]))
