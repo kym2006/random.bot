@@ -169,13 +169,7 @@ class Admin(commands.Cog):
             return
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
-
-    @checks.is_admin()
-    @commands.command(description="Make me say something.", usage="echo [channel] <message>", hidden=True)
-    async def echo(self, ctx, channel: Optional[discord.TextChannel], *, content: str):
-        channel = channel or ctx.channel
-        await ctx.message.delete()
-        await channel.send(content, allowed_mentions=discord.AllowedMentions(everyone=False))
+    
 
 
 def setup(bot):

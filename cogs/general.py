@@ -15,6 +15,11 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(description="Make me say something.", usage="echo [channel] <message>", hidden=True)
+    async def echo(self, ctx, channel: Optional[discord.TextChannel], *, content: str):
+        channel = channel or ctx.channel
+        await ctx.message.delete()
+        await channel.send(content, allowed_mentions=discord.AllowedMentions(everyone=False))
 
     @commands.bot_has_permissions(add_reactions=True)
     @commands.command(
