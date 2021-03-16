@@ -413,6 +413,11 @@ class Random(commands.Cog):
     async def spintaxcmd(self, ctx, *, spintxt):
         await ctx.send(spintax.spin(spintxt))
 
+    @commands.command(name="filechoose", usage="filechoose", description="choose but reads the input from attachments. each option must be separated by a new line")
+    async def filechoose(self, ctx):
+        f=await ctx.message.attachments[0].read()
+        chosen=random.choice(f.decode('utf-8').split('\n'))
+        await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(chosen), colour=self.bot.primary_colour))
 
 def setup(bot):
     bot.add_cog(Random(bot))
