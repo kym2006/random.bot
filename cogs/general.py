@@ -1,7 +1,7 @@
 import logging
 import platform
 import time
-
+from typing import Optional
 import discord
 import psutil
 from discord.ext import commands
