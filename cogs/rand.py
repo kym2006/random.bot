@@ -76,7 +76,7 @@ class Random(commands.Cog):
         else:
             canping = 0
         potential = []
-        for i in ctx.channel.guild.members:
+        async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
                 potential.append(i)
         user = random.choice(potential)
@@ -104,7 +104,7 @@ class Random(commands.Cog):
     @commands.command(name="username", description="Send the name of someone in the server")
     async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
         potential = []
-        for i in ctx.channel.guild.members:
+        async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
                 potential.append(i)
         user = random.choice(potential)
@@ -141,7 +141,7 @@ class Random(commands.Cog):
         else:
             canping = 0
         potential = []
-        for i in ctx.channel.guild.members:
+        async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
                 potential.append(i)
         finals = []
@@ -195,7 +195,7 @@ class Random(commands.Cog):
         role = role.replace("@", "")
         role = role.replace("&", "")
         role = discord.utils.get(ctx.message.guild.roles, id=int(role))
-        for member in ctx.message.guild.members:
+        async for i in ctx.guild.fetch_members(limit=None):
             if role in member.roles:
                 users.append(member)
         user = random.choice(users)
@@ -219,7 +219,7 @@ class Random(commands.Cog):
         role = role.replace("@", "")
         role = role.replace("&", "")
         role = discord.utils.get(ctx.message.guild.roles, id=int(role))
-        for member in ctx.message.guild.members:
+        async for i in ctx.guild.fetch_members(limit=None):
             if role in member.roles:
                 users.append(member)
         user = random.choice(users)
@@ -308,8 +308,8 @@ class Random(commands.Cog):
             raise commands.MissingPermissions(["ban_members"])
         if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members and not auth:
             raise commands.MissingPermissions(["kick_members"])
-
-        user = random.choice(ctx.channel.guild.members)
+        guildmembers = await ctx.guild.fetch_members(limit=None).flatten()
+        user = random.choice(guildmembers)
         await ctx.send("Picked <@!{}>".format(user.id))
         await ctx.send("Say your goodbyes...")
         if kick_or_ban.lower() == "ban":
