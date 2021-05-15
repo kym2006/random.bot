@@ -195,7 +195,7 @@ class Random(commands.Cog):
         role = role.replace("@", "")
         role = role.replace("&", "")
         role = discord.utils.get(ctx.message.guild.roles, id=int(role))
-        async for i in ctx.guild.fetch_members(limit=None):
+        async for member in ctx.guild.fetch_members(limit=None):
             if role in member.roles:
                 users.append(member)
         user = random.choice(users)
