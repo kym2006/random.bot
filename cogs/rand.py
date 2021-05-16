@@ -8,7 +8,7 @@ import discord
 import namegenerator
 import names
 from discord.ext import commands
-
+from classes import converters
 
 class Random(commands.Cog):
     def __init__(self, bot):
@@ -183,18 +183,14 @@ class Random(commands.Cog):
         )
 
     @commands.command(name="somerole", description="Ping a user with that role in your server", usage="somerole <@role>")
-    async def somerole(self, ctx, role: str):
+    async def somerole(self, ctx, role: converters.PingRole):
         row = await self.bot.get_data(ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
         users = []
-        role = role.replace("<", "")
-        role = role.replace(">", "")
-        role = role.replace("@", "")
-        role = role.replace("&", "")
-        role = discord.utils.get(ctx.message.guild.roles, id=int(role))
+        
         async for member in ctx.guild.fetch_members(limit=None):
             if role in member.roles:
                 users.append(member)
@@ -207,19 +203,14 @@ class Random(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(name="someroledm", description="Dm a user with that role in your server", usage="someroledm <@role>")
-    async def someroledm(self, ctx, role: str):
+    async def someroledm(self, ctx, role: converters.PingRole):
         row = await self.bot.get_data(ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
         else:
             canping = 0
         users = []
-        role = role.replace("<", "")
-        role = role.replace(">", "")
-        role = role.replace("@", "")
-        role = role.replace("&", "")
-        role = discord.utils.get(ctx.message.guild.roles, id=int(role))
-        async for i in ctx.guild.fetch_members(limit=None):
+        async for member in ctx.guild.fetch_members(limit=None):
             if role in member.roles:
                 users.append(member)
         user = random.choice(users)
