@@ -402,7 +402,6 @@ class Random(commands.Cog):
                 if i.id != self.bot.user.id:
                     users.append(i.id)
         users=list(set(users))
-        print(users)
         roles=[]
         while len(roles) != len(users):
             await ctx.send(f"Input the roles separated with ,  .Input {len(users)} roles for all players! (The same user that made the game)")

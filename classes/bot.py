@@ -75,7 +75,6 @@ class Bot(commands.AutoShardedBot):
             self.all_prefix[row[0]] = row[1]
             if row[2] is not None:
                 self.cooldown[row[0]] = json.loads(row[2])
-        print(self.cooldown[693310066547490817])
         for extension in self.config.initial_extensions:
             try:
                 self.load_extension(extension)
