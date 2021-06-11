@@ -5,7 +5,7 @@ import traceback
 from pathlib import Path
 import asyncpg
 from discord.ext import commands
-
+import json 
 import config
 from utils import tools
 
@@ -62,6 +62,7 @@ class Bot(commands.AutoShardedBot):
             return res 
 
     all_prefix = {}
+    cooldown = {}
 
     async def connect_postgres(self):
         self.pool = await asyncpg.create_pool(self.config.database_url, max_size=20, command_timeout=10)
@@ -69,9 +70,12 @@ class Bot(commands.AutoShardedBot):
     async def start_bot(self):
         await self.connect_postgres()
         async with self.pool.acquire() as conn:
-            data = await conn.fetch("SELECT guild, prefix from data")
+            data = await conn.fetch("SELECT guild, prefix, cooldown from data")
         for row in data:
             self.all_prefix[row[0]] = row[1]
+            if row[2] is not None:
+                self.cooldown[row[0]] = json.loads(row[2])
+        print(self.cooldown[693310066547490817])
         for extension in self.config.initial_extensions:
             try:
                 self.load_extension(extension)

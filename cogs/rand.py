@@ -6,15 +6,29 @@ import spintax
 import aiohttp
 import discord
 import namegenerator
+import time 
 import names
 from discord.ext import commands
 from classes import converters
-
+cooldown = dict({"randint":dict()})
+def get_cd(bot, guild, cmd):
+    try:
+        cd = bot.cooldown[guild][cmd]
+        return 0 if cd is None else cd
+    except KeyError:
+        return 0
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
+    def on_cooldown(self, cmd, id, guild):
+        if cmd not in cooldown:
+            return False 
+        if id not in cooldown[cmd]:
+            return False 
+        dif = time.time() - cooldown[cmd][id]
+        
+        return dif < get_cd(self.bot, guild, cmd)
 
 
     @commands.command(name="yesno", description="Say yes or no. ", usage="yesno")
@@ -94,6 +108,12 @@ class Random(commands.Cog):
         usage="randint <start> <end>",
     )
     async def rnd(self, ctx, arg1: int, arg2: int):
+        if self.on_cooldown("randint", ctx.author.id, ctx.guild.id):
+            ti = time.time() - cooldown["randint"][ctx.author.id]
+            ti = round(ti, 2)
+            await ctx.send(f"You are on cooldown! It has only been {ti}s")
+            return 
+        cooldown["randint"][ctx.author.id] = time.time()
         await ctx.send(
             embed=discord.Embed(
                 description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2),

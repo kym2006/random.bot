@@ -7,6 +7,14 @@ def get_prefix(bot, guild):
     except KeyError:
         return bot.config.default_prefix
 
+def get_cd(bot, guild, cmd):
+    try:
+        cd = bot.cooldown[guild][cmd]
+        return 0 if cd is None else cd
+    except KeyError:
+        return 0
+
+
 
 def perm_format(perm):
     return perm.replace("_", " ").replace("guild", "server").title()

@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from classes import converters
-
+import json 
 
 class Configuration(commands.Cog):
     def __init__(self, bot):
@@ -81,50 +81,22 @@ class Configuration(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     @commands.command(
-        description="Toggle which roles are allowed to use the random kick command",
-        usage="setbyebyeroles [roles]",
+        description="Set cooldown on commands",
+        usage="setcooldown [command name] [time(in seconds)]",
+        aliases=["cooldown", "setcd", "cd"]
     )
-    async def setbyebyeroles(self, ctx, roles: commands.Greedy[converters.PingRole] = None):
-        if roles is None:
-            roles = []
-        role_ids = []
-        
-        for role in roles:
-            if not isinstance(role, discord.Role):
-                role = role.lower()
-                role = role.replace("@", "", 1)
-                if role == "everyone":
-                    role_ids.append(ctx.guild.default_role.id)
-                elif role == "here":
-                    role_ids.append(-1)
-                else:
-                    await ctx.send(
-                        embed=discord.Embed(
-                            description="The role(s) are not found. Please try again.",
-                            colour=self.bot.error_colour,
-                        )
-                    )
-                    return
-            else:
-                role_ids.append(role.id)
-        if len(role_ids) > 10:
-            await ctx.send(
-                embed=discord.Embed(
-                    description="There can at most be 10 roles. Try using the command again but specify less roles.",
-                    colour=self.bot.error_colour,
-                )
-            )
-            return
-        await self.bot.get_data(ctx.guild.id)
+    async def setcooldown(self, ctx, command:str, ti:int):
+        jsb= (await (self.bot.get_data(ctx.guild.id)))['cooldown']
+        if jsb is None:
+            jsb = "{}"
+        dat=json.loads(jsb)
+        dat[command] = ti 
+        if ctx.guild.id not in self.bot.cooldown:
+            self.bot.cooldown[ctx.guild.id] = dict()
+        self.bot.cooldown[ctx.guild.id][command] = ti
         async with self.bot.pool.acquire() as conn:
-            await conn.execute("UPDATE data SET byebyeroles=$1 WHERE guild=$2", role_ids, ctx.guild.id)
-        await ctx.send(
-            embed=discord.Embed(
-                description="The role(s) are updated successfully.",
-                colour=self.bot.primary_colour,
-            )
-        )
-
+            await conn.execute("UPDATE data set cooldown=$1 where guild=$2", json.dumps(dat), ctx.guild.id)
+        await ctx.send("Settings updated!")
     @commands.guild_only()
     @commands.command(description="View the configurations for the current server.", usage="viewconfig")
     async def viewconfig(self, ctx):
