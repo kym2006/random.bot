@@ -39,8 +39,7 @@ class Events(commands.Cog):
                 await self.bot.http.send_message(self.bot.config.admin_channel, None, embed=embed.to_dict())
         if ctx.prefix == f"<@{self.bot.user.id}> " or ctx.prefix == f"<@!{self.bot.user.id}> ":
             ctx.prefix = self.bot.tools.get_prefix(self.bot, message.guild)
-        r = random.randint(1, 10)
-        print(r)
+        r = random.randint(1, 1000)
         if r == 1:
             await ctx.send(f"⭐Ad 1 Scene 1⭐Hey {ctx.author.name}! We've been trying to reach YOU concerning your vehicle's extended warranty. You should've received a notice in the mail about your car's extended warranty eligibility. Since we've not gotten a response, we're giving you a final courtesy call before we close out your file. Donate 2 https://paypal.me/kym2k06 to be removed and placed on our do-not-call list. To speak to someone about possibly extending or reinstating your vehicle's warranty, press https://discord.gg/ZatYnsX to speak with a warranty specialist.")
         elif r == 2:
