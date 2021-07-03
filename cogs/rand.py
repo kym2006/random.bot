@@ -44,7 +44,21 @@ class Random(commands.Cog):
         for i in self.bot.guilds:
             emojis.extend(i.emojis)
         await ctx.send(random.choice(emojis))
-        
+
+    @commands.command(name="someonevc", description="Choose someone in your vc.", usage="someonevc", aliases=["someoneinvc", "somevc"])
+    async def someonevc(self,ctx):
+        voice_state = ctx.author.voice
+        if voice_state is None:
+            await ctx.send("You need to be in a voice channel to use this command.")
+            return 
+        for i in ctx.guild.channels:
+            if type(i) == type(self.bot.get_channel(693310066979373096)):
+                member_ids = list(i.voice_states.keys())
+                if ctx.author.id in member_ids:
+                    chosen = random.choice(member_ids)
+                    li = await ctx.guild.query_members(user_ids=[chosen])
+                    print(li)
+                    await ctx.send(f"{str(li[0])} has been chosen!")
     @commands.command(name="chose", description="Choose, but rigged to always pick the second item", usage="coose <item1 item2 item3 ... >")
     async def chose(self, ctx, *args):
         if len(args) == 1:
