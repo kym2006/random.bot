@@ -38,6 +38,17 @@ class Random(commands.Cog):
     @commands.command(aliases=["randomise", "randomize", "randomizer"],name="choose", description="Choose something. To add choices with many words, wrap each choice in quotes", usage="choose <item1 item2 item3...>")
     async def choose(self, ctx, *args):
         await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(args)), colour=self.bot.primary_colour))
+    
+    @commands.command(aliases=["randomiseline", "randomizeline", "randomizerline"],name="chooseline", description="Choose something. Each option takes up a line", usage="choose <item1 item2 item3...>")
+    async def chooseline(self, ctx, *, content:str):
+        print('hi')
+        content=content.replace('\r','')
+        args=content.split('\n')
+        args = [x for x in args if x]
+        d=random.choice(args)
+        print(d)
+        await ctx.send(embed=discord.Embed(description=d, colour=self.bot.primary_colour))
+    
     @commands.command(name="emoji", description="Send a random emoji", usage="emoji")
     async def emoji(self,ctx):
         emojis=[]

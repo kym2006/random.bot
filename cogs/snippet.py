@@ -13,6 +13,58 @@ class Snippet(commands.Cog):
         self.bot = bot
 
     @commands.command(
+        name="snippetaddfile",
+        description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.",
+        usage="snippetaddfile <name>",
+        aliases=["snippetnewfile", "addsnippetfile", "newsnippetfile", "snaddfile"]
+    )
+    async def snippetaddfile(self, ctx, name:str):
+        f=await ctx.message.attachments[0].read()
+        f=f.decode('utf-8')
+        content = f
+        for snuse in ["snippetuse","run", "snuse", "use"]:
+            if content.find(snuse) != -1:
+                await ctx.send(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
+                return 
+        async with self.bot.pool.acquire() as conn:
+            res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
+
+        snippets = dict()
+        if res == []:
+            async with self.bot.pool.acquire() as conn:
+                await conn.execute(
+                    "INSERT INTO snippet(userid,content) VALUES($1,$2)", ctx.author.id, json.dumps(snippets)
+                )
+                snippets=json.dumps(snippets)
+        else:
+            snippets = res[0]["content"]
+
+        guild = self.bot.get_guild(725303414220914758)
+        limit = 500000
+        if ctx.author.id in [g.id for g in guild.members]:
+            patron1 = discord.utils.find(lambda r: r.id == self.bot.config.patron1, guild.roles)
+            patron2 = discord.utils.find(lambda r: r.id == self.bot.config.patron2, guild.roles)
+            patron3 = discord.utils.find(lambda r: r.id == self.bot.config.patron3, guild.roles)
+            member = guild.get_member(ctx.author.id)
+            if patron1 in member.roles:
+                limit += 100000
+            if patron2 in member.roles:
+                limit += 200000
+            if patron3 in member.roles:
+                limit += 1000000
+
+        if len(snippets) + len(content) > limit:
+            await ctx.send(f"Limit of {limit} exceeded.")
+            return
+        print(snippets)
+        s = json.loads(snippets)
+        s[name] = content
+        async with self.bot.pool.acquire() as conn:
+            await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
+        await ctx.message.add_reaction("✅")
+
+
+    @commands.command(
         name="snippetadd",
         description="Add a snippet. Each user is allowed to 10000 length in total. Limit increased if you are a patron.",
         usage="snippetadd <name> <command to run without prefix>",
@@ -37,7 +89,7 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
 
         guild = self.bot.get_guild(725303414220914758)
-        limit = 50000
+        limit = 500000
         if ctx.author.id in [g.id for g in guild.members]:
             patron1 = discord.utils.find(lambda r: r.id == self.bot.config.patron1, guild.roles)
             patron2 = discord.utils.find(lambda r: r.id == self.bot.config.patron2, guild.roles)

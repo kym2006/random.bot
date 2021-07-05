@@ -110,5 +110,7 @@ class Configuration(commands.Cog):
         embed.add_field(name="Roles with access to iamveryrandom/byebye", value="*Not set*" if len(byebyeroles) == 0 else " ".join([f"<@&{str(i)}>" for i in byebyeroles]),inline=False)
         await ctx.send(embed=embed)
 
+    
+
 def setup(bot):
     bot.add_cog(Configuration(bot))
