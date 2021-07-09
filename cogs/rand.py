@@ -105,8 +105,8 @@ class Random(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command(name="someone", usage="someone", description="ping someone at random")
-    async def mention(self, ctx, *, msg: str = ""):
+    @commands.command(name="someone", usage="someone [number of people chosen]", description="ping someone at random")
+    async def mention(self, ctx, *, num: int = 1):
         await self.bot.get_data(ctx.guild.id) 
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
@@ -118,13 +118,16 @@ class Random(commands.Cog):
         async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
                 potential.append(i)
-        user = random.choice(potential)
-        if canping:
-            await ctx.send("Picked <@!{}>".format(user.id))
-        else:
-            embed = discord.Embed(description="Picked <@!{}>".format(user.id), colour=self.bot.primary_colour)
-            embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-            await ctx.send(embed=embed)
+        while num > 0:
+            num -= 1
+            user = random.choice(potential)
+            potential.remove(user)
+            if canping:
+                await ctx.send("Picked <@!{}>".format(user.id))
+            else:
+                embed = discord.Embed(description="Picked <@!{}>".format(user.id), colour=self.bot.primary_colour)
+                embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+                await ctx.send(embed=embed)
 
     @commands.command(
         name="randint",
