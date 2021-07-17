@@ -30,6 +30,37 @@ class Random(commands.Cog):
         
         return dif < get_cd(self.bot, guild, cmd)
 
+    @commands.command(name="reactions", description="Choose some users from those who reacted to a message", usage="reactions <number of users>, written in an reply to the message with the reactions", aliases=["choosereactions, somereactions"])
+    async def reactions(self, ctx, num:int = 1):
+        await self.bot.get_data(ctx.guild.id) 
+        async with self.bot.pool.acquire() as conn:
+            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
+        if row and row["ping"] is not None and row["ping"] == 1:
+            canping = 1
+        else:
+            canping = 0
+        if ctx.message.reference is None:
+            await ctx.send("You have to reply to the message you want to get the reactions from!")
+            return 
+        m = ctx.message.reference 
+        chnl = self.bot.get_channel(ctx.message.reference.channel_id)
+        msg = await chnl.fetch_message(ctx.message.reference.message_id)
+        users = set()
+        for reaction in msg.reactions:
+            async for user in reaction.users():
+                users.add(user)
+
+        while num > 0:
+            num -= 1
+            user = random.choice(list(users))
+            users.remove(user)
+            if canping:
+                await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
+            else:
+                embed = discord.Embed(description="Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator), colour=self.bot.primary_colour)
+                embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
+                await ctx.send(embed=embed)
+        
 
     @commands.command(name="yesno", description="Say yes or no. ", usage="yesno")
     async def yesno(self, ctx):
@@ -123,9 +154,9 @@ class Random(commands.Cog):
             user = random.choice(potential)
             potential.remove(user)
             if canping:
-                await ctx.send("Picked <@!{}>".format(user.id))
+                await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
             else:
-                embed = discord.Embed(description="Picked <@!{}>".format(user.id), colour=self.bot.primary_colour)
+                embed = discord.Embed(description="Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator), colour=self.bot.primary_colour)
                 embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
                 await ctx.send(embed=embed)
 
@@ -136,6 +167,14 @@ class Random(commands.Cog):
         usage="randint <start> <end>",
     )
     async def rnd(self, ctx, arg1: int, arg2: int):
+        if ctx.guild is None:
+            await ctx.send(
+                embed=discord.Embed(
+                    description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2),
+                    colour=self.bot.primary_colour,
+                )
+            )
+            return 
         if self.on_cooldown("randint", ctx.author.id, ctx.guild.id):
             ti = time.time() - cooldown["randint"][ctx.author.id]
             ti = round(ti, 2)
@@ -244,9 +283,9 @@ class Random(commands.Cog):
                 users.append(member)
         user = random.choice(users)
         if canping:
-            await ctx.send("Picked {}".format(user.mention))
+            await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
         else:
-            embed = discord.Embed(description="Picked {}".format(user.mention))
+            embed = discord.Embed(description="Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
             await ctx.send(embed=embed)
 
@@ -349,7 +388,7 @@ class Random(commands.Cog):
             raise commands.MissingPermissions(["kick_members"])
         guildmembers = await ctx.guild.fetch_members(limit=None).flatten()
         user = random.choice(guildmembers)
-        await ctx.send("Picked <@!{}>".format(user.id))
+        await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
         await ctx.send("Say your goodbyes...")
         if kick_or_ban.lower() == "ban":
 
