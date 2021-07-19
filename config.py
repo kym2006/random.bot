@@ -69,8 +69,10 @@ initial_extensions = [
     "cogs.error_handler",
     "cogs.events",
     "cogs.general",
-    "cogs.miscellaneous"
+    "cogs.miscellaneous",
+    "cogs.statcord"
 ]
+
 
 down_commands=[
 
