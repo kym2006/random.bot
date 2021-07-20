@@ -495,6 +495,18 @@ class Random(commands.Cog):
         f=await ctx.message.attachments[0].read()
         chosen=random.choice(f.decode('utf-8').split('\n'))
         await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(chosen), colour=self.bot.primary_colour))
+    @commands.command(name="password",description="Random password", usage="personwomanmancameratv", aliases=["personwomanmancameratv", "memorytest", "iqtest"])
+    async def pwmct(self, ctx, num:int=3):
+        fp=open("cogs/freqwords.txt","r")
+        everything=fp.read().split('\n')
+        x = random.sample(everything, num)
+        first = x[0][0].upper()+ x[0][1:]
+        chosen = [first] + x[1:]
+        chosen = "".join(chosen)
+        for i in range(3):
+            chosen+=str(random.randint(1,9))
+        await ctx.send(f"{chosen}")
+
 
 def setup(bot):
     bot.add_cog(Random(bot))

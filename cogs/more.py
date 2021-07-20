@@ -4,7 +4,6 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-
 class More(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -106,6 +105,10 @@ class More(commands.Cog):
                 res = json.loads(await data.text())
                 embed = discord.Embed(description=res[0], colour=self.bot.primary_colour)
                 await ctx.send(embed=embed)
+
+
+    
+
 
 
 def setup(bot):
