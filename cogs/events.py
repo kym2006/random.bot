@@ -81,6 +81,10 @@ she/her•13 💁♥️ • 2-9-06 💋💞 • Atheist 😈💫 • God's Princ
             await ctx.send(f'''⭐Ad 1 Scene 9⭐Hey {ctx.author.name}! This 👈👉 is money snek(https://paypal.me/kym2k06) 🐍🐍💰💰 Upsnek ⬆⬆🔜🔜 in 7.123 snekonds 🐍🐍 or you ✋✋ will NEVER ❌❌❌❌ get monies 💰💰 again Beware!! ✋✋❌❌ You😏😏 don't ❌❌ have much time!!🕛🕧🕐🕜🕑🕝🕝 You 😏😏 may never ❌❌get monies 💰💰🐍💰💰 again!!''')
         elif r==10:
             await ctx.send(f'''⭐Ad 1 Scene 10⭐Hey {ctx.author.name}! You may be thinking, why are all the ads stolen off of reddit and the likes? Well this is because, the creator of the bot doesn't have the time to make high quality ads himself. If you would like to change this, consider donating to https://paypal.me/kym2k06''')
+        elif r>=11 and r <= 20:
+            await ctx.send(f'''⭐Ad 1 Scene 11⭐Hey Please vote for the bot please vote for the bot please vote for the bot https://top.gg/bot/606402391314530319/vote if not bot will not grow then i can't host it anymore cmon at least i'm better than ea games''')
+        
+        
         await self.bot.invoke(ctx)
 
     '''
