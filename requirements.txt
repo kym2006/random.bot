@@ -9,7 +9,7 @@ certifi==2020.6.20
 chardet==3.0.4
 click==7.1.2
 dateparser==0.7.6
-discord.py==1.5.0
+discord.py==1.5.1
 flake8==3.8.3
 hiredis==1.1.0
 idna==2.10
@@ -38,3 +38,4 @@ tzlocal==2.1
 urllib3==1.25.10
 yarl==1.6.0
 spintax==1.0.4
+paginator.py==0.6
