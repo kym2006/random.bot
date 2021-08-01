@@ -36,5 +36,4 @@ async def on_message(_):
     pass
 
 loop = asyncio.get_event_loop()
-loop.create_task(bot.start_bot())
-loop.run_forever()
+loop.run_until_complete(bot.start_bot())
