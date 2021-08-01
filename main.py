@@ -25,7 +25,6 @@ bot = Bot(
     command_prefix=_get_prefix,
     heartbeat_timeout=300,
     intents=intents,
-    shard_count=1,
     case_insensitive=True,
     chunk_guilds_at_startup=True,
     help_command=None,
