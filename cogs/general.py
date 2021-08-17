@@ -5,8 +5,8 @@ from typing import Optional
 import discord
 import psutil
 from discord.ext import commands
-from paginator import Paginator, Page, NavigationType
-
+#from paginator import Paginator, Page, NavigationType
+from utils.paginator import Paginator
 
 log = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.paginator = Paginator(bot)
+        #self.paginator = Paginator(bot)
 
     @commands.bot_has_permissions(add_reactions=True)
     @commands.command(
@@ -112,10 +112,8 @@ class General(commands.Cog):
                     page.add_field(name=cmd.name, value=cmd.description, inline=False)
             all_pages.append(page)
         
-        pages = []
-        for x in all_pages:
-            pages.append(Page(embed=x))
-        await self.paginator.send(ctx.channel, pages, type=NavigationType.Buttons)
+        paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
+        await paginator.start(ctx)
 
     @commands.command(description="Shows brief help menu", usage="commands", name="commands")
     async def _commands(self, ctx):
