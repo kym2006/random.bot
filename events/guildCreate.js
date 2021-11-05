@@ -7,7 +7,7 @@ module.exports = async (bot, guild) => {
     channel.send({
       embeds: [
         new MessageEmbed()
-          .setColor(`#${process.env.BOT_SUCCESS_COLOUR}`)
+          .setColor(process.env.BOT_SUCCESS_COLOUR)
           .setTitle('Server Join')
           .setDescription(`${guild.name} (${guild.id})`)
           .setFooter(`${guildCount} servers`)
@@ -31,7 +31,7 @@ module.exports = async (bot, guild) => {
   firstChannel.send({
     embeds: [
       new MessageEmbed()
-        .setColor(`#${process.env.BOT_PRIMARY_COLOUR}`)
+        .setColor(process.env.BOT_PRIMARY_COLOUR)
         .setDescription(
           'Thank you for inviting random.bot! Join our support server at ' +
             'https://discord.gg/ZatYnsX if you need help. The bot uses slash commands. ' +

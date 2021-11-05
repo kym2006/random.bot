@@ -7,7 +7,7 @@ module.exports = async (bot, guild) => {
     channel.send({
       embeds: [
         new MessageEmbed()
-          .setColor(`#${process.env.BOT_ERROR_COLOUR}`)
+          .setColor(process.env.BOT_ERROR_COLOUR)
           .setTitle('Server Leave')
           .setDescription(`${guild.name} (${guild.id})`)
           .setFooter(`${guildCount} servers`)

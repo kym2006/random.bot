@@ -5,7 +5,7 @@ module.exports = async (bot, id) => {
     channel.send({
       embeds: [
         new MessageEmbed()
-          .setColor(`#${process.env.BOT_SUCCESS_COLOUR}`)
+          .setColor(process.env.BOT_SUCCESS_COLOUR)
           .setTitle(`Shard ${id} Ready`)
           .setTimestamp()
       ]

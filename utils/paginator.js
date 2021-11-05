@@ -1,8 +1,15 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
 
 const paginationEmbed = async (interaction, pages) => {
-  const buttonList = [new MessageButton().setLabel('◀')];
+  const buttonList = [
+    new MessageButton().setCustomId('firstPage').setEmoji('⏮️'),
+    new MessageButton().setCustomId('previousPage').setEmoji('◀️'),
+    new MessageButton().setCustomId('stop').setEmoji('⏹️'),
+    new MessageButton().setCustomId('nextPage').setEmoji('▶️'),
+    new MessageButton().setCustomId('lastPage').setEmoji('⏭️')
+  ].map(button => button.setStyle('PRIMARY'));
   const row = new MessageActionRow().addComponents(buttonList);
+  const time = 120000;
 
   let page = 0;
 
@@ -16,46 +23,61 @@ const paginationEmbed = async (interaction, pages) => {
     fetchReply: true
   });
 
-  const filter = i =>
-    i.customId === buttonList[0].customId || i.customId === buttonList[1].customId;
+  const filter = i => buttonList.map(b => b.customId).includes(i.customId);
 
   const collector = await curPage.createMessageComponentCollector({
     filter,
-    time: timeout
+    time
   });
 
   collector.on('collect', async i => {
     switch (i.customId) {
       case buttonList[0].customId:
-        page = page > 0 ? --page : pages.length - 1;
+        page = 0;
         break;
       case buttonList[1].customId:
-        page = page + 1 < pages.length ? ++page : 0;
+        page = page > 0 ? (page -= 1) : pages.length - 1;
+        break;
+      case buttonList[2].customId:
+        console.log('stopped');
+        collector.stop();
+        break;
+      case buttonList[3].customId:
+        page = page + 1 < pages.length ? (page += 1) : 0;
+        break;
+      case buttonList[4].customId:
+        page = pages.length - 1;
         break;
       default:
         break;
     }
+
     await i.deferUpdate();
     await i.editReply({
       embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
       components: [row]
     });
+
     collector.resetTimer();
   });
 
   collector.on('end', () => {
+    console.log('hi');
     if (!curPage.deleted) {
+      console.log('blah');
       const disabledRow = new MessageActionRow().addComponents(
-        buttonList[0].setDisabled(true),
-        buttonList[1].setDisabled(true)
+        buttonList.map(b => b.setDisabled(true))
       );
+      console.log(disabledRow);
       curPage.edit({
         embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
         components: [disabledRow]
       });
+      console.log('blah blah');
     }
   });
 
   return curPage;
 };
+
 module.exports = paginationEmbed;

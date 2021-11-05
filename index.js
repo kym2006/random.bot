@@ -13,20 +13,21 @@ const bot = new Client({
   ]
 });
 bot.commands = new Collection();
-bot.help = {};
+bot.modules = [];
 
 fs.readdirSync('./commands')
   .filter(folder => !folder.startsWith('.'))
   .forEach(folder => {
+    bot.modules.push(folder);
+
     fs.readdirSync(`./commands/${folder}`)
       .filter(file => file.endsWith('.js'))
       .forEach(file => {
         delete require.cache[require.resolve(`./commands/${folder}/${file}`)];
         // eslint-disable-next-line
-        const command = require(`./commands/${file}`);
+        const command = require(`./commands/${folder}/${file}`);
 
         bot.commands.set(command.data.name, command);
-        bot.help[folder].push(command.help);
       });
   });
 
