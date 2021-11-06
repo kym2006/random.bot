@@ -39,9 +39,9 @@ const paginationEmbed = async (interaction, pages) => {
         page = page > 0 ? (page -= 1) : pages.length - 1;
         break;
       case buttonList[2].customId:
-        console.log('stopped');
         collector.stop();
-        break;
+        await i.deferUpdate();
+        return;
       case buttonList[3].customId:
         page = page + 1 < pages.length ? (page += 1) : 0;
         break;
@@ -52,7 +52,6 @@ const paginationEmbed = async (interaction, pages) => {
         break;
     }
 
-    await i.deferUpdate();
     await i.editReply({
       embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
       components: [row]
@@ -62,18 +61,14 @@ const paginationEmbed = async (interaction, pages) => {
   });
 
   collector.on('end', () => {
-    console.log('hi');
     if (!curPage.deleted) {
-      console.log('blah');
       const disabledRow = new MessageActionRow().addComponents(
         buttonList.map(b => b.setDisabled(true))
       );
-      console.log(disabledRow);
       curPage.edit({
         embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
         components: [disabledRow]
       });
-      console.log('blah blah');
     }
   });
 
