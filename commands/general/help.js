@@ -58,8 +58,9 @@ module.exports = {
 
     const embed = new MessageEmbed()
       .setColor(process.env.BOT_PRIMARY_COLOUR)
-      .setTitle(`${interaction.client.user.username} Help Menu`)
-      .setDescription('See more information on a command with `/help [command]`');
+      .setTitle(`${interaction.client.user.username} help menu`)
+      .setDescription('See more information on a command with `/help [command]`')
+      .setThumbnail(interaction.client.user.displayAvatarURL());
 
     allEmbeds.push(embed);
 
@@ -71,8 +72,8 @@ module.exports = {
           .setColor(process.env.BOT_PRIMARY_COLOUR)
           .setTitle(category.charAt(0).toUpperCase() + category.slice(1))
           .setDescription(commands[category].join('\n'))
-          .setAuthor(`${interaction.client.user.username} Help Menu`)
-          .setThumbnail(interaction.client.user.avatarURL())
+          .setAuthor(`${interaction.client.user.username} help menu`)
+          .setThumbnail(interaction.client.user.displayAvatarURL())
       );
     });
 

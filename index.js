@@ -1,5 +1,5 @@
-const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
+const { initCommands, initEvents } = require('./utils/tools');
 require('dotenv').config();
 
 const bot = new Client({
@@ -12,34 +12,13 @@ const bot = new Client({
     Intents.FLAGS.DIRECT_MESSAGES
   ]
 });
+
+bot.owners = process.env.BOT_OWNERS.split(',');
+bot.admins = process.env.BOT_ADMINS.split(',');
 bot.commands = new Collection();
 bot.modules = [];
 
-fs.readdirSync('./commands')
-  .filter(folder => !folder.startsWith('.'))
-  .forEach(folder => {
-    bot.modules.push(folder);
-
-    fs.readdirSync(`./commands/${folder}`)
-      .filter(file => file.endsWith('.js'))
-      .forEach(file => {
-        delete require.cache[require.resolve(`./commands/${folder}/${file}`)];
-        // eslint-disable-next-line
-        const command = require(`./commands/${folder}/${file}`);
-
-        bot.commands.set(command.data.name, command);
-      });
-  });
-
-fs.readdirSync('./events')
-  .filter(file => file.endsWith('.js'))
-  .forEach(file => {
-    delete require.cache[require.resolve(`./events/${file}`)];
-    // eslint-disable-next-line
-    const event = require(`./events/${file}`);
-
-    bot.removeAllListeners(file.split('.')[0]);
-    bot.on(file.split('.')[0], event.bind(null, bot));
-  });
+initCommands(bot);
+initEvents(bot);
 
 bot.login(process.env.BOT_TOKEN);
