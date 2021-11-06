@@ -18,12 +18,11 @@ module.exports = {
 
     interaction.client.commands.forEach(cmd => {
       if (cmd.info.permLevel > 0) return;
-
       commands[cmd.info.module].push(cmd.data.name);
     });
 
     const embed = new MessageEmbed()
-      .setColor(process.env.BOT_PRIMARY_COLOR)
+      .setColor(process.env.BOT_PRIMARY_COLOUR)
       .setTitle(`${interaction.client.user.username} command panel`)
       .setDescription('See all of my commands. Use /help for more information.')
       .setThumbnail(interaction.client.user.displayAvatarURL());
@@ -42,7 +41,7 @@ module.exports = {
 
       fields.push({
         name: category.charAt(0).toUpperCase() + category.slice(1),
-        value: `\`\`\`${commands[category].join('\n')}\`\`\``
+        value: `\`\`\`\n${commands[category].join('\n')}\`\`\``
       });
     });
 
