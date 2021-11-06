@@ -8,8 +8,6 @@ module.exports = async (bot, interaction) => {
   try {
     command.execute(interaction);
   } catch (error) {
-    process.stderr.write(error);
-
     interaction.reply({
       content: 'There was an error while executing this command!',
       ephemeral: true
