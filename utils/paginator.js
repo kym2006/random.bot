@@ -52,6 +52,7 @@ const paginationEmbed = async (interaction, pages) => {
         break;
     }
 
+    await i.deferUpdate();
     await i.editReply({
       embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
       components: [row]

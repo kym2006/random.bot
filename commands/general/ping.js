@@ -23,6 +23,7 @@ module.exports = {
       embeds: [
         new MessageEmbed()
           .setColor(process.env.BOT_PRIMARY_COLOUR)
+          .setTitle('Pong!')
           .setDescription(
             `Gateway latency: ${interaction.client.ws.ping}ms.\nHTTP API Latency: ${Math.round(
               Date.now() - startTime
