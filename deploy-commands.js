@@ -7,13 +7,12 @@ const commands = [];
 
 fs.readdirSync('./commands')
   .filter(folder => !folder.startsWith('.'))
-  .forEach(folder =>
-    fs
-      .readdirSync(`./commands/${folder}`)
+  .forEach(folder => {
+    fs.readdirSync(`./commands/${folder}`)
       .filter(file => file.endsWith('.js'))
       // eslint-disable-next-line
-      .forEach(file => commands.push(require(`./commands/${folder}/${file}`).data.toJSON()))
-  );
+      .forEach(file => commands.push(require(`./commands/${folder}/${file}`).data.toJSON()));
+  });
 
 const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 

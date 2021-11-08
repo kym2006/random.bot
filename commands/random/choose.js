@@ -1,27 +1,29 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const { sample } = require('../../utils/tools');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName('choose')
-    .setDescription('Choose random element')
-    .addStringOption(option => option.setName('choices').setDescription('Enter a choices, seperated by space')),
+    .setDescription('Choose a random element.')
+    .addStringOption(option =>
+      option
+        .setName('choices')
+        .setDescription('Enter choices seperated by a space')
+        .setRequired(true)
+    ),
   info: {
-    module: 'general',
+    module: 'random',
     permLevel: 0,
-    usage: 'help [command]'
+    usage: 'random <item 1> <item 2> ...'
   },
   async execute(interaction) {
-
-    Array.prototype.sample = function(){
-        return this[Math.floor(Math.random()*this.length)];
-      }
-    const choices = interaction.options.getString('choices').split(" ");
+    const choices = interaction.options.getString('choices').split(' ');
     await interaction.reply({
       embeds: [
         new MessageEmbed()
           .setColor(process.env.BOT_PRIMARY_COLOUR)
-          .setDescription(`${choices.sample()}`)
+          .setDescription(`The wheel has chosen **${sample(choices)}**!`)
       ]
     });
   }

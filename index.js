@@ -13,8 +13,6 @@ const bot = new Client({
   ]
 });
 
-bot.owners = process.env.BOT_OWNERS.split(',');
-bot.admins = process.env.BOT_ADMINS.split(',');
 bot.commands = new Collection();
 bot.modules = [];
 

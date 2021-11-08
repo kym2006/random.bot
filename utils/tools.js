@@ -30,3 +30,8 @@ exports.initEvents = bot => {
       bot.on(file.split('.')[0], event.bind(null, bot));
     });
 };
+
+exports.sample = arr => {
+  const index = Math.floor(Math.random() * arr.length);
+  return arr[index];
+};

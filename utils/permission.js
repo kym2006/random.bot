@@ -1,4 +1,5 @@
-const { admins, owners } = require('../index').bot;
+const admins = process.env.BOT_ADMINS.split(',');
+const owners = process.env.BOT_OWNERS.split(',');
 
 module.exports = [
   {
@@ -7,10 +8,10 @@ module.exports = [
   },
   {
     level: 9,
-    check: message => admins.includes(message.author.id)
+    check: user => admins.includes(user.id)
   },
   {
     level: 10,
-    check: message => owners.includes(message.author.id)
+    check: user => owners.includes(user.id)
   }
 ];
