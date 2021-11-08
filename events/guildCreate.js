@@ -37,6 +37,7 @@ module.exports = async (bot, guild) => {
             'https://discord.gg/ZatYnsX if you need help. The bot uses slash commands. ' +
             'Type /commands for a brief menu of all the commands, or /help for a more detailed version.'
         )
+        .setThumbnail(bot.user.displayAvatarURL())
     ]
   });
 };

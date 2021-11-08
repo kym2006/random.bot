@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-exports.initCommands = bot => {
+exports.loadCommands = bot => {
   fs.readdirSync('./commands')
     .filter(folder => !folder.startsWith('.'))
     .forEach(folder => {
@@ -18,7 +18,7 @@ exports.initCommands = bot => {
     });
 };
 
-exports.initEvents = bot => {
+exports.loadEvents = bot => {
   fs.readdirSync('./events')
     .filter(file => file.endsWith('.js'))
     .forEach(file => {

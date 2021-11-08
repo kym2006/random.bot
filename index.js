@@ -1,5 +1,5 @@
 const { Client, Collection, Intents } = require('discord.js');
-const { initCommands, initEvents } = require('./utils/tools');
+const { loadCommands, loadEvents } = require('./utils/tools');
 require('dotenv').config();
 
 const bot = new Client({
@@ -16,7 +16,7 @@ const bot = new Client({
 bot.commands = new Collection();
 bot.modules = [];
 
-initCommands(bot);
-initEvents(bot);
+loadCommands(bot);
+loadEvents(bot);
 
 bot.login(process.env.BOT_TOKEN);

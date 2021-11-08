@@ -18,9 +18,9 @@ module.exports = {
     const command = interaction.options.getString('command');
 
     if (command) {
-      const commandData = this.data.getCommand(command);
+      const cmd = interaction.client.commands.get(command);
 
-      if (!commandData) {
+      if (!cmd) {
         return interaction.reply({
           embeds: [
             new MessageEmbed()
@@ -34,9 +34,9 @@ module.exports = {
 
       const embed = new MessageEmbed()
         .setColor(process.env.BOT_PRIMARY_COLOUR)
-        .setTitle(command.data.name)
-        .setDescription(command.data.description)
-        .setFields([{ name: 'Usage', value: `\`\`\`${command.usage}\`\`\`` }]);
+        .setTitle(cmd.data.name)
+        .setDescription(cmd.data.description)
+        .setFields([{ name: 'Usage', value: `\`\`\`${cmd.info.usage}\`\`\`` }]);
 
       return interaction.reply({ embeds: [embed] });
     }
