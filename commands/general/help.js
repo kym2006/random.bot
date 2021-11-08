@@ -7,7 +7,7 @@ module.exports = {
     .setName('help')
     .setDescription('Shows the help menu or information for a specific command when specified.')
     .addStringOption(option =>
-      option.setName('command').setDescription('The command to get help for.')
+      option.setName('command').setDescription('Enter the command you need help for')
     ),
   info: {
     module: 'general',
