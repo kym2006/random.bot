@@ -21,7 +21,7 @@ module.exports = {
       const cmd = interaction.client.commands.get(command);
 
       if (!cmd) {
-        return interaction.reply({
+        interaction.reply({
           embeds: [
             new MessageEmbed()
               .setColor(process.env.BOT_ERROR_COLOUR)
@@ -30,6 +30,8 @@ module.exports = {
               )
           ]
         });
+
+        return;
       }
 
       const embed = new MessageEmbed()
@@ -38,7 +40,9 @@ module.exports = {
         .setDescription(cmd.data.description)
         .setFields([{ name: 'Usage', value: `\`\`\`${cmd.info.usage}\`\`\`` }]);
 
-      return interaction.reply({ embeds: [embed] });
+      interaction.reply({ embeds: [embed] });
+
+      return;
     }
 
     const commands = {};
@@ -77,6 +81,6 @@ module.exports = {
       );
     });
 
-    return paginationEmbed(interaction, allEmbeds);
+    paginationEmbed(interaction, allEmbeds);
   }
 };

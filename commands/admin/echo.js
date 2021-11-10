@@ -6,7 +6,7 @@ module.exports = {
     .setName('echo')
     .setDescription('Make me say something.')
     .addStringOption(option =>
-      option.setName('message').setDescription('Enter the message to be echoed').setRequired(true)
+      option.setName('message').setDescription('Enter the message to echo').setRequired(true)
     )
     .addChannelOption(option =>
       option.setName('channel').setDescription('Enter the channel to echo in')
