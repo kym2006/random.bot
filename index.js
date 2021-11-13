@@ -1,5 +1,6 @@
 const { Client, Collection, Intents } = require('discord.js');
-const { loadCommands, loadEvents } = require('./utils/tools');
+// const { Pool } = require('pg');
+const { initBot } = require('./utils/tools');
 require('dotenv').config();
 
 const bot = new Client({
@@ -15,8 +16,8 @@ const bot = new Client({
 
 bot.commands = new Collection();
 bot.modules = [];
+// bot.pool = new Pool({ connectionString: process.env.DB_URL });
 
-loadCommands(bot);
-loadEvents(bot);
+initBot(bot);
 
 bot.login(process.env.BOT_TOKEN);

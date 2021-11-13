@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const { loadCommands, loadEvents } = require('../../utils/tools');
+const { initBot } = require('../../utils/tools');
 
 module.exports = {
   data: new SlashCommandBuilder().setName('reload').setDescription('Reload the bot.'),
@@ -19,7 +19,6 @@ module.exports = {
       ephemeral: true
     });
 
-    loadCommands(interaction.client);
-    loadEvents(interaction.client);
+    initBot(interaction.client);
   }
 };

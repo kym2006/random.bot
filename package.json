@@ -39,6 +39,8 @@
     "erlpack": "^0.1.3",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
+    "pg": "^8.7.1",
+    "statcord.js": "^3.3.0",
     "utf-8-validate": "^5.0.7",
     "zlib-sync": "^0.1.7"
   }
