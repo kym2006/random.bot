@@ -32,8 +32,13 @@ module.exports = {
     console.log(res);
     const embed = new MessageEmbed()
         .setColor(process.env.BOT_PRIMARY_COLOUR)
-        .setTitle('Pinged users')
+        .setTitle('Chosen users')
         .setDescription(res);
-    await interaction.reply({embed});
+    await interaction.reply({
+      embeds: [
+        embed
+      ]
+      
+    });
     }
 };
