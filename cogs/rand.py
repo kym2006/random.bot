@@ -394,7 +394,7 @@ class Random(commands.Cog):
             await asyncio.sleep(10)
             await self.bot.change_presence(
                 activity=discord.Activity(
-                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                    type=discord.ActivityType.watching, name=f"Astra inclinant, sed non obligant."
                 )
             )
             try:
@@ -413,7 +413,7 @@ class Random(commands.Cog):
             await asyncio.sleep(10)
             await self.bot.change_presence(
                 activity=discord.Activity(
-                    type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                    type=discord.ActivityType.watching, name=f"Astra inclinant, sed non obligant."
                 )
             )
             try:

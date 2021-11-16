@@ -118,7 +118,7 @@ she/her•13 💁♥️ • 2-9-06 💋💞 • Atheist 😈💫 • God's Princ
         await self.bot.http.send_message(self.bot.config.event_channel, None, embed=embed.to_dict())
         await self.bot.change_presence(
             activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"?help | random on {len(self.bot.guilds)} servers"
+                type=discord.ActivityType.watching, name=f"Astra inclinant, sed non obligant."
             )
         )
 
