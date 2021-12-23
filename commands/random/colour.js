@@ -12,7 +12,7 @@ module.exports = {
       .setDescription('Get a random colour'),
 
     info: {
-      module: 'colour',
+      module: 'random',
       permLevel: 0,
       usage: 'colour'
     },
