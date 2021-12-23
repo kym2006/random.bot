@@ -33,7 +33,7 @@ module.exports = {
         .addField('City', `${user.location.city}, ${user.location.state} ${user.location.postcode}`, true)
         .addField('Country', `${user.location.country}`, true)
         .addField('Age', `${user.dob.age}`, true)
-        //.addField('         
+                
         
         interaction.reply({
             embeds: [

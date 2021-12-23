@@ -9,10 +9,6 @@ someonevc
 avatar
 someone - need fixing
 
-username
-name
-ign
-wheel
 card
 somerole
 someroledm
