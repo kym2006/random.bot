@@ -46,7 +46,7 @@ module.exports = {
     }
 
     const commands = {};
-
+    console.log('test')
     // eslint-disable-next-line no-return-assign
     interaction.client.modules.forEach(module => {
       commands[module] = [];
@@ -54,7 +54,7 @@ module.exports = {
 
     interaction.client.commands.forEach(cmd => {
       if (cmd.info.permLevel > 0) return;
-
+      console.log(cmd.info.module)
       commands[cmd.info.module].push(`\`${cmd.data.name}\` ${cmd.data.description}`);
     });
 
