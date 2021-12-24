@@ -1,5 +1,4 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
-
 const paginationEmbed = async (interaction, pages) => {
   const buttonList = [
     new MessageButton().setCustomId('firstPage').setEmoji('⏮️'),
@@ -9,6 +8,25 @@ const paginationEmbed = async (interaction, pages) => {
     new MessageButton().setCustomId('lastPage').setEmoji('⏭️')
   ].map(button => button.setStyle('PRIMARY'));
   const row = new MessageActionRow().addComponents(buttonList);
+  const inviteButton = new MessageButton()
+      .setLabel("Invite the bot!")
+      .setStyle("LINK")
+      .setURL(
+          "https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands"
+      );
+  const topGGVote = new MessageButton()
+      .setLabel("Vote (Top.gg)")
+      .setStyle("LINK")
+      .setURL("https://top.gg/bot/606402391314530319");
+  const supportServer = new MessageButton()
+      .setLabel("Support Server")
+      .setStyle("LINK")
+      .setURL("https://discord.gg/ZatYnsX");
+  const row2 = new MessageActionRow().addComponents(
+        inviteButton,
+        topGGVote,
+        supportServer
+    );
   const time = 120000;
 
   let page = 0;
@@ -19,7 +37,7 @@ const paginationEmbed = async (interaction, pages) => {
 
   const curPage = await interaction.editReply({
     embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
-    components: [row],
+    components: [row, row2],
     fetchReply: true
   });
 
@@ -55,7 +73,7 @@ const paginationEmbed = async (interaction, pages) => {
     await i.deferUpdate();
     await i.editReply({
       embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
-      components: [row]
+      components: [row, row2]
     });
 
     collector.resetTimer();
@@ -68,7 +86,7 @@ const paginationEmbed = async (interaction, pages) => {
       );
       curPage.edit({
         embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)],
-        components: [disabledRow]
+        components: [disabledRow, row2]
       });
     }
   });

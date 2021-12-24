@@ -1,7 +1,23 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const paginationEmbed = require('../../utils/paginator');
-
+function getLinks() {
+  const inviteButton = new MessageButton()
+      .setLabel("Invite the bot!")
+      .setStyle("LINK")
+      .setURL(
+          "https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands"
+      );
+  const topGGVote = new MessageButton()
+      .setLabel("Vote (Top.gg)")
+      .setStyle("LINK")
+      .setURL("https://top.gg/bot/606402391314530319");
+  const supportServer = new MessageButton()
+      .setLabel("Support Server")
+      .setStyle("LINK")
+      .setURL("https://discord.gg/ZatYnsX");
+  return [inviteButton, topGGVote, supportServer];
+}
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('help')
@@ -46,8 +62,6 @@ module.exports = {
     }
 
     const commands = {};
-    console.log('test')
-    // eslint-disable-next-line no-return-assign
     interaction.client.modules.forEach(module => {
       commands[module] = [];
     });
@@ -59,7 +73,6 @@ module.exports = {
     });
 
     const allEmbeds = [];
-
     const embed = new MessageEmbed()
       .setColor(process.env.BOT_PRIMARY_COLOUR)
       .setTitle(`${interaction.client.user.username} help menu`)
