@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/waterflamev8/random.bot.git"
+    "url": "git+https://github.com/kym2006/random.bot.git"
   },
   "keywords": [
     "random",
@@ -18,9 +18,9 @@
   "author": "waterflamev8 <hi@pokeden.xyz>",
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/waterflamev8/random.bot/issues"
+    "url": "https://github.com/kym2006/random.bot/issues"
   },
-  "homepage": "https://github.com/waterflamev8/random.bot#readme",
+  "homepage": "https://github.com/kym2006/random.bot/blob/main/README.md",
   "devDependencies": {
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "14.2.1",
