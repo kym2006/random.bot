@@ -19,8 +19,7 @@ module.exports = {
   },
   async execute(interaction) {
     const number = interaction.options.getInteger('number') || 1; 
-    console.log(interaction.guild.members);
-    const total  = interaction.guild.members.cache.filter(member => !member.user.bot)
+    const total  = (await interaction.guild.members.fetch()).filter(member => !member.user.bot)
     const users = total.map(member => member.user);
     const pingedUsers = [];
     for (let i = 0; i < number; i++) {
