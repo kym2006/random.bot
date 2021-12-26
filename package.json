@@ -45,6 +45,7 @@
     "moment-duration-format": "^2.3.2",
     "pg": "^8.7.1",
     "statcord.js": "^3.3.0",
+    "typescript": "^4.5.4",
     "utf-8-validate": "^5.0.7",
     "xmlhttprequest": "^1.8.0",
     "zlib-sync": "^0.1.7"
