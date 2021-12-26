@@ -1,30 +1,29 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const {
-  CommandInteraction,
-  MessageActionRow,
-  MessageButton,
-  MessageSelectMenu,
-  SelectMenuInteraction,
+CommandInteraction,
+MessageActionRow,
+MessageButton,
+MessageSelectMenu,
+SelectMenuInteraction,
 } = require("discord.js");
 const paginationEmbed = require('../../utils/paginator');
 
-
 module.exports = {
-  
-  data: new SlashCommandBuilder()
-    .setName('help2')
-    .setDescription('Shows the help menu or information for a specific command when specified.')
-    .addStringOption(option =>
-      option.setName('command').setDescription('Enter the command you need help for')
-    ),
-  info: {
-    module: 'general',
-    permLevel: 0,
-    usage: 'help [command]'
-  },
-  async execute(interaction) {
-    
+
+data: new SlashCommandBuilder()
+.setName('help2')
+.setDescription('Shows the help menu or information for a specific command when specified.')
+.addStringOption(option =>
+option.setName('command').setDescription('Enter the command you need help for')
+),
+info: {
+module: 'general',
+permLevel: 0,
+usage: 'help [command]'
+},
+async execute(interaction) {
+
     const command = interaction.options.getString('command');
 
     if (command) {
@@ -71,5 +70,6 @@ module.exports = {
     await interaction.reply({
       components: [row, row2],
     })
-  }
+
+}
 };

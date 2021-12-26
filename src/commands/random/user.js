@@ -4,21 +4,17 @@ const { sample } = require('../../utils/tools');
 const axios = require('axios');
 
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('user')
-    .setDescription('Get a random (fake) person'),
+  data: new SlashCommandBuilder().setName('user').setDescription('Get a random (fake) person'),
   info: {
     module: 'random',
     permLevel: 0,
     usage: 'user'
   },
   async execute(interaction) {
-    axios
-    .get('https://randomuser.me/api/', {})
-    .then(res => {
-        console.log(res.data.results[0].name.first);
-        const user = res.data.results[0]
-        const embed = new MessageEmbed()
+    axios.get('https://randomuser.me/api/', {}).then(res => {
+      console.log(res.data.results[0].name.first);
+      const user = res.data.results[0];
+      const embed = new MessageEmbed()
 
         .setColor(process.env.BOT_PRIMARY_COLOUR)
         .setTitle(`${user.name.first} ${user.name.last}`)
@@ -28,18 +24,19 @@ module.exports = {
         .setTimestamp()
         .setURL(user.picture.large)
         .addField('Phone', user.phone, true)
-        
+
         .addField('Address', `${user.location.street.number} ${user.location.street.name}`, true)
-        .addField('City', `${user.location.city}, ${user.location.state} ${user.location.postcode}`, true)
+        .addField(
+          'City',
+          `${user.location.city}, ${user.location.state} ${user.location.postcode}`,
+          true
+        )
         .addField('Country', `${user.location.country}`, true)
-        .addField('Age', `${user.dob.age}`, true)
-                
-        
-        interaction.reply({
-            embeds: [
-                embed
-            ]
-        }); 
-    })
+        .addField('Age', `${user.dob.age}`, true);
+
+      interaction.reply({
+        embeds: [embed]
+      });
+    });
   }
 };

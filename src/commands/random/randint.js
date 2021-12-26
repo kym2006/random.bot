@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { sample } = require('../../utils/tools');
 function randint(x, y) {
-    return Math.floor(Math.random() * (y - x + 1) + x);
+  return Math.floor(Math.random() * (y - x + 1) + x);
 }
 module.exports = {
   data: new SlashCommandBuilder()
@@ -27,7 +27,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setColor('#0099ff')
       .setTitle('Random number')
-      .setDescription(`I chose **${randint(x,y)}**`);
+      .setDescription(`I chose **${randint(x, y)}**`);
 
     interaction.reply(embed);
   }
