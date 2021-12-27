@@ -57,8 +57,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&scope=bot&permissions=519239"
-            + "\nKudos to you if you don't leave within a minute.",
+            value="https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands",
             inline=False,
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
@@ -125,7 +124,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id={self.bot.user.id}&scope=bot&permissions=519239)",
+            value=f"[Invite Link](https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands)",
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
         page.add_field(name="Donate", value="https://paypal.me/kym2k06", inline=False)
@@ -160,7 +159,7 @@ class General(commands.Cog):
         all_pages = []
         page = discord.Embed(
             title="Snippet",
-            description="Snippet is a bot designed to help you easily store and retrieve something in discord. You can use this bot to store copypasta, store music, display faq, and many more. Invite it with https://discordapp.com/oauth2/authorize?client_id=726673431143383090&scope=bot&permissions=11328",
+            description="Snippet is a bot designed to help you easily store and retrieve something in discord. You can use this bot to store copypasta, store music, display faq, and many more. Invite it with https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands",
             colour=self.bot.primary_colour,
         )
         page.add_field(name="Website", value="https://snippetsite.netlify.app")
@@ -325,7 +324,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Invite Link",
-                description=f"https://discord.com/oauth2/authorize?client_id={self.bot.user.id}&scope=bot&permissions=519239",
+                description=f"https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands",
                 colour=self.bot.primary_colour,
             )
         )
