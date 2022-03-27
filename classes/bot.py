@@ -8,6 +8,7 @@ from discord.ext import commands
 import json 
 import config
 from utils import tools
+import shelve
 
 log = logging.getLogger(__name__)
 class Bot(commands.AutoShardedBot):
@@ -63,6 +64,7 @@ class Bot(commands.AutoShardedBot):
 
     all_prefix = {}
     cooldown = {}
+    shelf = shelve.open("prefix")
 
     async def connect_postgres(self):
         self.pool = await asyncpg.create_pool(self.config.database_url, max_size=20, command_timeout=10)
@@ -72,9 +74,8 @@ class Bot(commands.AutoShardedBot):
         async with self.pool.acquire() as conn:
             data = await conn.fetch("SELECT guild, prefix, cooldown from data")
         for row in data:
-            self.all_prefix[row[0]] = row[1]
-            if row[2] is not None:
-                self.cooldown[row[0]] = json.loads(row[2])
+            # self.all_prefix[row[0]] = row[1]
+            self.shelf[str(row[0])] = row[1]
         for extension in self.config.initial_extensions:
             try:
                 self.load_extension(extension)
@@ -82,6 +83,7 @@ class Bot(commands.AutoShardedBot):
                 log.error(f"Failed to load extension {extension}.")
                 log.error(traceback.print_exc())
 
-        
+        print(self.shelf)
+        self.shelf.close()
         await self.start(self.config.token)
         

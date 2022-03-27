@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from classes import converters
 import json 
-
+import shelve
 class Configuration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -13,7 +13,8 @@ class Configuration(commands.Cog):
     )
     async def prefix(self, ctx, *, prefix: str = None):
         if prefix is None:
-            res = self.bot.config.default_prefix if self.bot.all_prefix[ctx.guild.id] is None else self.bot.all_prefix[ctx.guild.id]
+            with shelve.open('prefix') as shelf:
+                res = self.bot.config.default_prefix if shelf[str(ctx.guild.id)] is None else shelf[str(ctx.guild.id)]
             await ctx.send(
                 embed=discord.Embed(
                     description=f"The prefix for this server is `{res}`.",
@@ -37,7 +38,8 @@ class Configuration(commands.Cog):
             await self.bot.get_data(ctx.guild.id)
             async with self.bot.pool.acquire() as conn:
                 await conn.execute("UPDATE data SET prefix=$1 WHERE guild=$2", prefix, ctx.guild.id)
-            self.bot.all_prefix[ctx.guild.id] = prefix
+            with shelve.open('prefix') as shelf:
+                shelf[str(ctx.guild.id)] = prefix
             await ctx.send(
                 embed=discord.Embed(
                     description="Successfully changed the prefix to "
