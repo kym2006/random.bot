@@ -35,5 +35,4 @@ bot = Bot(
 async def on_message(_):
     pass
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(bot.start_bot())
+asyncio.run(bot.start_bot())
