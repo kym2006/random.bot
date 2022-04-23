@@ -57,7 +57,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value="https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands",
+            value="https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands",
             inline=False,
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
@@ -124,7 +124,7 @@ class General(commands.Cog):
         page.set_thumbnail(url=self.bot.user.avatar_url)
         page.add_field(
             name="Invite",
-            value=f"[Invite Link](https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands)",
+            value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands)",
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
         page.add_field(name="Donate", value="https://paypal.me/kym2k06", inline=False)
@@ -324,7 +324,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="Invite Link",
-                description=f"https://discord.com/api/oauth2/authorize?client_id=606402391314530319&permissions=526636809431&scope=bot%20applications.commands",
+                description=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands",
                 colour=self.bot.primary_colour,
             )
         )
