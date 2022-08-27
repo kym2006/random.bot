@@ -57,7 +57,7 @@ class ErrorHandler(commands.Cog):
 
 
         if isinstance(error, commands.NoPrivateMessage):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Command Unavailable",
                     description="This command cannot be used in Direct Message.",
@@ -65,7 +65,7 @@ class ErrorHandler(commands.Cog):
                 )
             )
         elif isinstance(error, commands.PrivateMessageOnly):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Command Unavailable",
                     description="This command can only be used in Direct Message.",
@@ -81,9 +81,9 @@ class ErrorHandler(commands.Cog):
             )
             usage = "\n".join([ctx.prefix + x.strip() for x in ctx.command.usage.split("\n")])
             embed.add_field(name="Usage", value=f"```{usage}```")
-            await ctx.send(embed=embed)
+            await ctx.response.send_message(embed=embed)
         elif isinstance(error, commands.NotOwner):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Permission Denied",
                     description="You do not have permission to use this command.",
@@ -91,7 +91,7 @@ class ErrorHandler(commands.Cog):
                 )
             )
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Permission Denied",
                     description="You do not have permission to use this command. "
@@ -100,7 +100,7 @@ class ErrorHandler(commands.Cog):
                 )
             )
         elif isinstance(error, commands.BotMissingPermissions):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Bot Missing Permissions",
                     description="Bot is missing permissions to perform that action. The following permissions are"
@@ -109,7 +109,7 @@ class ErrorHandler(commands.Cog):
                 )
             )
         elif isinstance(error, discord.HTTPException):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Unknown HTTP Exception",
                     description=f"Please report this in the support server.\n```{error.text}````",
@@ -122,7 +122,7 @@ class ErrorHandler(commands.Cog):
                 f"Traceback:\n{''.join(traceback.format_tb(error.original.__traceback__))}"
             )
             try:
-                await ctx.send(
+                await ctx.response.send_message(
                     embed=discord.Embed(
                         title="Unknown Error",
                         description="Please report this in the support server.\n"
@@ -134,5 +134,5 @@ class ErrorHandler(commands.Cog):
                 pass
 
 
-def setup(bot):
-    bot.add_cog(ErrorHandler(bot))
+async def setup(bot):
+    await bot.add_cog(ErrorHandler(bot))

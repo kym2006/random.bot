@@ -5,13 +5,13 @@ from discord.ext import commands
 from discord.ext import commands
 
 import config
-
+import asyncio
 
 class Topgg(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "password")
-        self.bot.topgg_webhook.run(5000)  # this method can be awaited as well
+        #asyncio.run(self.bot.topgg_webhook.run(5000))  # this method can be awaited as well
 
     @commands.Cog.listener()
     async def on_dbl_vote(data):
@@ -28,7 +28,7 @@ class Topgg(commands.Cog):
         print(f"Received a test vote:\n{data}")
 
 
-def setup(bot):
-    bot.add_cog(Topgg(bot))
+async def setup(bot):
+    await bot.add_cog(Topgg(bot))
 
 

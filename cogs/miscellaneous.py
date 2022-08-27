@@ -22,7 +22,7 @@ class Miscellaneous(commands.Cog):
 
         embed.add_field(name="Allowed", value="\n".join(allowed))
         embed.add_field(name="Denied", value="\n".join(denied))
-        await ctx.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
 
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
@@ -71,7 +71,7 @@ class Miscellaneous(commands.Cog):
         embed.add_field(name="Account Created", value=member.created_at.replace(microsecond=0))
         embed.add_field(name="Roles", value=f"{len(roles)} roles" if len(", ".join(roles)) > 1000 else ", ".join(roles))
         embed.set_thumbnail(url=member.avatar_url)
-        await ctx.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
 
     @commands.guild_only()
     @commands.command(
@@ -93,8 +93,8 @@ class Miscellaneous(commands.Cog):
         embed.add_field(name="Roles", value=str(len(roles)))
         if guild.icon:
             embed.set_thumbnail(url=guild.icon_url)
-        await ctx.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Miscellaneous(bot))
+async def setup(bot):
+    await bot.add_cog(Miscellaneous(bot))

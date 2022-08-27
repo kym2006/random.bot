@@ -12,7 +12,7 @@ import shelve
 
 log = logging.getLogger(__name__)
 class Bot(commands.AutoShardedBot):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: object) -> object:
         super().__init__(**kwargs)
         self.help_command = None
         self.start_time = datetime.datetime.utcnow()
@@ -78,12 +78,17 @@ class Bot(commands.AutoShardedBot):
             self.shelf[str(row[0])] = row[1]
         for extension in self.config.initial_extensions:
             try:
-                self.load_extension(extension)
+                # self.add_cog(Greetings(bot))
+                await self.load_extension(extension)
             except Exception:
                 log.error(f"Failed to load extension {extension}.")
                 log.error(traceback.print_exc())
 
-        print(self.shelf)
+
         self.shelf.close()
         await self.start(self.config.token)
+
+
+
+
         

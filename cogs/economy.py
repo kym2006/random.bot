@@ -25,7 +25,7 @@ class Economy(commands.Cog):
         id = ctx.author.id 
         if self.on_cooldown("mine", id):
             dif = time.time() - cooldown["mine"][id]
-            await ctx.send(embed=discord.Embed(title="You are rate-limited!", description=f"Try again in {round(cdtime-dif,1)} seconds!", colour=self.bot.config.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(title="You are rate-limited!", description=f"Try again in {round(cdtime-dif,1)} seconds!", colour=self.bot.config.primary_colour))
             return 
         cooldown["mine"][id] = time.time()
         
@@ -41,7 +41,7 @@ class Economy(commands.Cog):
                 newval,
                 id,
             )
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(description=f"You now have {newval} silver.", colour=self.bot.primary_colour)
         )
 
@@ -53,13 +53,13 @@ class Economy(commands.Cog):
     )
     async def bet(self, ctx, amount: int):
         if amount < 0:
-            await ctx.send("positive amounts only")
+            await ctx.response.send_message("positive amounts only")
             return
         id = ctx.author.id
         row=await self.bot.get_user_data(id)
         have = row["silver"]
         if amount > have:
-            await ctx.send("You do not have enough money to bet that much")
+            await ctx.response.send_message("You do not have enough money to bet that much")
             return
         else:
             newval = row["silver"] + random.choice([1, -1]) * amount
@@ -73,7 +73,7 @@ class Economy(commands.Cog):
                     newval,
                     id,
                 )
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description=f"You got {newval-row['silver']} silver. You now have {newval} silver.",
                 colour=self.bot.primary_colour,
@@ -83,12 +83,12 @@ class Economy(commands.Cog):
     @commands.command(name="give", description="Give money to someone", usage="give <user> <amount>")
     async def give(self, ctx,  user: converters.GlobalUser, amount:int):
         if amount < 0:
-            await ctx.send(embed=discord.Embed(description="That would be stealing!"))
+            await ctx.response.send_message(embed=discord.Embed(description="That would be stealing!"))
             return 
         row=await self.bot.get_user_data(ctx.author.id)
         have = row["silver"]
         if amount > have:
-            await ctx.send("You do not have enough money to give that much")
+            await ctx.response.send_message("You do not have enough money to give that much")
             return
         else:
             newval = row["silver"] - amount
@@ -100,7 +100,7 @@ class Economy(commands.Cog):
                 else:
 
                     await conn.execute("UPDATE credit SET silver=$1 where userid=$2", given['silver']+amount, user.id)
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description=f"You gave {amount} silver to {user.name}#{user.discriminator}. You now have {newval} silver.",
                 colour=self.bot.primary_colour,
@@ -134,12 +134,12 @@ class Economy(commands.Cog):
             if ctx.author.id == i[2]:
                 found = True 
                 partial += f"Your rank: {rank}/{len(data)}\n"
-                await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
+                await ctx.response.send_message(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
                 break 
             else:
                 rank += 1
         if found == False:
-            await ctx.send(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
         payload = payload.replace("<:silver:635020537349013519>", "silver")
         payload = payload.replace("<:gold:635020560249913394>", "gold")
         payload = payload.replace('**', '')
@@ -152,7 +152,7 @@ class Economy(commands.Cog):
             async with session.post("https://pastebin.com/api/api_post.php", data=data) as r:
                 if r.status == 200:
                     res = await r.text()
-                    await ctx.send(
+                    await ctx.response.send_message(
                         embed=discord.Embed(
                             description="Full leaderboard: {}".format(res),
                             colour=self.bot.primary_colour,
@@ -163,12 +163,12 @@ class Economy(commands.Cog):
     async def displaytext(self,ctx,*,content):
         await self.bot.get_user_data(ctx.author.id)
         if len(content) > 50:
-            await ctx.send("Max characters of text is 50!")
+            await ctx.response.send_message("Max characters of text is 50!")
             return 
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE credit set displaytext=$1 where userid=$2", content, ctx.author.id)
-        await ctx.send(embed=discord.Embed(description=f"Updated your displaytext! (Use `{ctx.prefix}leaderboard` to check!)",colour=self.bot.config.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(description=f"Updated your displaytext! (Use `{ctx.prefix}leaderboard` to check!)",colour=self.bot.config.primary_colour))
 
 
-def setup(bot):
-    bot.add_cog(Economy(bot))
+async def setup(bot):
+    await bot.add_cog(Economy(bot))

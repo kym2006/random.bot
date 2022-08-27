@@ -2,10 +2,10 @@ import asyncio
 import logging
 import discord 
 from discord.ext import commands
-
 from classes.bot import Bot
 from utils.tools import get_prefix
-
+from discord.ext.commands import DefaultHelpCommand
+print(DefaultHelpCommand)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -21,19 +21,20 @@ async def _get_prefix(bot, message):
 
 intents=discord.Intents.default()
 intents.members=True 
+intents.messages=True
 bot = Bot(
-    command_prefix=_get_prefix,
+    command_prefix='?',
     heartbeat_timeout=300,
     intents=intents,
     case_insensitive=True,
-    chunk_guilds_at_startup=True,
-    help_command=None,
-    shard_count=3,
+    chunk_guilds_at_startup=False,
+    #help_command=DefaultHelpCommand(),
 )
 
 @bot.event
 async def on_message(_):
     pass
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(bot.start_bot())
+asyncio.run(bot.start_bot())
+#loop = asyncio.get_event_loop()
+#loop.run_until_complete(bot.start_bot())

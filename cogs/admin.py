@@ -50,7 +50,7 @@ class Admin(commands.Cog):
         else:
             guilds = [f"{guild.name} `{guild.id}`" for guild in guilds]
         if len(guilds) == 0:
-            await ctx.send(embed=discord.Embed(description="No such guild was found.", colour=self.bot.error_colour))
+            await ctx.response.send_message(embed=discord.Embed(description="No such guild was found.", colour=self.bot.error_colour))
             return
         all_pages = []
         for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
@@ -65,7 +65,7 @@ class Admin(commands.Cog):
         if len(all_pages) == 1:
             embed = all_pages[0]
             embed.set_footer(text=discord.Embed.Empty)
-            await ctx.send(embed=embed)
+            await ctx.response.send_message(embed=embed)
             return
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
@@ -98,7 +98,7 @@ class Admin(commands.Cog):
         if len(all_pages) == 1:
             embed = all_pages[0]
             embed.set_footer(text=discord.Embed.Empty)
-            await ctx.send(embed=embed)
+            await ctx.response.send_message(embed=embed)
             return
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
@@ -113,9 +113,9 @@ class Admin(commands.Cog):
         guild = self.bot.get_guild(guild_id)
         try:
             invite = (await guild.invites())[0]
-            await ctx.send(f"Here is the invite link: https://discord.gg/{invite[0]['code']}")
+            await ctx.response.send_message(f"Here is the invite link: https://discord.gg/{invite[0]['code']}")
         except Exception:
-            await ctx.send("Cannot be done")
+            await ctx.response.send_message("Cannot be done")
 
     @checks.is_admin()
     @commands.command(
@@ -132,14 +132,14 @@ class Admin(commands.Cog):
             except discord.Forbidden:
                 pass
         if not invite:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="No permissions to create an invite link.",
                     colour=self.bot.primary_colour,
                 )
             )
         else:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description=f"Here is the invite link: https://discord.gg/{invite[0]['code']}",
                     colour=self.bot.primary_colour,
@@ -172,12 +172,12 @@ class Admin(commands.Cog):
         if len(all_pages) == 1:
             embed = all_pages[0]
             embed.set_footer(text=discord.Embed.Empty)
-            await ctx.send(embed=embed)
+            await ctx.response.send_message(embed=embed)
             return
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
     
 
 
-def setup(bot):
-    bot.add_cog(Admin(bot))
+async def setup(bot):
+    await bot.add_cog(Admin(bot))

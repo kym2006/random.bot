@@ -24,7 +24,7 @@ class Randomdotorg(commands.Cog):
             for i in commands:
                 res+=i+'\n'
             res+='```'
-            await ctx.send(embed=discord.Embed(description=res,colour=self.bot.config.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(description=res,colour=self.bot.config.primary_colour))
             
     
     async def get_data(self,payload):
@@ -37,27 +37,27 @@ class Randomdotorg(commands.Cog):
     @org.command(usage="randint <start> <end>", description="Get a random integer from <start> to <end>, using random.org api")
     async def randint(self,ctx,start:int,end:int):
         if start == end:
-            await ctx.send("What do you think?")
+            await ctx.response.send_message("What do you think?")
             return 
         if start > end:
             start,end=end,start
         payload={"jsonrpc":"2.0","method":"generateIntegers","params":{"apiKey":self.bot.config.randomorg,"n":1,"min":start,"max":end,"replacement":True,"base":10},"id":1}
         res=await self.get_data(payload)
-        await ctx.send(embed=discord.Embed(description=f"Picked {res['random']['data'][0]} from {start} to {end}",colour=self.bot.config.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(description=f"Picked {res['random']['data'][0]} from {start} to {end}",colour=self.bot.config.primary_colour))
 
     @checks.is_patron()
     @org.command(usage="choose <list of things to choose from, separated by space>", description="Choose something from the list, using random.org api")
     async def choose(self, ctx, *args):
         args=list(args)
         if len(args)==0:
-            await ctx.send("Give me something to choose!")
+            await ctx.response.send_message("Give me something to choose!")
             return 
         elif len(args) == 1:
-            await ctx.send("What do you think?")
+            await ctx.response.send_message("What do you think?")
             return 
         payload={"jsonrpc":"2.0","method":"generateIntegers","params":{"apiKey":self.bot.config.randomorg,"n":1,"min":0,"max":len(args)-1,"replacement":True,"base":10},"id":2}
         res=await self.get_data(payload) 
-        await ctx.send(embed=discord.Embed(description=f"Picked `{args[res['random']['data'][0]]}`!", colour=self.bot.config.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(description=f"Picked `{args[res['random']['data'][0]]}`!", colour=self.bot.config.primary_colour))
     
     @checks.is_patron()
     @org.command(usage="coinflip", description="Flip a coin")
@@ -67,7 +67,7 @@ class Randomdotorg(commands.Cog):
         guild = self.bot.get_guild(725303414220914758)
         heads = [e for e in guild.emojis if e.name == "washingtonheads"][0]
         tails = [e for e in guild.emojis if e.name == "washingtontails"][0]
-        await ctx.send([heads, tails][res['random']['data'][0]])
+        await ctx.response.send_message([heads, tails][res['random']['data'][0]])
 
-def setup(bot):
-    bot.add_cog(Randomdotorg(bot))
+async def setup(bot):
+    await bot.add_cog(Randomdotorg(bot))

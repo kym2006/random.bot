@@ -2,6 +2,8 @@ import logging
 import platform
 import time
 from typing import Optional
+from discord import app_commands
+
 import discord
 import psutil
 from discord.ext import commands
@@ -16,19 +18,23 @@ class General(commands.Cog):
         self.bot = bot
         #self.paginator = Paginator(bot)
 
-    @commands.bot_has_permissions(add_reactions=True)
-    @commands.command(
+
+    '''@commands.command(
         description="Shows the help menu or information for a specific command when specified.",
         usage="help [command]",
         aliases=["h"],
-    )
+    )'''
+    @app_commands.command(name="help",description="Shows the help menu or information for a specific command when specified.")
     async def help(self, ctx, *, command: str = None):
         if command:
-            command = self.bot.get_command(command.lower())
+            try:
+                command = self.bot.tree.get_command(command.lower())
+            except:
+                command = self.bot.get_command((command.lower()))
             if not command:
-                await ctx.send(
+                await ctx.response.send_message(
                     embed=discord.Embed(
-                        description=f"That command does not exist. Use `{ctx.prefix}help` to see all the commands.",
+                        description=f"That command does not exist. Use `/help` to see all the commands.",
                         colour=self.bot.primary_colour,
                     )
                 )
@@ -38,14 +44,40 @@ class General(commands.Cog):
                 description=command.description,
                 colour=self.bot.primary_colour,
             )
-            usage = "\n".join([ctx.prefix + x.strip() for x in command.usage.split("\n")])
-            embed.add_field(name="Usage", value=f"```{usage}```", inline=False)
-            if len(command.aliases) > 1:
-                embed.add_field(name="Aliases", value=f"`{'`, `'.join(command.aliases)}`")
-            elif len(command.aliases) > 0:
-                embed.add_field(name="Alias", value=f"`{command.aliases[0]}`")
-            await ctx.send(embed=embed)
+            await ctx.response.send_message(embed=embed)
             return
+
+        page = discord.Embed(
+            title=f"{self.bot.user.name} Commands Menu",
+            description="See all commmands brief, use ?help to see the more detailed versions.",
+            colour=self.bot.primary_colour,
+        )
+        page.set_thumbnail(url=self.bot.user.avatar)
+        page.add_field(
+            name="Invite",
+            value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands)",
+        )
+        page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
+        page.add_field(name="Donate", value="https://paypal.me/kym2k06", inline=False)
+        page.set_thumbnail(url=self.bot.user.avatar)
+        for _, cog_name in enumerate(self.bot.cogs):
+            if cog_name in ["Owner", "Admin"]:
+                continue
+            cog = self.bot.get_cog(cog_name)
+            cog_commands = cog.get_commands()
+            if len(cog_commands) == 0:
+                continue
+            cmds = "```\n"
+            for cmd in cog_commands:
+                if cmd.hidden is False:
+                    cmds += cmd.name + "\n"
+            cmds += "```"
+            if cog_name == "More":
+                cog_name = "Random 2.0"
+            page.add_field(name=cog_name, value=cmds)
+
+        await ctx.response.send_message(embed=page)
+        '''
         all_pages = []
         page = discord.Embed(
             title=f"{self.bot.user.name} Help Menu",
@@ -54,7 +86,7 @@ class General(commands.Cog):
             f"\n\nDon't forget to check out our partners with the `{ctx.prefix}partners` command!",
             colour=self.bot.primary_colour,
         )
-        page.set_thumbnail(url=self.bot.user.avatar_url)
+        page.set_thumbnail(url=self.bot.user.avatar)
         page.add_field(
             name="Invite",
             value="https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands",
@@ -67,8 +99,8 @@ class General(commands.Cog):
             description="See all commmands briefly, use flip pages to see the more detailed versions.",
             colour=self.bot.primary_colour,
         )
-        page.set_thumbnail(url=self.bot.user.avatar_url)
-        page.set_thumbnail(url=self.bot.user.avatar_url)
+        page.set_thumbnail(url=self.bot.user.avatar)
+        page.set_thumbnail(url=self.bot.user.avatar)
         for _, cog_name in enumerate(self.bot.cogs):
             if cog_name in ["Owner", "Admin"]:
                 continue
@@ -102,9 +134,9 @@ class General(commands.Cog):
             )
             page.set_author(
                 name=f"{self.bot.user.name} Help Menu",
-                icon_url=self.bot.user.avatar_url,
+                icon_url=self.bot.user.avatar,
             )
-            page.set_thumbnail(url=self.bot.user.avatar_url)
+            page.set_thumbnail(url=self.bot.user.avatar)
             page.set_footer(text="Use the reactions to flip pages.")
             for cmd in cog_commands:
                 if cmd.hidden is False:
@@ -113,6 +145,7 @@ class General(commands.Cog):
         
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
+        '''
 
     @commands.command(description="Shows brief help menu", usage="commands", name="commands")
     async def _commands(self, ctx):
@@ -121,14 +154,14 @@ class General(commands.Cog):
             description="See all commmands brief, use ?help to see the more detailed versions.",
             colour=self.bot.primary_colour,
         )
-        page.set_thumbnail(url=self.bot.user.avatar_url)
+        page.set_thumbnail(url=self.bot.user.avatar)
         page.add_field(
             name="Invite",
             value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands)",
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
         page.add_field(name="Donate", value="https://paypal.me/kym2k06", inline=False)
-        page.set_thumbnail(url=self.bot.user.avatar_url)
+        page.set_thumbnail(url=self.bot.user.avatar)
         for _, cog_name in enumerate(self.bot.cogs):
             if cog_name in ["Owner", "Admin"]:
                 continue
@@ -145,8 +178,8 @@ class General(commands.Cog):
                 cog_name = "Random 2.0"
             page.add_field(name=cog_name, value=cmds)
 
-        await ctx.send(embed=page)
-
+        await ctx.response.send_message(embed=page)
+    '''
     @commands.command(description="Suggest a feature!", name="suggest", usage="suggest")
     async def suggest(self, ctx, *, content: str):
         channel = self.bot.get_channel(766642940323037214)
@@ -216,22 +249,20 @@ class General(commands.Cog):
         all_pages.append(page)
         paginator = Paginator(length=1, entries=all_pages, use_defaults=True, embed=True, timeout=120)
         await paginator.start(ctx)
-
-    @commands.command(description="Pong! Get my latency.", usage="ping")
-    async def ping(self, ctx):
-        start = time.time()
-        msg = await ctx.send(embed=discord.Embed(description="Checking latency...", colour=self.bot.primary_colour))
-        await msg.edit(
+    '''
+#@commands.command(description="Pong! Get my latency.", usage="ping")
+    @app_commands.command(name="ping", description="Pong! Get my latency.")
+    async def ping(self, interaction: discord.Interaction):
+        await interaction.response.send_message(
             embed=discord.Embed(
                 title="Pong!",
-                description=f"Gateway latency: {round(self.bot.latency * 1000, 2)}ms.\n"
-                f"HTTP API latency: {round((time.time() - start) * 1000, 2)}ms.",
+                description=f"Gateway latency: {round(self.bot.latency * 1000, 2)}ms.\n",
                 colour=self.bot.primary_colour,
             )
         )
-
-    @commands.command(description="Support random.bot!", usage="donate", aliases=["paypal"])
-    async def donate(self, ctx):
+        print(self.bot.tree.get_commands())
+    @app_commands.command(name="donate", description="Donate to the bot!")
+    async def donate(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="Looking to donate? Donate At least 5USD to get the patron role!!",
             description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/kym2k06).",
@@ -240,7 +271,7 @@ class General(commands.Cog):
         embed.add_field(
             inline=False,
             name="Using random.org api functions",
-            value=f"Patrons also get access to functions that use the random.org api directly. Run `{ctx.prefix}org` to view a list of functions that have already been implemented. RANDOM.ORG offers true random numbers to anyone on the Internet. The randomness comes from atmospheric noise, which for many purposes is better than the pseudo-random number algorithms typically used in computer programs. People use RANDOM.ORG for holding drawings, lotteries and sweepstakes, to drive online games, for scientific applications and for art and music. Visit https://random.org to learn more."
+            value=f"Patrons also get access to functions that use the random.org api directly. Run `/org` to view a list of functions that have already been implemented. RANDOM.ORG offers true random numbers to anyone on the Internet. The randomness comes from atmospheric noise, which for many purposes is better than the pseudo-random number algorithms typically used in computer programs. People use RANDOM.ORG for holding drawings, lotteries and sweepstakes, to drive online games, for scientific applications and for art and music. Visit https://random.org to learn more."
         )
         embed.add_field(
             inline=False,
@@ -263,7 +294,7 @@ class General(commands.Cog):
             value="More features are on the way, stay tuned for that!",
         )
 
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
     def get_bot_uptime(self, *, brief=False):
         hours, remainder = divmod(int(self.bot.uptime.total_seconds()), 3600)
@@ -280,11 +311,8 @@ class General(commands.Cog):
                 fmt = "{d}d " + fmt
         return fmt.format(d=days, h=hours, m=minutes, s=seconds)
 
-    @commands.command(
-        description="See some super cool statistics about me.",
-        usage="stats",
-        aliases=["statistics", "info"],
-    )
+
+    @app_commands.command(name="stats", description= "See some cool statistics about me.")
     async def stats(self, ctx):
         guilds = len(self.bot.guilds)
         users = len(self.bot.users)
@@ -311,17 +339,18 @@ class General(commands.Cog):
         embed.add_field(name="RAM Usage", value=f"{psutil.virtual_memory().percent}%")
         embed.add_field(name="Python Version", value=platform.python_version())
         embed.add_field(name="discord.py Version", value=discord.__version__)
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
+        embed.set_thumbnail(url=self.bot.user.avatar)
         embed.add_field(name="Statcord", value="https://statcord.com/bot/606402391314530319")
         embed.set_footer(
             text="</> with ❤ using discord.py",
             icon_url="https://www.python.org/static/opengraph-icon-200x200.png",
         )
-        await ctx.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
 
-    @commands.command(description="Get a link to invite me.", usage="invite")
+    @app_commands.command(name="invite", description="Get an invite link for the bot.")
+    #@commands.command(description="Get a link to invite me.", usage="invite")
     async def invite(self, ctx):
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 title="Invite Link",
                 description=f"https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands",
@@ -329,13 +358,10 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(
-        description="Get a link to my support server.",
-        usage="support",
-        aliases=["server"],
-    )
+
+    @app_commands.command(name="support", description="Get a link to my support server.")
     async def support(self, ctx):
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 title="Support Server",
                 description="https://discord.gg/ZatYnsX",
@@ -343,9 +369,9 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Get the link to Random.bot's website.", usage="website")
+    @app_commands.command(name="website", description="Get a link to my website.")
     async def website(self, ctx):
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 title="Website",
                 description="https://randomweb.netlify.app/",
@@ -353,9 +379,9 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Top.gg site for random.bot", usage="vote")
+    @app_commands.command(description="Top.gg site for random.bot", name="vote")
     async def vote(self, ctx):
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 title="Vote for random.bot!",
                 description="https://top.gg/bot/606402391314530319/vote",
@@ -363,20 +389,6 @@ class General(commands.Cog):
             )
         )
 
-    @commands.command(description="Usage statistics of the bot.", usage="usagestats", hidden=True)
-    async def usagestats(self, ctx):
-        embed = discord.Embed(
-            title="Usage Statistics",
-            description="Bot usage statistics since 1 January 2020.",
-            colour=self.bot.primary_colour,
-        )
-        async with self.bot.pool.acquire() as conn:
-            res = await conn.fetchrow("SELECT commands, messages, tickets FROM stats")
-        embed.add_field(name="Total commands", value=str(res[0]), inline=False)
-        embed.add_field(name="Total messages", value=str(res[1]), inline=False)
-        embed.add_field(name="Total tickets", value=str(res[2]), inline=False)
-        await ctx.send(embed=embed)
 
-
-def setup(bot):
-    bot.add_cog(General(bot))
+async def setup(bot):
+    await bot.add_cog(General(bot))

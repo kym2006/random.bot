@@ -87,11 +87,11 @@ class Session:
             page = ctx.message
 
         if isinstance(page, discord.Embed):
-            self.page = await ctx.send(embed=page)
+            self.page = await ctx.response.send_message(embed=page)
         elif isinstance(page, discord.Message):
             self.page = page
         else:
-            self.page = await ctx.send(page)
+            self.page = await ctx.response.send_message(page)
 
         self._session_task = ctx.bot.loop.create_task(self._session(ctx))
 
@@ -295,7 +295,7 @@ class Paginator(Session):
                 self._pages.append(self.joiner.join(chunk))
             else:
                 embed = chunk
-                if embed.footer.text == discord.Embed.Empty:
+                if embed.footer.text is None:
                     embed.set_footer(text=f"Page {index + 1}/{len(self.entries)}")
                 else:
                     embed.set_footer(
@@ -307,9 +307,9 @@ class Paginator(Session):
         self._pages = self._pages + self.extra_pages
 
         if isinstance(self._pages[0], discord.Embed):
-            self.page = await ctx.send(embed=self._pages[0])
+            self.page = await ctx.response.send_message(embed=self._pages[0])
         else:
-            self.page = await ctx.send(self._pages[0])
+            self.page = await ctx.response.send_message(self._pages[0])
 
         self._session_task = ctx.bot.loop.create_task(self._session(ctx))
 

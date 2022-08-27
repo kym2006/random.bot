@@ -10,6 +10,7 @@ import time
 import names
 from discord.ext import commands
 from classes import converters
+from discord import app_commands
 cooldown = dict({"randint":dict()})
 def get_cd(bot, guild, cmd):
     try:
@@ -20,19 +21,14 @@ def get_cd(bot, guild, cmd):
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        super().__init__()
 
     def on_cooldown(self, cmd, id, guild):
-        if cmd not in cooldown:
-            return False 
-        if id not in cooldown[cmd]:
-            return False 
-        dif = time.time() - cooldown[cmd][id]
-        
-        return dif < get_cd(self.bot, guild, cmd)
+        return False
 
-    @commands.command(name="reactions", description="Choose some users from those who reacted to a message", usage="reactions <number of users>, written in an reply to the message with the reactions", aliases=["choosereactions, somereactions"])
+    @app_commands.command(name="reactions", description="Choose some users from those who reacted to a message")
     async def reactions(self, ctx, num:int = 1):
-        await self.bot.get_data(ctx.guild.id) 
+        await ctx.guild.chunk()
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
@@ -40,7 +36,7 @@ class Random(commands.Cog):
         else:
             canping = 0
         if ctx.message.reference is None:
-            await ctx.send("You have to reply to the message you want to get the reactions from!")
+            await ctx.response.send_message("You have to reply to the message you want to get the reactions from!")
             return 
         m = ctx.message.reference 
         chnl = self.bot.get_channel(ctx.message.reference.channel_id)
@@ -55,87 +51,88 @@ class Random(commands.Cog):
             user = random.choice(list(users))
             users.remove(user)
             if canping:
-                await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
+                await ctx.response.send_message("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
             else:
                 embed = discord.Embed(description="Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator), colour=self.bot.primary_colour)
                 embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-                await ctx.send(embed=embed)
-        
+                await ctx.response.send_message(embed=embed)
 
-    @commands.command(name="yesno", description="Say yes or no. ", usage="yesno")
+    @app_commands.command(name="yesno", description="Say yes or no. ")
     async def yesno(self, ctx):
-        await ctx.send(random.choice(["Yes", "No"]))
+        c=random.choice(["Yes", "No"])
+        await ctx.response.send_message(c)
     
-    @commands.command(aliases=["randomise", "randomize", "randomizer"],name="choose", description="Choose something. To add choices with many words, wrap each choice in quotes", usage="choose <item1 item2 item3...>")
-    async def choose(self, ctx, *args):
-        await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(args)), colour=self.bot.primary_colour))
+    @app_commands.command(name="choose", description="Choose something. Wrap each choice in quotes or separate with space")
+    async def choose(self, ctx, *, choices:str):
+        choices = choices.split(" ")
+        await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(args)), colour=self.bot.primary_colour))
     
-    @commands.command(aliases=["randomiseline", "randomizeline", "randomizerline"],name="chooseline", description="Choose something. Each option takes up a line", usage="choose <item1 item2 item3...>")
-    async def chooseline(self, ctx, *, content:str):
-        content=content.replace('\r','')
-        args=content.split('\n')
+    @app_commands.command(name="chooseline", description="Choose something. Each option takes up a line")
+    async def choose_line(self, ctx, *, content:str):
+        content = content.replace('\r','')
+        args = content.split('\n')
         args = [x for x in args if x]
-        d=random.choice(args)
-        await ctx.send(embed=discord.Embed(description=d, colour=self.bot.primary_colour))
+        d = random.choice(args)
+        await ctx.response.send_message(embed=discord.Embed(description=d, colour=self.bot.primary_colour))
     
-    @commands.command(name="emoji", description="Send a random emoji", usage="emoji")
+    @app_commands.command(name="emoji", description="Send a random emoji")
     async def emoji(self,ctx):
         emojis=[]
         for i in self.bot.guilds:
             emojis.extend(i.emojis)
-        await ctx.send(random.choice(emojis))
+        await ctx.response.send_message(random.choice(emojis))
 
-    @commands.command(name="someonevc", description="Choose someone in your vc.", usage="someonevc", aliases=["someoneinvc", "somevc"])
-    async def someonevc(self,ctx):
+    @app_commands.command(name="someonevc", description="Choose someone in your vc.")
+    async def someonevc(self, ctx):
         voice_state = ctx.author.voice
         if voice_state is None:
-            await ctx.send("You need to be in a voice channel to use this command.")
+            await ctx.response.send_message("You need to be in a voice channel to use this command.")
             return 
         for i in ctx.guild.channels:
-            if type(i) == type(self.bot.get_channel(693310066979373096)):
+            if type(i) == type(await self.bot.get_channel(725303414363390018)):
                 member_ids = list(i.voice_states.keys())
                 if ctx.author.id in member_ids:
                     chosen = random.choice(member_ids)
                     li = await ctx.guild.query_members(user_ids=[chosen])
-                    await ctx.send(f"{str(li[0])} has been chosen!")
-    @commands.command(name="chose", description="Choose, but rigged to always pick the second item", usage="coose <item1 item2 item3 ... >")
+                    await ctx.response.send_message(f"{str(li[0])} has been chosen!")
+    '''
+    @app_commands.command(name="chose", description="Choose, but rigged to always pick the second item")
     async def chose(self, ctx, *args):
         if len(args) == 1:
-            await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[0]), colour=self.bot.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[0]), colour=self.bot.primary_colour))
         else:
-            await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[1]), colour=self.bot.primary_colour))
-    @commands.command(
+            await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[1]), colour=self.bot.primary_colour))
+    '''
+    @app_commands.command(
         name="colour",
-        aliases=["color", "randomcolour", "randomcolor", "gencolor", "gencolour"],
         description="Pick a random colour",
-        usage="colour",
     )
     async def colour(self, ctx):
         c = discord.Colour.from_rgb(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 title="Colour Codes",
                 description=f"6 digit Hexadecimal: ``{c.__str__()}``\n" f"RGB Values: ``{c.to_rgb()}``",
                 colour=c,
             )
         )
-    @commands.command(name = "avatar", description="Get a random avatar! Note: May be subjected to copyright, please contact owner of that avatar before using it.", usage= "avatar")
+
+    @app_commands.command(name = "avatar", description="Get a random avatar!")
     async def avatar(self, ctx):
         user = random.choice(self.bot.users)
         default_avatars=[]
         for i in range(5):
             default_avatars.append(f"https://cdn.discordapp.com/embed/avatars/{i}.png")
-        while str(user.avatar_url) in default_avatars:
+        while str(user.avatar) in default_avatars:
             user=random.choice(self.bot.users)
-        embed=discord.Embed(colour=self.bot.config.primary_colour,description="Here's a random avatar! Please do not use it without permission from the original creator.")
-        embed.set_thumbnail(url=user.avatar_url)
+        embed=discord.Embed(colour=self.bot.config.primary_colour, description="Here's a random avatar! Please do not use it without permission from the original creator.")
+        embed.set_thumbnail(url=user.avatar)
         embed.set_author(name=f"{user.name}#{user.discriminator}")
-        await ctx.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
 
-
-    @commands.command(name="someone", usage="someone [number of people chosen]", description="ping someone at random")
+    @app_commands.command(name="someone", description="ping someone at random")
     async def mention(self, ctx, *, num: int = 1):
-        await self.bot.get_data(ctx.guild.id) 
+        await ctx.guild.chunk()
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
@@ -146,60 +143,56 @@ class Random(commands.Cog):
         async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
                 potential.append(i)
+
+        print(potential)
         while num > 0:
             num -= 1
             user = random.choice(potential)
             potential.remove(user)
             if canping:
-                await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
+                await ctx.response.send_message("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
             else:
                 embed = discord.Embed(description="Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator), colour=self.bot.primary_colour)
-                embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-                await ctx.send(embed=embed)
+                embed.set_footer(text=f"Use /toggleping to toggle between actually pinging the user")
+                await ctx.response.send_message(embed=embed)
 
-    @commands.command(
+    @app_commands.command(
         name="randint",
-        aliases=["rnd"],
         description="Pick a number in range <st> to <en>",
-        usage="randint <start> <end>",
     )
     async def rnd(self, ctx, arg1: int, arg2: int):
         if ctx.guild is None:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2),
                     colour=self.bot.primary_colour,
                 )
             )
-            return 
-        if self.on_cooldown("randint", ctx.author.id, ctx.guild.id):
-            ti = time.time() - cooldown["randint"][ctx.author.id]
-            ti = round(ti, 2)
-            await ctx.send(f"You are on cooldown! It has only been {ti}s")
-            return 
-        cooldown["randint"][ctx.author.id] = time.time()
-        await ctx.send(
+            return
+
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description="Picked {} from {} to {}".format(random.randrange(arg1, arg2 + 1), arg1, arg2),
                 colour=self.bot.primary_colour,
             )
         )
 
-    @commands.command(name="username", description="Send the name of someone in the server")
+    @app_commands.command(name="username", description="Send the name of someone in the server")
     async def username(self, ctx, allow_bots: str = "0", *, msg: str = ""):
+        await ctx.guild.chunk()
         potential = []
         async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
                 potential.append(i)
         user = random.choice(potential)
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description="Picked {}".format(user.name + "#" + str(user.discriminator)),
                 colour=self.bot.primary_colour,
             )
         )
 
-    @commands.command(name="name", usage="name [gender]", description="Get a english name", aliases=["randomname"])
+    @app_commands.command(name="name", description="Get a english name")
     async def name(self, ctx, gender: str = "Both"):
         gender = gender.lower()
         res = ""
@@ -209,15 +202,16 @@ class Random(commands.Cog):
             res = names.get_full_name(gender="female")
         else:
             res = names.get_full_name()
-        await ctx.send(embed=discord.Embed(title="Random Name", description=res, colour=self.bot.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(title="Random Name", description=res, colour=self.bot.primary_colour))
 
-    @commands.command(name="ign", usage="ign", description="Get an in game name", aliases=["gamename"])
+    @app_commands.command(name="ign", description="Get an in game name")
     async def ign(self, ctx):
         res = namegenerator.gen()
-        await ctx.send(embed=discord.Embed(title="Random Game Name", description=res, colour=self.bot.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(title="Random Game Name", description=res, colour=self.bot.primary_colour))
 
-    @commands.command(name="wheel", description="@someone but more dramatic", usage="wheel")
+    @app_commands.command(name="wheel", description="@someone but more dramatic")
     async def wheel(self, ctx, *, msg: str = ""):
+        await ctx.guild.chunk()
         async with self.bot.pool.acquire() as conn:
             row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
@@ -231,20 +225,20 @@ class Random(commands.Cog):
         finals = []
         for i in range(random.randint(2, 8)):
             user = random.choice(potential)
-            await ctx.send(f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw.")
+            await ctx.response.send_message(f"\N{ROUND PUSHPIN} {user.name}#{user.discriminator} chosen for the draw.")
             finals.append(user)
             await asyncio.sleep(10)
         user = random.choice(potential)
         if canping:
-            await ctx.send(f"Final winner: {random.choice(finals).mention}")
+            await ctx.response.send_message(f"Final winner: {random.choice(finals).mention}")
         else:
             embed = discord.Embed(
                 description=f"Final winner: {random.choice(finals).mention}", colour=self.bot.primary_colour
             )
-            embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-            await ctx.send(embed=embed)
+            embed.set_footer(text=f"Use /toggleping to toggle between actually pinging the user")
+            await ctx.response.send_message(embed=embed)
 
-    @commands.command(name="card", description="Draw a random poker card", usage="card", aliases=["poker"])
+    @app_commands.command(name="card", description="Draw a random poker card")
     async def card(self, ctx):
         cards = self.bot.get_guild(623564336052568065).emojis
         suit = random.choice(["eclubs", "espades", "ehearts", "ediamonds"])
@@ -262,12 +256,14 @@ class Random(commands.Cog):
                 p2 = i
         p1 = str(p1)
         p2 = str(p2)
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(title="Card chosen", description=p1 + "\n" + p2, colour=self.bot.config.primary_colour)
         )
 
-    @commands.command(name="somerole", description="Ping a user with that role in your server", usage="somerole <@role>")
-    async def somerole(self, ctx, role: converters.PingRole):
+    @app_commands.command(name="somerole", description="Ping a user with that role in your server")
+    async def somerole(self, ctx, role: str = ""):
+        await ctx.guild.chunk()
+        role=converters.PingRole.convert(ctx, role)
         row = await self.bot.get_data(ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
@@ -280,14 +276,16 @@ class Random(commands.Cog):
                 users.append(member)
         user = random.choice(users)
         if canping:
-            await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
+            await ctx.response.send_message("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
         else:
             embed = discord.Embed(description="Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
             embed.set_footer(text=f"Use {ctx.prefix}toggleping to toggle between actually pinging the user")
-            await ctx.send(embed=embed)
+            await ctx.response.send_message(embed=embed)
 
-    @commands.command(name="someroledm", description="Dm a user with that role in your server", usage="someroledm <@role>")
-    async def someroledm(self, ctx, role: converters.PingRole):
+    @app_commands.command(name="someroledm", description="Dm a user with that role in your server")
+    async def someroledm(self, ctx, role: str):
+        await ctx.guild.chunk()
+        role = converters.PingRole.convert(ctx, role)
         row = await self.bot.get_data(ctx.guild.id)
         if row and row["ping"] is not None and row["ping"] == 1:
             canping = 1
@@ -301,10 +299,10 @@ class Random(commands.Cog):
         try:
             await user.send(f"You have been chosen in {ctx.guild.name} for the someroledm command!")
         except:
-            await ctx.send("Are you sure that you allowed dms?")
+            await ctx.response.send_message("Are you sure that you allowed dms?")
 
 
-    @commands.command(name="8ball", description="classic 8ball", aliases=["eightball"])
+    @app_commands.command(name="8ball", description="classic 8ball")
     async def eightball(self, ctx, question: str):
         li = [
             "It is certain.",
@@ -326,13 +324,13 @@ class Random(commands.Cog):
             "My sources say no.",
             "Very doubtful.",
         ]
-        await ctx.send(embed=discord.Embed(description=":8ball: " + random.choice(li), colour=self.bot.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(description=":8ball: " + random.choice(li), colour=self.bot.primary_colour))
 
-    @commands.command(name="coinflip", description="Flip a coin", usage="coinflip")
+    @app_commands.command(name="coinflip", description="Flip a coin")
     async def coinflip(self, ctx):
         notland = random.randint(1, 6000)
         if notland == 1:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="The coin landed perfectly on it's side! What a miracle!",
                     colour=self.bot.primary_colour,
@@ -342,36 +340,35 @@ class Random(commands.Cog):
         guild = self.bot.get_guild(725303414220914758)
         heads = [e for e in guild.emojis if e.name == "washingtonheads"][0]
         tails = [e for e in guild.emojis if e.name == "washingtontails"][0]
-        await ctx.send(str(random.choice([heads, tails])))
+        await ctx.response.send_message(str(random.choice([heads, tails])))
 
-    @commands.command(name="dice", description="Throw a 6 side dice!", usage="dice")
+    @app_commands.command(name="dice", description="Throw a 6 side dice!")
     async def dice(self, ctx):
         res = random.randint(1, 6)
         guild = self.bot.get_guild(725303414220914758)
         emoji = [e for e in guild.emojis if e.name == f"dice{res}"][0]
-        await ctx.send(emoji)
-    @commands.command(name="d20", description="Throw a 20 sided dice.", usage="d20")
+        await ctx.response.send_message(emoji)
+    @app_commands.command(name="d20", description="Throw a 20 sided dice.")
     async def d20(self, ctx):
-        await ctx.send(file=discord.File(f"cogs/d20/dice{random.randint(1,20)}.png"))
+        await ctx.response.send_message(file=discord.File(f"cogs/d20/dice{random.randint(1,20)}.png"))
 
-    @commands.command(name="shuffle", description="Shuffle a list.", usage="shuffle <item1 item2 item3...>")
-    async def shuffle(self, ctx, *args):
-        args = list(args)
+    @app_commands.command(name="shuffle", description="Shuffle a list.")
+    async def shuffle(self, ctx, *, args: str):
+        args=args.split(" ")
         random.shuffle(args)
         res = ""
         for i in args:
             res += i + " "
-        await ctx.send(embed=discord.Embed(title="Shuffled List", description=f"{res}", colour=self.bot.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(title="Shuffled List", description=f"{res}", colour=self.bot.primary_colour))
 
-    @commands.command(
+    @app_commands.command(
         name="iamveryrandom",
-        usage="iamveryrandom <ban|kick>",
-        description="Randomly ban or kick a user, depending on what you input. Person calling this command must have kicking/banning permissions.",
-        aliases=["byebye"],
+        description="Randomly ban/kick a user. Person calling this command must have permissions.",
     )
     async def iamveryrandom(self, ctx, kick_or_ban: str = "ban"):
+        await ctx.guild.chunk()
         if kick_or_ban.lower() != "ban" and kick_or_ban.lower() != "kick":
-            await ctx.send("Do you want me to ban or kick?")
+            await ctx.response.send_message("Do you want me to ban or kick?")
             return
         member = ctx.author
         auth = 0
@@ -385,11 +382,11 @@ class Random(commands.Cog):
             raise commands.MissingPermissions(["kick_members"])
         guildmembers = await ctx.guild.fetch_members(limit=None).flatten()
         user = random.choice(guildmembers)
-        await ctx.send("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
-        await ctx.send("Say your goodbyes...")
+        await ctx.response.send_message("Picked <@!{}> ({}#{})".format(user.id, user.name, user.discriminator))
+        await ctx.response.send_message("Say your goodbyes...")
         if kick_or_ban.lower() == "ban":
 
-            await ctx.send("Banning in 10 seconds... ")
+            await ctx.response.send_message("Banning in 10 seconds... ")
             await self.bot.change_presence(activity=discord.Game("Banning someone"))
             await asyncio.sleep(10)
             await self.bot.change_presence(
@@ -404,11 +401,11 @@ class Random(commands.Cog):
                     delete_message_days=0,
                 )
             except Exception:
-                await ctx.send("I need higher perms than that person.")
+                await ctx.response.send_message("I need higher perms than that person.")
                 return
-            await ctx.send("Goodbye!")
+            await ctx.response.send_message("Goodbye!")
         else:
-            await ctx.send("Kicking in 10 seconds... ")
+            await ctx.response.send_message("Kicking in 10 seconds... ")
             await self.bot.change_presence(activity=discord.Game("Kicking someone"))
             await asyncio.sleep(10)
             await self.bot.change_presence(
@@ -422,16 +419,16 @@ class Random(commands.Cog):
                     reason=f"Random kick requested by {ctx.author.name}#{ctx.author.discriminator}",
                 )
             except Exception:
-                await ctx.send("I need higher perms than that person.")
+                await ctx.response.send_message("I need higher perms than that person.")
                 return
-            await ctx.send("Goodbye!")
+            await ctx.response.send_message("Goodbye!")
 
-    @commands.command(
+    @app_commands.command(
         name="team",
         description="Assign random teams players",
-        usage="team {number of teams} [players]",
     )
-    async def teams(self, ctx, num: typing.Optional[int] = 2, *players):
+    async def teams(self, ctx, num: typing.Optional[int] = 2, *, players:str):
+        players=players.split(" ")
         num = min(num, len(players))
         players = list(players)
         random.shuffle(players)
@@ -445,16 +442,16 @@ class Random(commands.Cog):
                 res += f"{j}, "
             res = res[:-2]
             embed.add_field(name=f"Team {i+1}", value=res, inline=False)
-        await ctx.send(embed=embed)
-    
-    
-    @commands.command(name="makegame", description="make a mafia like mystery game where each player will be assigned a role", usage="makegame")
+        await ctx.response.send_message(embed=embed)
+
+    @app_commands.command(name="makegame", description="make a mafia like mystery game where each player will be assigned a role")
     async def makegame(self, ctx):
+        await ctx.guild.chunk()
         def check(msg):
             return msg.author.id == ctx.author.id and msg.channel.id == ctx.channel.id
-        botmsg = await ctx.send(embed=discord.Embed(description="React to this message to join the game!", colour=self.bot.config.primary_colour))
+        botmsg = await ctx.response.send_message(embed=discord.Embed(description="React to this message to join the game!", colour=self.bot.config.primary_colour))
         await botmsg.add_reaction("✅")
-        cd = await ctx.send(10*'◻️')
+        cd = await ctx.response.send_message(10*'◻️')
         for i in range(9,-1,-1):
             await asyncio.sleep(1)
             await cd.edit(content=i*'◻️'+(10-i)*'◼️')
@@ -468,7 +465,7 @@ class Random(commands.Cog):
         users=list(set(users))
         roles=[]
         while len(roles) != len(users):
-            await ctx.send(f"Input the roles separated with ,  .Input {len(users)} roles for all players! (The same user that made the game)")
+            await ctx.response.send_message(f"Input the roles separated with ,  .Input {len(users)} roles for all players! (The same user that made the game)")
             rep = await self.bot.wait_for("message", timeout=60, check=check)
             rep=rep.content
             try:
@@ -481,18 +478,19 @@ class Random(commands.Cog):
             try:
                 await self.bot.get_user(users[i]).send(f"You were chosen to be the {roles[i]}")
             except:
-                await ctx.send("Are you sure you allowed dms?")
+                await ctx.response.send_message("Are you sure you allowed dms?")
     
-    @commands.command(name="spintax", usage="spintax <spintax text>", description="use spintax in random.bot! (example here: https://spintaxtool.appspot.com/")
-    async def spintaxcmd(self, ctx, *, spintxt):
-        await ctx.send(spintax.spin(spintxt))
+    @app_commands.command(name="spintax", description="use spintax in random.bot! (example here: https://spintaxtool.appspot.com/")
+    async def spintaxcmd(self, ctx, *, spintxt:str):
+        await ctx.response.send_message(spintax.spin(spintxt))
 
-    @commands.command(name="filechoose", usage="filechoose", description="choose but reads the input from attachments. each option must be separated by a new line")
+    @app_commands.command(name="filechoose", description="Choose but reads the input from attachments. each option must be separated by a new line")
     async def filechoose(self, ctx):
         f=await ctx.message.attachments[0].read()
         chosen=random.choice(f.decode('utf-8').split('\n'))
-        await ctx.send(embed=discord.Embed(description="The wheel has chosen **{}**!".format(chosen), colour=self.bot.primary_colour))
-    @commands.command(name="password",description="Random password", usage="personwomanmancameratv", aliases=["personwomanmancameratv", "memorytest", "iqtest"])
+        await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(chosen), colour=self.bot.primary_colour))
+
+    @app_commands.command(name="password",description="Random password")
     async def pwmct(self, ctx, num:int=3):
         fp=open("cogs/freqwords.txt","r")
         everything=fp.read().split('\n')
@@ -502,8 +500,8 @@ class Random(commands.Cog):
         chosen = "".join(chosen)
         for i in range(3):
             chosen+=str(random.randint(1,9))
-        await ctx.send(f"{chosen}")
+        await ctx.response.send_message(f"{chosen}")
 
 
-def setup(bot):
-    bot.add_cog(Random(bot))
+async def setup(bot):
+    await bot.add_cog(Random(bot))

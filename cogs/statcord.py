@@ -9,12 +9,12 @@ class Statcord(commands.Cog):
         self.bot = bot
         self.key = config.statcord
         self.api = statcord.Client(self.bot, self.key)
-        self.api.start_loop()
+        #self.api.start_loop()
 
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        self.api.command_run(ctx)
+    #@commands.Cog.listener()
+    #async def on_command(self, ctx):
+        #self.api.command_run(ctx)
 
 
-def setup(bot):
-    bot.add_cog(Statcord(bot))
+async def setup(bot):
+    await bot.add_cog(Statcord(bot))

@@ -24,7 +24,7 @@ class Snippet(commands.Cog):
         content = f
         for snuse in ["snippetuse","run", "snuse", "use"]:
             if content.find(snuse) != -1:
-                await ctx.send(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
+                await ctx.response.send_message(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
                 return 
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -54,7 +54,7 @@ class Snippet(commands.Cog):
                 limit += 1000000
 
         if len(snippets) + len(content) > limit:
-            await ctx.send(f"Limit of {limit} exceeded.")
+            await ctx.response.send_message(f"Limit of {limit} exceeded.")
             return
         print(snippets)
         s = json.loads(snippets)
@@ -73,7 +73,7 @@ class Snippet(commands.Cog):
     async def snippetadd(self, ctx, name: str, *, content: str):
         for snuse in ["snippetuse","run", "snuse", "use"]:
             if content.find(snuse) != -1:
-                await ctx.send(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
+                await ctx.response.send_message(embed=discord.Embed(description="Please do not try and cause a snippet-ception!", colour=self.bot.primary_colour))
                 return 
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetch("SELECT * FROM snippet WHERE userid=$1", ctx.author.id)
@@ -103,7 +103,7 @@ class Snippet(commands.Cog):
                 limit += 100000
 
         if len(snippets) + len(content) > limit:
-            await ctx.send(f"Limit of {limit} exceeded.")
+            await ctx.response.send_message(f"Limit of {limit} exceeded.")
             return
         print(snippets)
         s = json.loads(snippets)
@@ -122,7 +122,7 @@ class Snippet(commands.Cog):
         if times is None:
             times = 1 
         if times > 10 and ctx.author.id not in self.bot.config.owners:
-            await ctx.send(embed=discord.Embed(description="The limit for amount of times is 10.", colour=self.bot.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(description="The limit for amount of times is 10.", colour=self.bot.primary_colour))
             return 
         tar = user or ctx.author
         async with self.bot.pool.acquire() as conn:
@@ -135,7 +135,7 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
         s = json.loads(snippets)
         if name not in s:
-            await ctx.send(embed=discord.Embed(title="No note of that name found", description="Are you sure you have the correct spelling/added the snippet?", colour=self.bot.config.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(title="No note of that name found", description="Are you sure you have the correct spelling/added the snippet?", colour=self.bot.config.primary_colour))
             return 
         msg = copy.copy(ctx.message)
         msg.channel = ctx.channel
@@ -167,9 +167,9 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
         s = json.loads(snippets)
         if name in s:
-            await ctx.send(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}", colour=self.bot.config.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}", colour=self.bot.config.primary_colour))
         else:
-            await ctx.send(embed=discord.Embed(title="Error", description="No snippet of that name is found.", colour=self.bot.config.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(title="Error", description="No snippet of that name is found.", colour=self.bot.config.primary_colour))
 
     @commands.command(
         name="snippetremove", 
@@ -194,7 +194,7 @@ class Snippet(commands.Cog):
         try:
             del s[name]
         except Exception:
-            await ctx.send("You do not have a snippet named that!")
+            await ctx.response.send_message("You do not have a snippet named that!")
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.author.id)
         await ctx.message.add_reaction("✅")
@@ -220,7 +220,7 @@ class Snippet(commands.Cog):
         res = ""
         for i in s.keys():
             res += i + "\n"
-        await ctx.send(embed=discord.Embed(title="All snippets", description=res, colour=self.bot.config.primary_colour))
+        await ctx.response.send_message(embed=discord.Embed(title="All snippets", description=res, colour=self.bot.config.primary_colour))
 
     @commands.command(name="snippetabout", description="How to use snippets", usage="snippetabout")
     async def snippetabout(self, ctx):
@@ -242,8 +242,8 @@ class Snippet(commands.Cog):
             value="If you want a dedicated bot to store snippet, then **Snippet** may be the right bot for you! You can check it out via [this link](https://snippetsite.netlify.app/)",
         )
 
-        await ctx.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Snippet(bot))
+async def setup(bot):
+    await bot.add_cog(Snippet(bot))

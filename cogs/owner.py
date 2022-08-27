@@ -41,28 +41,28 @@ class Owner(commands.Cog):
     async def load(self, ctx, *, cog: str):
         try:
             self.bot.load_extension(f"cogs.{cog}")
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="Successfully loaded the module.",
                     colour=self.bot.primary_colour,
                 )
             )
         except Exception as e:
-            await ctx.send(embed=discord.Embed(description=f"Error {e}", colour=self.bot.error_colour))
+            await ctx.response.send_message(embed=discord.Embed(description=f"Error {e}", colour=self.bot.error_colour))
 
     @checks.is_owner()
     @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
     async def unload(self, ctx, *, cog: str):
         try:
             self.bot.unload_extension(f"cogs.{cog}")
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="Successfully unloaded the module.",
                     colour=self.bot.primary_colour,
                 )
             )
         except Exception as e:
-            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
+            await ctx.response.send_message(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
 
     @checks.is_owner()
     @commands.command(description="Reload a module.", usage="reload <cog>", hidden=True)
@@ -70,14 +70,14 @@ class Owner(commands.Cog):
         try:
             self.bot.unload_extension(f"cogs.{cog}")
             self.bot.load_extension(f"cogs.{cog}")
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="Successfully reloaded the module.",
                     colour=self.bot.primary_colour,
                 )
             )
         except Exception as e:
-            await ctx.send(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
+            await ctx.response.send_message(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
 
     @checks.is_owner()
     @commands.command(description="post a command")
@@ -105,7 +105,7 @@ class Owner(commands.Cog):
         try:
             exec(to_compile, env)
         except Exception:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description=f"```py\n{traceback.format_exc()}\n```",
                     colour=discord.Color.red(),
@@ -117,7 +117,7 @@ class Owner(commands.Cog):
             with redirect_stdout(stdout):
                 ret = await func()
         except (AttributeError, Exception, BaseException):
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description=f"```py\n{stdout.getvalue()}{traceback.format_exc()}\n```",
                     colour=discord.Color.red(),
@@ -133,21 +133,21 @@ class Owner(commands.Cog):
             if stdout.getvalue():
                 try:
                     if value != None:
-                        await ctx.send(
+                        await ctx.response.send_message(
                             embed=discord.Embed(
                                 description=f"```py\n{stdout.getvalue()}{value}\n```",
                                 colour=discord.Color.green(),
                             )
                         )
                     else:
-                        await ctx.send(
+                        await ctx.response.send_message(
                             embed=discord.Embed(
                                 description=f"```py\n{stdout.getvalue()}\n```",
                                 colour=discord.Color.green(),
                             )
                         )
                 except Exception:
-                    await ctx.send(
+                    await ctx.response.send_message(
                         embed=discord.Embed(
                             description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
                             colour=discord.Color.red(),
@@ -157,14 +157,14 @@ class Owner(commands.Cog):
                 try:
                     # will not send if no return value
                     if value != None:
-                        await ctx.send(
+                        await ctx.response.send_message(
                             embed=discord.Embed(
                                 description=f"```py\n{value}\n```",
                                 colour=discord.Color.green(),
                             )
                         )
                 except Exception:
-                    await ctx.send(
+                    await ctx.response.send_message(
                         embed=discord.Embed(
                             description=f"```py\n{traceback.format_exc()[-5000:]}\n```",
                             colour=discord.Color.red(),
@@ -176,9 +176,9 @@ class Owner(commands.Cog):
     async def bash(self, ctx, *, command_to_run: str):
         try:
             output = subprocess.check_output(command_to_run.split(), stderr=subprocess.STDOUT).decode("utf-8")
-            await ctx.send(embed=discord.Embed(description=f"```py\n{output}\n```", colour=self.bot.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(description=f"```py\n{output}\n```", colour=self.bot.primary_colour))
         except Exception as error:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="⚠ Error",
                     description=f"```py\n{error.__class__.__name__}: {error}\n```",
@@ -193,7 +193,7 @@ class Owner(commands.Cog):
             async with self.bot.pool.acquire() as conn:
                 res = await conn.fetch(query)
         except Exception:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     title="⚠ Error",
                     description=f"```py\n{traceback.format_exc()}```",
@@ -202,9 +202,9 @@ class Owner(commands.Cog):
             )
             return
         if res:
-            await ctx.send(embed=discord.Embed(description=f"```{res}```", colour=self.bot.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(description=f"```{res}```", colour=self.bot.primary_colour))
         else:
-            await ctx.send(embed=discord.Embed(description="No results to fetch.", colour=self.bot.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(description="No results to fetch.", colour=self.bot.primary_colour))
 
     @checks.is_owner()
     @commands.command(
@@ -227,7 +227,7 @@ class Owner(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM ban WHERE identifier=$1 AND category=$2", user.id, 0)
             if res:
-                await ctx.send(
+                await ctx.response.send_message(
                     embed=discord.Embed(
                         description="That user is already banned.",
                         colour=discord.Color.red(),
@@ -236,7 +236,7 @@ class Owner(commands.Cog):
                 return
             await conn.execute("INSERT INTO ban (identifier, category) VALUES ($1, $2)", user.id, 0)
         self.bot.banned_users.append(user.id)
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description="Successfully banned that user from the bot.",
                 colour=self.bot.primary_colour,
@@ -249,7 +249,7 @@ class Owner(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM ban WHERE identifier=$1 AND category=$2", user, 0)
             if not res:
-                await ctx.send(
+                await ctx.response.send_message(
                     embed=discord.Embed(
                         description="That user is not already banned.",
                         colour=discord.Color.red(),
@@ -258,7 +258,7 @@ class Owner(commands.Cog):
                 return
             await conn.execute("DELETE FROM ban WHERE identifier=$1 AND category=$2", user, 0)
         self.bot.banned_users.remove(user)
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description="Successfully unbanned that user from the bot.",
                 colour=self.bot.primary_colour,
@@ -274,9 +274,9 @@ class Owner(commands.Cog):
     async def leaveserver(self, ctx, *, guild: converters.GlobalGuild):
         data = await self.bot.cogs["Communication"].handler("leave_guild", 1, {"guild_id": guild["id"]})
         if not data:
-            await ctx.send(embed=discord.Embed(description="That server is not found.", colour=discord.Color.red()))
+            await ctx.response.send_message(embed=discord.Embed(description="That server is not found.", colour=discord.Color.red()))
         else:
-            await ctx.send(
+            await ctx.response.send_message(
                 embed=discord.Embed(
                     description="The bot has left that server.",
                     colour=self.bot.primary_colour,
@@ -292,12 +292,12 @@ class Owner(commands.Cog):
     async def banserver(self, ctx, *, guild: converters.GlobalGuild):
         data = await self.bot.cogs["Communication"].handler("leave_guild", 1, {"guild_id": guild["id"]})
         if not data:
-            await ctx.send(embed=discord.Embed(description="That server is not found.", colour=discord.Color.red()))
+            await ctx.response.send_message(embed=discord.Embed(description="That server is not found.", colour=discord.Color.red()))
             return
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM ban WHERE identifier=$1 AND category=$2", guild["id"], 1)
             if res:
-                await ctx.send(
+                await ctx.response.send_message(
                     embed=discord.Embed(
                         description="That server is already banned.",
                         colour=discord.Color.red(),
@@ -306,7 +306,7 @@ class Owner(commands.Cog):
                 return
             await conn.execute("INSERT INTO ban (identifier, category) VALUES ($1, $2)", guild["id"], 1)
         self.bot.banned_guilds.append(guild["id"])
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description="Successfully banned that server from the bot.",
                 colour=self.bot.primary_colour,
@@ -323,7 +323,7 @@ class Owner(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM ban WHERE identifier=$1 AND category=$2", guild, 1)
             if not res:
-                await ctx.send(
+                await ctx.response.send_message(
                     embed=discord.Embed(
                         description="That server is not already banned.",
                         colour=discord.Color.red(),
@@ -332,7 +332,7 @@ class Owner(commands.Cog):
                 return
             await conn.execute("DELETE FROM ban WHERE identifier=$1 AND category=$2", guild, 1)
         self.bot.banned_guilds.remove(guild)
-        await ctx.send(
+        await ctx.response.send_message(
             embed=discord.Embed(
                 description="Successfully unbanned that server from the bot.",
                 colour=self.bot.primary_colour,
@@ -340,5 +340,5 @@ class Owner(commands.Cog):
         )
 
 
-def setup(bot):
-    bot.add_cog(Owner(bot))
+async def setup(bot):
+    await bot.add_cog(Owner(bot))
