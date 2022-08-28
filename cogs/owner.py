@@ -37,58 +37,6 @@ class Owner(commands.Cog):
         print(get_json(self.bot))
 
     @checks.is_owner()
-    @commands.command(description="Load a module.", usage="load <cog>", hidden=True)
-    async def load(self, ctx, *, cog: str):
-        try:
-            self.bot.load_extension(f"cogs.{cog}")
-            await ctx.response.send_message(
-                embed=discord.Embed(
-                    description="Successfully loaded the module.",
-                    colour=self.bot.primary_colour,
-                )
-            )
-        except Exception as e:
-            await ctx.response.send_message(embed=discord.Embed(description=f"Error {e}", colour=self.bot.error_colour))
-
-    @checks.is_owner()
-    @commands.command(description="Unload a module.", usage="unload <cog>", hidden=True)
-    async def unload(self, ctx, *, cog: str):
-        try:
-            self.bot.unload_extension(f"cogs.{cog}")
-            await ctx.response.send_message(
-                embed=discord.Embed(
-                    description="Successfully unloaded the module.",
-                    colour=self.bot.primary_colour,
-                )
-            )
-        except Exception as e:
-            await ctx.response.send_message(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
-
-    @checks.is_owner()
-    @commands.command(description="Reload a module.", usage="reload <cog>", hidden=True)
-    async def reload(self, ctx, *, cog: str):
-        try:
-            self.bot.unload_extension(f"cogs.{cog}")
-            self.bot.load_extension(f"cogs.{cog}")
-            await ctx.response.send_message(
-                embed=discord.Embed(
-                    description="Successfully reloaded the module.",
-                    colour=self.bot.primary_colour,
-                )
-            )
-        except Exception as e:
-            await ctx.response.send_message(embed=discord.Embed(description=f"Error: {e}", colour=self.bot.error_colour))
-
-    @checks.is_owner()
-    @commands.command(description="post a command")
-    async def posthuggin(self, ctx, *, content: str):
-        async with aiohttp.ClientSession() as session:
-            await session.post(
-                "https://huginn.chamburr.xyz/users/1/web_requests/12/ae7cf81ab0f456972fb91ce8dc4c5d46",
-                data={"content": content},
-            )
-
-    @checks.is_owner()
     @app_commands.command(name="eval", description="Evaluate code.")
     async def _eval(self, ctx, *, body: str):
         env = {
