@@ -150,7 +150,7 @@ class General(commands.Cog):
     async def _commands(self, ctx):
         page = discord.Embed(
             title=f"{self.bot.user.name} Commands Menu",
-            description="See all commmands brief, use ?help to see the more detailed versions.",
+            description="See all commmands brief, use /help to see the more detailed versions.",
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar)

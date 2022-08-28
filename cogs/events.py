@@ -177,7 +177,7 @@ she/her•13 💁♥️ • 2-9-06 💋💞 • Atheist 😈💫 • God's Princ
                         embed=discord.Embed(
                             description="""Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX if you need help.
 The default prefix for the bot is ?, but you can change it with the prefix command.
-Type ?commands for a brief menu of all the commands, or ?help for a more detailed version.""",
+Type ?commands for a brief menu of all the commands, or /help for a more detailed version.""",
                             colour=self.bot.primary_colour,
                         )
                     )

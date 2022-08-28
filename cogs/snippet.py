@@ -235,7 +235,7 @@ class Snippet(commands.Cog):
         )
         embed.add_field(
             name="Other commands",
-            value="Do ?help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do ?help <command> to get more information.",
+            value="Do /help to see all commands.\nSnippet commands include\n``snippetadd``, ``snippetuse``, ``snippetview``, ``snippetall`` and ``snippetremove``. Do /help <command> to get more information.",
         )
         embed.add_field(
             name="Snippet",
