@@ -10,7 +10,7 @@ import json
 import aiohttp
 import discord
 from discord.ext import commands
-
+from discord import app_commands
 from classes import converters
 from utils import checks
 
@@ -89,13 +89,13 @@ class Owner(commands.Cog):
             )
 
     @checks.is_owner()
-    @commands.command(name="eval", description="Evaluate code.", usage="eval <code>", hidden=True)
+    @app_commands.command(name="eval", description="Evaluate code.")
     async def _eval(self, ctx, *, body: str):
         env = {
             "bot": self.bot,
             "ctx": ctx,
             "channel": ctx.channel,
-            "author": ctx.author,
+            "user": ctx.user,
             "guild": ctx.guild,
             "message": ctx.message,
         }
@@ -124,12 +124,14 @@ class Owner(commands.Cog):
                 )
             )
         else:
+
             value = ret
+            '''
             try:
                 await ctx.message.add_reaction("✅")
             except discord.Forbidden:
                 pass
-
+            '''
             if stdout.getvalue():
                 try:
                     if value != None:
@@ -163,6 +165,13 @@ class Owner(commands.Cog):
                                 colour=discord.Color.green(),
                             )
                         )
+                    else:
+                        await ctx.response.send_message(
+                            embed=discord.Embed(
+                                description=f"```py\nOK\n```",
+                                colour=discord.Color.green(),
+                            )
+                        )
                 except Exception:
                     await ctx.response.send_message(
                         embed=discord.Embed(
@@ -172,7 +181,7 @@ class Owner(commands.Cog):
                     )
 
     @checks.is_owner()
-    @commands.command(description="Execute code in bash.", usage="bash <command>", hidden=True)
+    @app_commands.command(description="Execute code in bash.")
     async def bash(self, ctx, *, command_to_run: str):
         try:
             output = subprocess.check_output(command_to_run.split(), stderr=subprocess.STDOUT).decode("utf-8")
@@ -187,7 +196,7 @@ class Owner(commands.Cog):
             )
 
     @checks.is_owner()
-    @commands.command(description="Execute SQL.", usage="sql <query>", hidden=True)
+    @app_commands.command(description="Execute SQL.")
     async def sql(self, ctx, *, query: str):
         try:
             async with self.bot.pool.acquire() as conn:
@@ -207,12 +216,11 @@ class Owner(commands.Cog):
             await ctx.response.send_message(embed=discord.Embed(description="No results to fetch.", colour=self.bot.primary_colour))
 
     @checks.is_owner()
-    @commands.command(
+    @app_commands.command(
         description="Invoke the command as another user and optionally in another channel.",
-        usage="invoke [channel] <user> <command>",
-        hidden=True,
     )
-    async def invoke(self, ctx, channel: Optional[discord.TextChannel], user: converters.GlobalUser, *, command: str):
+    async def invoke(self, ctx, channel: Optional[discord.TextChannel], user: str, *, command: str):
+        user=await converters.GlobalUser().convert(ctx, user)
         msg = copy.copy(ctx.message)
         channel = channel or ctx.channel
         msg.channel = channel
@@ -220,7 +228,7 @@ class Owner(commands.Cog):
         msg.content = '/' + command
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
-
+    '''
     @checks.is_owner()
     @commands.command(description="Ban a user from the bot", usage="banuser <user>", hidden=True)
     async def banuser(self, ctx, *, user: converters.GlobalUser):
@@ -266,10 +274,8 @@ class Owner(commands.Cog):
         )
 
     @checks.is_owner()
-    @commands.command(
+    @app_commands.command(
         description="Make the bot leave a server.",
-        usage="leaveserver <server ID>",
-        hidden=True,
     )
     async def leaveserver(self, ctx, *, guild: converters.GlobalGuild):
         data = await self.bot.cogs["Communication"].handler("leave_guild", 1, {"guild_id": guild["id"]})
@@ -338,7 +344,7 @@ class Owner(commands.Cog):
                 colour=self.bot.primary_colour,
             )
         )
-
+    '''
 
 async def setup(bot):
     await bot.add_cog(Owner(bot))
