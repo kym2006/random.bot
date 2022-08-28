@@ -217,7 +217,7 @@ class Owner(commands.Cog):
         channel = channel or ctx.channel
         msg.channel = channel
         msg.author = channel.guild.get_member(user.id) or user
-        msg.content = ctx.prefix + command
+        msg.content = '/' + command
         new_ctx = await self.bot.get_context(msg, cls=type(ctx))
         await self.bot.invoke(new_ctx)
 

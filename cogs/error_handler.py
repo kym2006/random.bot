@@ -76,10 +76,10 @@ class ErrorHandler(commands.Cog):
             embed = discord.Embed(
                 title="Invalid Arguments",
                 description=f"Please check the usage below or join the support server with "
-                f"`{ctx.prefix}support` if you don't know what went wrong.",
+                f"`/support` if you don't know what went wrong.",
                 colour=self.bot.error_colour,
             )
-            usage = "\n".join([ctx.prefix + x.strip() for x in ctx.command.usage.split("\n")])
+            usage = "\n".join(['/' + x.strip() for x in ctx.command.usage.split("\n")])
             embed.add_field(name="Usage", value=f"```{usage}```")
             await ctx.response.send_message(embed=embed)
         elif isinstance(error, commands.NotOwner):

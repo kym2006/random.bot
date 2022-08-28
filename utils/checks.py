@@ -39,7 +39,7 @@ def is_patron():
             return True 
         else:
             await ctx.response.send_message(embed=discord.Embed(
-                description=f"You do not have access to this command, as it is a premium only command. More information is available with the `{ctx.prefix}donate` command.",
+                description=f"You do not have access to this command, as it is a premium only command. More information is available with the `/donate` command.",
                 colour=ctx.bot.config.primary_colour
             ))
             return False 

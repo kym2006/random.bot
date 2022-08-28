@@ -82,7 +82,7 @@ class General(commands.Cog):
             title=f"{self.bot.user.name} Help Menu",
             description="Thank you for using Random.bot! You can "
             "also invite me to your server with the link below, or join our support server if you need further help."
-            f"\n\nDon't forget to check out our partners with the `{ctx.prefix}partners` command!",
+            f"\n\nDon't forget to check out our partners with the `/partners` command!",
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar)
@@ -127,7 +127,7 @@ class General(commands.Cog):
                 cog_name = "Random 2.0"
             page = discord.Embed(
                 title=cog_name,
-                description=f"My prefix is `{ctx.prefix}`. Use `{ctx.prefix}"
+                description=f"My prefix is `/`. Use `/"
                 "help <command>` for more information on a command.",
                 colour=self.bot.primary_colour,
             )

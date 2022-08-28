@@ -3,12 +3,12 @@ import json
 import aiohttp
 import discord
 from discord.ext import commands
-
+from discord import app_commands
 class More(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(description="Sends a random activity", usage="activity")
+    @app_commands.command(description="Sends a random activity")
     async def activity(self, ctx):
         url = "https://boredapi.com/api/activity"
         async with aiohttp.ClientSession() as session:
@@ -18,7 +18,7 @@ class More(commands.Cog):
                 embed.set_footer(text=f"Type: {res['type']}")
                 await ctx.response.send_message(embed=embed)
 
-    @commands.command(description="Sends a random piece of advice", usage="advice")
+    @app_commands.command(description="Sends a random piece of advice")
     async def advice(self, ctx):
         url = "https://api.adviceslip.com/advice"
         async with aiohttp.ClientSession() as session:
@@ -27,7 +27,7 @@ class More(commands.Cog):
                 embed = discord.Embed(description=res["slip"]["advice"], colour=self.bot.primary_colour)
                 await ctx.response.send_message(embed=embed)
 
-    @commands.command(description="Sends a random cat image", usage="cat")
+    @app_commands.command(description="Sends a random cat image")
     async def cat(self, ctx):
         url = "https://aws.random.cat/meow"
         async with aiohttp.ClientSession() as session:
@@ -37,7 +37,7 @@ class More(commands.Cog):
                 embed.set_image(url=res["file"])
                 await ctx.response.send_message(embed=embed)
 
-    @commands.command(description="Sends a random cat fact", usage="catfact")
+    @app_commands.command(description="Sends a random cat fact")
     async def catfact(self, ctx):
         url = "https://catfact.ninja/fact"
         async with aiohttp.ClientSession() as session:
@@ -45,7 +45,7 @@ class More(commands.Cog):
                 res = json.loads(await data.text())
                 await ctx.response.send_message(embed=discord.Embed(description=res["fact"], colour=self.bot.primary_colour))
 
-    @commands.command(description="Sends a random dog image", usage="dog")
+    @app_commands.command(description="Sends a random dog image")
     async def dog(self, ctx):
         url = "https://dog.ceo/api/breeds/image/random"
         async with aiohttp.ClientSession() as session:
@@ -55,7 +55,7 @@ class More(commands.Cog):
                 embed.set_image(url=res["message"])
                 await ctx.response.send_message(embed=embed)
 
-    @commands.command(description="Sends a random dog fact", usage="dogfact")
+    @app_commands.command(description="Sends a random dog fact")
     async def dogfact(self, ctx):
         url = "https://dog-api.kinduff.com/api/facts"
         async with aiohttp.ClientSession() as session:
@@ -63,7 +63,7 @@ class More(commands.Cog):
                 res = json.loads(await data.text())
                 await ctx.response.send_message(embed=discord.Embed(description=res["facts"][0], colour=self.bot.primary_colour))
 
-    @commands.command(description="Sends a random joke", usage="joke")
+    @app_commands.command(description="Sends a random joke")
     async def joke(self, ctx):
         url = "https://official-joke-api.appspot.com/jokes/random"
         async with aiohttp.ClientSession() as session:
@@ -77,7 +77,7 @@ class More(commands.Cog):
                     )
                 )
 
-    @commands.command(description="Sends a random (inspirational?) quote", usage="quote")
+    @app_commands.command(description="Sends a random (inspirational?) quote")
     async def quote(self, ctx):
         url = "https://api.quotable.io/random"
         async with aiohttp.ClientSession() as session:
@@ -87,7 +87,7 @@ class More(commands.Cog):
                 embed.set_author(name=res["author"])
                 await ctx.response.send_message(embed=embed)
 
-    @commands.command(description="Sends a random quote by Trump", usage="trump")
+    @app_commands.command(description="Sends a random quote by Trump")
     async def trump(self, ctx):
         url = "https://api.tronalddump.io/random/quote"
         async with aiohttp.ClientSession() as session:
@@ -97,7 +97,7 @@ class More(commands.Cog):
                 embed.set_author(name="Donald Trump")
                 await ctx.response.send_message(embed=embed)
                               
-    @commands.command(description="Sends a random word", usage="word")
+    @app_commands.command(description="Sends a random word")
     async def word(self, ctx):
         url = "https://random-word-api.herokuapp.com/word"
         async with aiohttp.ClientSession() as session:

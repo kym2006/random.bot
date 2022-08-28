@@ -4,6 +4,7 @@ import random
 import aiohttp
 import discord
 from discord.ext import commands
+from discord import app_commands
 from classes import converters
 import time 
 cooldown = dict({"mine": dict()})
@@ -20,16 +21,16 @@ class Economy(commands.Cog):
         dif = time.time() - cooldown[cmd][id]
         return dif < cdtime 
 
-    @commands.command(name="mine", description="mine for ~~bit~~silver coins", usage="mine")
+    @app_commands.command(name="mine", description="mine for ~~bit~~silver coins")
     async def mine(self, ctx):
-        id = ctx.author.id 
+        id = ctx.user.id
         if self.on_cooldown("mine", id):
             dif = time.time() - cooldown["mine"][id]
             await ctx.response.send_message(embed=discord.Embed(title="You are rate-limited!", description=f"Try again in {round(cdtime-dif,1)} seconds!", colour=self.bot.config.primary_colour))
             return 
         cooldown["mine"][id] = time.time()
         
-        row=await self.bot.get_user_data(ctx.author.id)
+        row=await self.bot.get_user_data(ctx.user.id)
         newval = row["silver"] + 1
         async with self.bot.pool.acquire() as conn:
             await conn.execute(
@@ -45,17 +46,16 @@ class Economy(commands.Cog):
             embed=discord.Embed(description=f"You now have {newval} silver.", colour=self.bot.primary_colour)
         )
 
-    @commands.command(
+    @app_commands.command(
         name="bet",
         description="Double or nothing!",
-        usage="bet <amount>",
-        aliases=["gamble"],
+
     )
     async def bet(self, ctx, amount: int):
         if amount < 0:
             await ctx.response.send_message("positive amounts only")
             return
-        id = ctx.author.id
+        id = ctx.user.id
         row=await self.bot.get_user_data(id)
         have = row["silver"]
         if amount > have:
@@ -80,12 +80,13 @@ class Economy(commands.Cog):
             ),
         )
     
-    @commands.command(name="give", description="Give money to someone", usage="give <user> <amount>")
-    async def give(self, ctx,  user: converters.GlobalUser, amount:int):
+    @app_commands.command(name="give", description="Give money to someone")
+    async def give(self, ctx,  user: str, amount:int):
+        user=await converters.GlobalUser().convert(ctx, user)
         if amount < 0:
             await ctx.response.send_message(embed=discord.Embed(description="That would be stealing!"))
             return 
-        row=await self.bot.get_user_data(ctx.author.id)
+        row=await self.bot.get_user_data(ctx.user.id)
         have = row["silver"]
         if amount > have:
             await ctx.response.send_message("You do not have enough money to give that much")
@@ -93,7 +94,7 @@ class Economy(commands.Cog):
         else:
             newval = row["silver"] - amount
             async with self.bot.pool.acquire() as conn:
-                await conn.execute("UPDATE credit SET silver=$1 where userid=$2", newval, ctx.author.id)
+                await conn.execute("UPDATE credit SET silver=$1 where userid=$2", newval, ctx.user.id)
                 given = await conn.fetchrow("SELECT * FROM credit where userid=$1", user.id)
                 if given is None:
                     await conn.execute("INSERT INTO credit(userid, silver, gold) VALUES($1,$2,$3)",user.id, amount, 0)
@@ -107,7 +108,7 @@ class Economy(commands.Cog):
             ),
         )
 
-    @commands.command(name="leaderboard", description="See the richest people", usage="leaderboard")
+    @app_commands.command(name="leaderboard", description="See the richest people")
     async def leaderboard(self, ctx):
         async with self.bot.pool.acquire() as conn:
             rows = await conn.fetch("SELECT * FROM credit")
@@ -131,7 +132,7 @@ class Economy(commands.Cog):
         rank = 1
         found = False
         for i in data:
-            if ctx.author.id == i[2]:
+            if ctx.user.id == i[2]:
                 found = True 
                 partial += f"Your rank: {rank}/{len(data)}\n"
                 await ctx.response.send_message(embed=discord.Embed(title="Top 10", description=partial, colour=self.bot.primary_colour))
@@ -159,15 +160,15 @@ class Economy(commands.Cog):
                         )
                     )
 
-    @commands.command(name="displaytext", description="Set what you would like your text to be displayed as", usage="displaytext <text>")
-    async def displaytext(self,ctx,*,content):
-        await self.bot.get_user_data(ctx.author.id)
+    @app_commands.command(name="displaytext", description="Set what you would like your text to be displayed as")
+    async def displaytext(self, ctx, *, content:str):
+        await self.bot.get_user_data(ctx.user.id)
         if len(content) > 50:
             await ctx.response.send_message("Max characters of text is 50!")
             return 
         async with self.bot.pool.acquire() as conn:
-            await conn.execute("UPDATE credit set displaytext=$1 where userid=$2", content, ctx.author.id)
-        await ctx.response.send_message(embed=discord.Embed(description=f"Updated your displaytext! (Use `{ctx.prefix}leaderboard` to check!)",colour=self.bot.config.primary_colour))
+            await conn.execute("UPDATE credit set displaytext=$1 where userid=$2", content, ctx.user.id)
+        await ctx.response.send_message(embed=discord.Embed(description=f"Updated your displaytext! (Use `/leaderboard` to check!)",colour=self.bot.config.primary_colour))
 
 
 async def setup(bot):

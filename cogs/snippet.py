@@ -6,7 +6,7 @@ from discord.ext import commands
 import typing 
 import config
 from classes import converters
-
+# TODO Make this premium + fix multiple response problem
 
 class Snippet(commands.Cog):
     def __init__(self, bot):
@@ -143,7 +143,7 @@ class Snippet(commands.Cog):
             msg.author = ctx.channel.guild.get_member(tar.id) or tar
         except Exception:
             msg.author = tar
-        msg.content = ctx.prefix + s[name]
+        msg.content = '/' + s[name]
         for i in range(times):
             new_ctx = await self.bot.get_context(msg, cls=type(ctx))
             await self.bot.invoke(copy.copy(new_ctx))
@@ -167,7 +167,7 @@ class Snippet(commands.Cog):
             snippets = res[0]["content"]
         s = json.loads(snippets)
         if name in s:
-            await ctx.response.send_message(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{ctx.prefix}{s[name]}", colour=self.bot.config.primary_colour))
+            await ctx.response.send_message(embed=discord.Embed(title=f"Snippet name: {name}", description=f"{'/'}{s[name]}", colour=self.bot.config.primary_colour))
         else:
             await ctx.response.send_message(embed=discord.Embed(title="Error", description="No snippet of that name is found.", colour=self.bot.config.primary_colour))
 

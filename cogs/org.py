@@ -4,6 +4,7 @@ import json
 import aiohttp
 import discord
 from discord.ext import commands
+from discord import app_commands
 from classes import converters
 from utils import checks
 log = logging.getLogger(__name__)
@@ -14,19 +15,18 @@ class Randomdotorg(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    #@checks.is_patron()
-    @commands.group(usage="org", description="A group of commands whereby random.org api is used to generate more cryptographically secure results")
-    async def org(self,ctx):
-        if ctx.invoked_subcommand is None:
-            cog=self.bot.get_cog("Randomdotorg")
-            commands=[c.qualified_name for c in cog.walk_commands()]
-            res="```\nCommands using random.org api:\n"
-            for i in commands:
-                res+=i+'\n'
-            res+='```'
-            await ctx.response.send_message(embed=discord.Embed(description=res,colour=self.bot.config.primary_colour))
-            
-    
+    group = app_commands.Group(name="org", description="A group of commands whereby random.org api is used to generate more cryptographically secure results")
+
+    @app_commands.command(name="orginfo", description="A group of commands whereby random.org api is used to generate more cryptographically secure results")
+    async def org(self, ctx):
+        cog = self.bot.get_cog("Randomdotorg")
+        commands = [c.qualified_name for c in cog.walk_app_commands()]
+        res = "```\nCommands using random.org api:\n"
+        for i in commands:
+            res += i+'\n'
+        res += '```'
+        await ctx.response.send_message(embed=discord.Embed(description=res, colour=self.bot.config.primary_colour))
+
     async def get_data(self,payload):
         async with aiohttp.ClientSession() as session:
             async with session.post("https://api.random.org/json-rpc/1/invoke", data=json.dumps(payload)) as r:  
@@ -34,8 +34,8 @@ class Randomdotorg(commands.Cog):
                 return js['result']
 
     @checks.is_patron()
-    @org.command(usage="randint <start> <end>", description="Get a random integer from <start> to <end>, using random.org api")
-    async def randint(self,ctx,start:int,end:int):
+    @group.command(name="randint", description="Get a random integer from <start> to <end>, using random.org api")
+    async def randint(self, ctx, start: int, end: int):
         if start == end:
             await ctx.response.send_message("What do you think?")
             return 
@@ -46,9 +46,9 @@ class Randomdotorg(commands.Cog):
         await ctx.response.send_message(embed=discord.Embed(description=f"Picked {res['random']['data'][0]} from {start} to {end}",colour=self.bot.config.primary_colour))
 
     @checks.is_patron()
-    @org.command(usage="choose <list of things to choose from, separated by space>", description="Choose something from the list, using random.org api")
-    async def choose(self, ctx, *args):
-        args=list(args)
+    @group.command(name="choose", description="Choose something from the list, using random.org api. Separate with comma")
+    async def choose(self, ctx, *, args:str):
+        args=args.split(',')
         if len(args)==0:
             await ctx.response.send_message("Give me something to choose!")
             return 
@@ -60,7 +60,7 @@ class Randomdotorg(commands.Cog):
         await ctx.response.send_message(embed=discord.Embed(description=f"Picked `{args[res['random']['data'][0]]}`!", colour=self.bot.config.primary_colour))
     
     @checks.is_patron()
-    @org.command(usage="coinflip", description="Flip a coin")
+    @group.command(name="coinflip", description="Flip a coin")
     async def coinflip(self, ctx):
         payload={"jsonrpc":"2.0","method":"generateIntegers","params":{"apiKey":self.bot.config.randomorg,"n":1,"min":0,"max":1,"replacement":True,"base":10},"id":3}
         res=await self.get_data(payload)
