@@ -49,7 +49,7 @@ class General(commands.Cog):
 
         page = discord.Embed(
             title=f"{self.bot.user.name} Commands Menu",
-            description="See all commmands brief, use ?help to see the more detailed versions.",
+            description="See all commmands brief, use /help to see the more detailed versions.",
             colour=self.bot.primary_colour,
         )
         page.set_thumbnail(url=self.bot.user.avatar)
@@ -64,13 +64,12 @@ class General(commands.Cog):
             if cog_name in ["Owner", "Admin"]:
                 continue
             cog = self.bot.get_cog(cog_name)
-            cog_commands = cog.get_commands()
+            cog_commands = cog.get_app_commands()
             if len(cog_commands) == 0:
                 continue
             cmds = "```\n"
             for cmd in cog_commands:
-                if cmd.hidden is False:
-                    cmds += cmd.name + "\n"
+                cmds += cmd.name + "\n"
             cmds += "```"
             if cog_name == "More":
                 cog_name = "Random 2.0"
