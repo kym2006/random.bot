@@ -13,7 +13,7 @@ def is_owner():
 
 def is_admin():
     async def predicate(ctx):
-        if ctx.user.id not in ctx.bot.config.owners and ctx.user.id not in ctx.bot.config.admins:
+        if ctx.user.id not in ctx.client.config.owners and ctx.user.id not in ctx.client.config.admins:
             return False
         else:
             return True
@@ -22,25 +22,31 @@ def is_admin():
 
 def is_patron():
     async def predicate(ctx):
-        guild = ctx.bot.get_guild(725303414220914758)
-        can=0
-        if ctx.user.id in [g.id for g in guild.members]:
+        guild = await ctx.client.fetch_guild(725303414220914758)
+        await guild.chunk()
+        can = 0
+        members = []
+        async for i in guild.fetch_members(limit=None):
+            members.append(i)
+        if ctx.user.id in [g.id for g in members]:
             patron1 = discord.utils.find(lambda r: r.id == ctx.client.config.patron1, guild.roles)
             patron2 = discord.utils.find(lambda r: r.id == ctx.client.config.patron2, guild.roles)
             patron3 = discord.utils.find(lambda r: r.id == ctx.client.config.patron3, guild.roles)
-            member = guild.get_member(ctx.author.id)
+            member = guild.get_member(ctx.user.id)
+            print(member)
+            print(member.roles)
             if patron1 in member.roles:
-                can=1
+                can = 1
             if patron2 in member.roles:
-                can=1
+                can = 1
             if patron3 in member.roles:
-                can=1
+                can = 1
         if can:
             return True 
         else:
             await ctx.response.send_message(embed=discord.Embed(
                 description=f"You do not have access to this command, as it is a premium only command. More information is available with the `/donate` command.",
-                colour=ctx.bot.config.primary_colour
+                colour=ctx.client.config.primary_colour
             ))
             return False 
 

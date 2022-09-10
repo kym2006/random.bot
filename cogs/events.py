@@ -187,9 +187,15 @@ Type ?commands for a brief menu of all the commands, or /help for a more detaile
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-       content = f"Guild leave: {guild.name}... Now at **{len(self.bot.guilds)}** guilds"
-       c = await self.bot.fetch_channel(self.bot.config.join_channel)
-       await c.send(content=content,allowed_mentions=discord.AllowedMentions.none())
+        content = f"Guild leave: {guild.name}... Now at **{len(self.bot.guilds)}** guilds"
+        c = await self.bot.fetch_channel(self.bot.config.join_channel)
+        await c.send(content=content,allowed_mentions=discord.AllowedMentions.none())
+
+    @commands.Cog.listener()
+    async def on_app_command_completion(self, interaction, command):
+        content = f"{interaction.user} used {command.name} {interaction.data}"
+        c = await self.bot.fetch_channel(1018037359691960390)
+        await c.send(content=content,allowed_mentions=discord.AllowedMentions.none())
 
 
 async def setup(bot):
