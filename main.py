@@ -5,7 +5,6 @@ from discord.ext import commands
 from classes.bot import Bot
 from utils.tools import get_prefix
 from discord.ext.commands import DefaultHelpCommand
-print(DefaultHelpCommand)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

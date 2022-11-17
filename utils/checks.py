@@ -25,22 +25,16 @@ def is_patron():
         guild = await ctx.client.fetch_guild(725303414220914758)
         await guild.chunk()
         can = 0
-        members = []
-        async for i in guild.fetch_members(limit=None):
-            members.append(i)
-        if ctx.user.id in [g.id for g in members]:
-            patron1 = discord.utils.find(lambda r: r.id == ctx.client.config.patron1, guild.roles)
-            patron2 = discord.utils.find(lambda r: r.id == ctx.client.config.patron2, guild.roles)
-            patron3 = discord.utils.find(lambda r: r.id == ctx.client.config.patron3, guild.roles)
-            member = guild.get_member(ctx.user.id)
-            print(member)
-            print(member.roles)
-            if patron1 in member.roles:
-                can = 1
-            if patron2 in member.roles:
-                can = 1
-            if patron3 in member.roles:
-                can = 1
+        member = await guild.fetch_member(ctx.user.id)
+        patron1 = discord.utils.find(lambda r: r.id == ctx.client.config.patron1, guild.roles)
+        patron2 = discord.utils.find(lambda r: r.id == ctx.client.config.patron2, guild.roles)
+        patron3 = discord.utils.find(lambda r: r.id == ctx.client.config.patron3, guild.roles)
+        if patron1 in member.roles:
+            can = 1
+        if patron2 in member.roles:
+            can = 1
+        if patron3 in member.roles:
+            can = 1
         if can:
             return True 
         else:
