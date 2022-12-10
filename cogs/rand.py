@@ -29,12 +29,7 @@ class Random(commands.Cog):
     @app_commands.command(name="reactions", description="Choose some users from those who reacted to a message")
     async def reactions(self, ctx, message_id: str, num: int = 1):
         await ctx.guild.chunk()
-        async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
-        if row and row["ping"] is not None and row["ping"] == 1:
-            canping = 1
-        else:
-            canping = 0
+        canping=1
 
         chnl = ctx.channel
         msg = await chnl.fetch_message(int(message_id))
@@ -129,12 +124,7 @@ class Random(commands.Cog):
     @app_commands.command(name="someone", description="ping someone at random")
     async def mention(self, ctx, *, num: int = 1):
         await ctx.guild.chunk()
-        async with self.bot.pool.acquire() as conn:
-            row = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", ctx.guild.id)
-        if row and row["ping"] is not None and row["ping"] == 1:
-            canping = 1
-        else:
-            canping = 0
+        canping=1
         potential = []
         async for i in ctx.guild.fetch_members(limit=None):
             if not i.bot:
@@ -265,11 +255,7 @@ class Random(commands.Cog):
     async def somerole(self, ctx, role: str = ""):
         await ctx.guild.chunk()
         role = await converters.PingRole().convert(ctx, role)
-        row = await self.bot.get_data(ctx.guild.id)
-        if row and row["ping"] is not None and row["ping"] == 1:
-            canping = 1
-        else:
-            canping = 0
+        canping=1
         users = []
         
         async for member in ctx.guild.fetch_members(limit=None):
@@ -285,12 +271,7 @@ class Random(commands.Cog):
     @app_commands.command(name="someroledm", description="Dm a user with that role in your server")
     async def someroledm(self, ctx, role: str):
         await ctx.guild.chunk()
-        role = await converters.PingRole().convert(ctx, role)
-        row = await self.bot.get_data(ctx.guild.id)
-        if row and row["ping"] is not None and row["ping"] == 1:
-            canping = 1
-        else:
-            canping = 0
+        canping=1
         users = []
         async for member in ctx.guild.fetch_members(limit=None):
             if role in member.roles:
@@ -372,10 +353,6 @@ class Random(commands.Cog):
             return
         member = ctx.user
         auth = 0
-        data=await self.bot.get_data(ctx.guild.id)
-        for r in ctx.user.roles:
-            if data['byebyeroles'] is not None and r.id in data['byebyeroles']:
-                auth = 1
         if kick_or_ban.lower() == "ban" and not member.guild_permissions.ban_members and not auth:
             raise commands.MissingPermissions(["ban_members"])
         if kick_or_ban.lower() == "kick" and not member.guild_permissions.kick_members and not auth:

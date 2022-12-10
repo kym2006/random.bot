@@ -67,6 +67,7 @@ class Snippet(commands.Cog):
             await conn.execute("UPDATE snippet set content=$1 where userid=$2", json.dumps(s), ctx.user.id)
         await ctx.message.add_reaction("✅")
     '''
+    '''
 
     @checks.is_patron()
     @app_commands.command(
@@ -251,7 +252,7 @@ class Snippet(commands.Cog):
         )
 
         await ctx.response.send_message(embed=embed)
-
+    '''
 
 async def setup(bot):
     await bot.add_cog(Snippet(bot))

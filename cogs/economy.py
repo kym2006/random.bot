@@ -14,7 +14,7 @@ cdtime = 3
 class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+    '''
     def on_cooldown(self, cmd, id):
         if id not in cooldown[cmd]:
             return False 
@@ -169,7 +169,7 @@ class Economy(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             await conn.execute("UPDATE credit set displaytext=$1 where userid=$2", content, ctx.user.id)
         await ctx.response.send_message(embed=discord.Embed(description=f"Updated your displaytext! (Use `/leaderboard` to check!)",colour=self.bot.config.primary_colour))
-
+    '''
 
 async def setup(bot):
     await bot.add_cog(Economy(bot))

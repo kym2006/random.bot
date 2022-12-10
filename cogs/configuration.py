@@ -8,7 +8,7 @@ import shelve
 class Configuration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+    '''
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     @app_commands.command(
@@ -38,7 +38,7 @@ class Configuration(commands.Cog):
                 ctx.guild.id,
             )
         await ctx.response.send_message("Successfuly updated your settings!")
-
+    
     @commands.guild_only()
     @app_commands.command(description="View the configurations for the current server.")
     async def viewconfig(self, ctx):
@@ -52,6 +52,6 @@ class Configuration(commands.Cog):
         embed.add_field(name="Roles with access to iamveryrandom/byebye", value="*Not set*" if len(byebyeroles) == 0 else " ".join([f"<@&{str(i)}>" for i in byebyeroles]),inline=False)
         await ctx.response.send_message(embed=embed)
     # TODO: configure iamveryrandom roles
-
+    '''
 async def setup(bot):
     await bot.add_cog(Configuration(bot))

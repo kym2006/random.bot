@@ -45,7 +45,7 @@ class Bot(commands.AutoShardedBot):
     @property
     def down_commands(self):
         return self.config.down_commands
-
+    '''
     async def get_data(self, guild):
         async with self.pool.acquire() as conn:
             res = await conn.fetchrow("SELECT * FROM data WHERE guild=$1", guild)
@@ -53,7 +53,7 @@ class Bot(commands.AutoShardedBot):
                 await conn.execute("INSERT INTO data VALUES ($1, $2, $3, $4)", guild, None, None, None)
                 return await self.get_data(guild)
             return res
-
+    
     async def get_user_data(self, user):
         async with self.pool.acquire() as conn:
             res=await conn.fetchrow("SELECT * FROM credit where userid=$1",user)
@@ -61,21 +61,26 @@ class Bot(commands.AutoShardedBot):
                 await conn.execute("INSERT INTO credit VALUES ($1, $2, $3, $4)", user, 0, 0, None)
                 return await self.get_user_data(user)
             return res 
-
+    '''
     all_prefix = {}
     cooldown = {}
     shelf = shelve.open("prefix")
 
+    '''
     async def connect_postgres(self):
         self.pool = await asyncpg.create_pool(self.config.database_url, max_size=20, command_timeout=10)
-
+        
+    '''
     async def start_bot(self):
+        # TODO: fix database
+        '''
         await self.connect_postgres()
         async with self.pool.acquire() as conn:
             data = await conn.fetch("SELECT guild, prefix, cooldown from data")
         for row in data:
             # self.all_prefix[row[0]] = row[1]
             self.shelf[str(row[0])] = row[1]
+        '''
         for extension in self.config.initial_extensions:
             try:
                 # self.add_cog(Greetings(bot))

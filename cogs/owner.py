@@ -142,7 +142,7 @@ class Owner(commands.Cog):
                     colour=self.bot.error_colour,
                 )
             )
-
+    '''
     @checks.is_owner()
     @app_commands.command(description="Execute SQL.")
     async def sql(self, ctx, *, query: str):
@@ -162,7 +162,7 @@ class Owner(commands.Cog):
             await ctx.response.send_message(embed=discord.Embed(description=f"```{res}```", colour=self.bot.primary_colour))
         else:
             await ctx.response.send_message(embed=discord.Embed(description="No results to fetch.", colour=self.bot.primary_colour))
-
+    '''
     @checks.is_owner()
     @app_commands.command(
         description="Invoke the command as another user and optionally in another channel.",
