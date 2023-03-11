@@ -22,6 +22,7 @@ intents=discord.Intents.default()
 intents.members=True 
 intents.messages=True
 bot = Bot(
+    shard_count=6,
     command_prefix='?',
     heartbeat_timeout=300,
     intents=intents,

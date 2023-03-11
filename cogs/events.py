@@ -119,7 +119,7 @@ she/her•13 💁♥️ • 2-9-06 💋💞 • Atheist 😈💫 • God's Princ
         await (await self.bot.fetch_channel(self.bot.config.event_channel)).send(embed=embed)
         await self.bot.change_presence(
             activity=discord.Activity(
-                type=discord.ActivityType.watching, name=f"Now with better uptime and slash commands!"
+                type=discord.ActivityType.watching, name=f"Consider donating with /donate!",
             )
         )
 
