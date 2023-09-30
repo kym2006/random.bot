@@ -263,8 +263,8 @@ class General(commands.Cog):
     @app_commands.command(name="donate", description="Donate to the bot!")
     async def donate(self, interaction: discord.Interaction):
         embed = discord.Embed(
-            title="Looking to [donate?](https://buy.stripe.com/9AQaGfdZhgrm21G145)",
-            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/kym2k06).",
+            title="Looking to donate?",
+            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://buy.stripe.com/9AQaGfdZhgrm21G145).",
             colour=self.bot.primary_colour,
         )
         
