@@ -58,7 +58,7 @@ class General(commands.Cog):
             value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands)",
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
-        page.add_field(name="Donate", value="https://paypal.me/kym2k06", inline=False)
+        page.add_field(name="Donate", value="https://buy.stripe.com/9AQaGfdZhgrm21G145", inline=False)
         page.set_thumbnail(url=self.bot.user.avatar)
         for _, cog_name in enumerate(self.bot.cogs):
             if cog_name in ["Owner", "Admin"]:
@@ -263,35 +263,11 @@ class General(commands.Cog):
     @app_commands.command(name="donate", description="Donate to the bot!")
     async def donate(self, interaction: discord.Interaction):
         embed = discord.Embed(
-            title="Looking to donate? Donate At least 5USD to get the patron role!!",
+            title="Looking to [donate?](https://buy.stripe.com/9AQaGfdZhgrm21G145)",
             description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://paypal.me/kym2k06).",
             colour=self.bot.primary_colour,
         )
-        embed.add_field(
-            inline=False,
-            name="Using random.org api functions",
-            value=f"Patrons also get access to functions that use the random.org api directly. Run `/org` to view a list of functions that have already been implemented. RANDOM.ORG offers true random numbers to anyone on the Internet. The randomness comes from atmospheric noise, which for many purposes is better than the pseudo-random number algorithms typically used in computer programs. People use RANDOM.ORG for holding drawings, lotteries and sweepstakes, to drive online games, for scientific applications and for art and music. Visit https://random.org to learn more."
-        )
-        embed.add_field(
-            inline=False,
-            name="Snippet storage space",
-            value="Patrons get additional storage space for snippets\nPatrons: 20000\nSuper patrons: 50000\nSuper duper patrons: 100000",
-        )
-        embed.add_field(
-            inline=False,
-            name="Priority support",
-            value="If you are a patron, we would definitely support you first! (Then again, support for our normal members are rather fast as well) :)",
-        )
-        embed.add_field(
-            inline=False,
-            name="Test beta features",
-            value="Beta features will be released to patrons exclusively in the development phase :)",
-        )
-        embed.add_field(
-            inline=False,
-            name="Other patrons exclusive features",
-            value="More features are on the way, stay tuned for that!",
-        )
+        
 
         await interaction.response.send_message(embed=embed)
 
