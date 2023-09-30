@@ -379,9 +379,7 @@ class Random(commands.Cog):
             )
             try:
                 await ctx.channel.guild.ban(
-                    user,
-                    reason=f"Random ban requested by {ctx.author.name}#{ctx.author.discriminator}",
-                    delete_message_days=0,
+                    user
                 )
             except Exception:
                 await webhook.send("I need higher perms than that person.")
@@ -397,10 +395,7 @@ class Random(commands.Cog):
                 )
             )
             try:
-                await ctx.channel.guild.kick(
-                    user,
-                    reason=f"Random kick requested by {ctx.author.name}#{ctx.author.discriminator}",
-                )
+                await ctx.channel.guild.kick(user)
             except Exception:
                 await webhook.send("I need higher perms than that person.")
                 return
