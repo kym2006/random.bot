@@ -133,8 +133,7 @@ class Events(commands.Cog):
                     await i.send(
                         embed=discord.Embed(
                             description="""Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX if you need help.
-The default prefix for the bot is ?, but you can change it with the prefix command.
-Type ?commands for a brief menu of all the commands, or /help for a more detailed version.""",
+Type /help for a menu of all the commands. If you enjoy using the bot, consider [donating](https://buy.stripe.com/9AQaGfdZhgrm21G145)""",
                             colour=self.bot.primary_colour,
                         )
                     )
