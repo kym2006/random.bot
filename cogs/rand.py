@@ -51,7 +51,7 @@ class Random(commands.Cog):
         c = random.choice(["Yes", "No"])
         await ctx.response.send_message(c)
     
-    @app_commands.command(name="choose", description="Choose something. Separate choices with comma")
+    @app_commands.command(name="choose", description="Separate choices with comma. Or input the name of your list.")
     async def choose(self, ctx, *, choices:str):
         long = len(choices) > 100
         choices = choices.split(",")
