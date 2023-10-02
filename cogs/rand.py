@@ -53,14 +53,22 @@ class Random(commands.Cog):
     
     @app_commands.command(name="choose", description="Choose something. Separate choices with comma")
     async def choose(self, ctx, *, choices:str):
+        long = len(choices) > 100
         choices = choices.split(",")
+        
         if len(choices) == 1:
+            long = False
             async with self.bot.pool.acquire() as conn:
                 res = await conn.fetch("SELECT * FROM lists WHERE userid=$1 AND name=$2", ctx.user.id, choices[0])
                 if res != []:
                     choices=res[0]["content"].split(",")
-
-        await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(choices)), colour=self.bot.primary_colour))
+        if long:
+            embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(choices)),colour=self.bot.primary_colour)
+            if random.randint(1,4) == 1:
+                embed.set_footer(text="Tip: You can save this list with /makelist")
+            await ctx.response.send_message(embed=embed),
+        else:
+            await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(choices)), colour=self.bot.primary_colour))
     
     @app_commands.command(name="makelist", description="Store your own custom list to be used for /choose or /shuffle.")
     async def makelist(self, ctx, *, name:str, choices:str):
