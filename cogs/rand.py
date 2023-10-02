@@ -8,16 +8,12 @@ import discord
 import namegenerator
 import time 
 import names
+import asyncpg
 from discord.ext import commands
 from classes import converters
 from discord import app_commands
 cooldown = dict({"randint":dict()})
-def get_cd(bot, guild, cmd):
-    try:
-        cd = bot.cooldown[guild][cmd]
-        return 0 if cd is None else cd
-    except KeyError:
-        return 0
+
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -58,8 +54,22 @@ class Random(commands.Cog):
     @app_commands.command(name="choose", description="Choose something. Separate choices with comma")
     async def choose(self, ctx, *, choices:str):
         choices = choices.split(",")
+        if len(choices) == 1:
+            async with self.bot.pool.acquire() as conn:
+                res = await conn.fetch("SELECT * FROM lists WHERE userid=$1 AND name=$2", ctx.user.id, choices[0])
+                if res != []:
+                    choices=res[0]["content"].split(",")
+
         await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(choices)), colour=self.bot.primary_colour))
     
+    @app_commands.command(name="makelist", description="Store your own custom list to be used for /choose or /shuffle.")
+    async def makelist(self, ctx, *, name:str, choices:str):
+        async with self.bot.pool.acquire() as conn:
+            await conn.execute(
+                    "INSERT INTO lists(userid,name,content) VALUES($1,$2,$3)", ctx.user.id, name, choices
+                )
+            await ctx.response.send_message(embed=discord.Embed(description="Done!", colour=self.bot.primary_colour))
+        
 
     @app_commands.command(name="emoji", description="Send a random emoji")
     async def emoji(self,ctx):
@@ -334,11 +344,16 @@ class Random(commands.Cog):
         await ctx.response.send_message(file=discord.File(f"cogs/d20/dice{random.randint(1,20)}.png"))
 
     @app_commands.command(name="shuffle", description="Shuffle a list, separated with comma")
-    async def shuffle(self, ctx, *, args: str):
-        args=args.split(",")
-        random.shuffle(args)
+    async def shuffle(self, ctx, *, choices: str):
+        choices=choices.split(",")
+        if len(choices) == 1:
+            async with self.bot.pool.acquire() as conn:
+                res = await conn.fetch("SELECT * FROM lists WHERE userid=$1 AND name=$2", ctx.user.id, choices[0])
+                if res != []:
+                    choices=res[0]["content"].split(",")
+        random.shuffle(choices)
         res = ""
-        for i in args:
+        for i in choices:
             res += i + " "
         await ctx.response.send_message(embed=discord.Embed(title="Shuffled List", description=f"{res}", colour=self.bot.primary_colour))
 

@@ -66,21 +66,15 @@ class Bot(commands.AutoShardedBot):
     cooldown = {}
     shelf = shelve.open("prefix")
 
-    '''
+    
     async def connect_postgres(self):
         self.pool = await asyncpg.create_pool(self.config.database_url, max_size=20, command_timeout=10)
-        
-    '''
+    
     async def start_bot(self):
         # TODO: fix database
-        '''
+        
         await self.connect_postgres()
-        async with self.pool.acquire() as conn:
-            data = await conn.fetch("SELECT guild, prefix, cooldown from data")
-        for row in data:
-            # self.all_prefix[row[0]] = row[1]
-            self.shelf[str(row[0])] = row[1]
-        '''
+        
         for extension in self.config.initial_extensions:
             try:
                 # self.add_cog(Greetings(bot))
