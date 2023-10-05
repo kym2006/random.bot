@@ -1,18 +1,15 @@
 import asyncio
-import json
 import random
 import typing
 import spintax
-import aiohttp
+
 import discord
 import namegenerator
-import time 
 import names
-import asyncpg
 from discord.ext import commands
 from classes import converters
 from discord import app_commands
-cooldown = dict({"randint":dict()})
+
 
 class Random(commands.Cog):
     def __init__(self, bot):
@@ -53,10 +50,11 @@ class Random(commands.Cog):
     
     @app_commands.command(name="choose", description="Separate choices with comma. Or input the name of your list.")
     async def choose(self, ctx, *, choices:str):
-        long = len(choices) > 100
+        long = len(choices) > 50
         choices = choices.split(",")
-        
+        stored = False
         if len(choices) == 1:
+            stored = True
             long = False
             async with self.bot.pool.acquire() as conn:
                 res = await conn.fetch("SELECT * FROM lists WHERE userid=$1 AND name=$2", ctx.user.id, choices[0])
@@ -69,8 +67,8 @@ class Random(commands.Cog):
             await ctx.response.send_message(embed=embed),
         else:
             await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(choices)), colour=self.bot.primary_colour))
-    
-    
+
+
     
 
     @app_commands.command(name="emoji", description="Send a random emoji")
