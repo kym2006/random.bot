@@ -70,14 +70,8 @@ class Random(commands.Cog):
         else:
             await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(random.choice(choices)), colour=self.bot.primary_colour))
     
-    @app_commands.command(name="makelist", description="Store your own custom list to be used for /choose or /shuffle.")
-    async def makelist(self, ctx, *, name:str, choices:str):
-        async with self.bot.pool.acquire() as conn:
-            await conn.execute(
-                    "INSERT INTO lists(userid,name,content) VALUES($1,$2,$3)", ctx.user.id, name, choices
-                )
-            await ctx.response.send_message(embed=discord.Embed(description="Done!", colour=self.bot.primary_colour))
-        
+    
+    
 
     @app_commands.command(name="emoji", description="Send a random emoji")
     async def emoji(self,ctx):

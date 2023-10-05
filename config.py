@@ -61,7 +61,7 @@ initial_extensions = [
     "cogs.events",
     "cogs.general",
     "cogs.miscellaneous",
-    #"cogs.top",
+    "cogs.snippets",
     #"cogs.statcord"
 ]
 
