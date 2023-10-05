@@ -4,9 +4,78 @@ import aiohttp
 import discord
 from discord.ext import commands
 from discord import app_commands
+
 class More(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+    
+    
+
+    @app_commands.command(description="Sends a random wikipedia page")
+    async def wikipedia(self, ctx):
+        url = "https://en.wikipedia.org/api/rest_v1/page/random/summary"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                embed = discord.Embed(title=res["title"], description=res["extract"], colour=self.bot.primary_colour)
+                embed.set_image(url=res["thumbnail"]["source"])
+                await ctx.response.send_message(embed=embed)
+
+    @app_commands.command(description="Sends a random xkcd comic")
+    async def xkcd(self, ctx):
+        url = "https://xkcd.com/info.0.json"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                num = random.randint(1, res["num"])
+                url = f"https://xkcd.com/{num}/info.0.json"
+                async with session.get(url) as data:
+                    res = json.loads(await data.text())
+                    embed = discord.Embed(title=res["title"], description=res["alt"], colour=self.bot.primary_colour)
+                    embed.set_image(url=res["img"])
+                    await ctx.response.send_message(embed=embed)
+    
+    @app_commands.command(description="Sends a random anime waifu")
+    async def waifu(self, ctx):
+        url = "https://api.waifu.pics/sfw/waifu"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                embed = discord.Embed(colour=self.bot.primary_colour)
+                embed.set_image(url=res["url"])
+                await ctx.response.send_message(embed=embed)
+
+    @commands.is_nsfw()
+    @app_commands.command(description="Send a random nsfw picture")
+    async def nsfw(self, ctx):
+        channel_nsfw = await self.is_nsfw(ctx.message.channel) 
+        if not channel_nsfw: 
+            print("You cannot use this command in a non-nsfw channel")
+            return
+        url = "https://api.waifu.pics/nsfw/waifu"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                embed = discord.Embed(colour=self.bot.primary_colour)
+                embed.set_image(url=res["url"])
+                await ctx.response.send_message(embed=embed)
+
+
+    
+    @app_commands.command(description="Sends a random fact")
+    async def fact(self, ctx):
+        url = "https://uselessfacts.jsph.pl/random.json?language=en"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                await ctx.response.send_message(embed=discord.Embed(description=res["text"], colour=self.bot.primary_colour))
+
+    @app_commands.command(description="Sends a random number fact")
+    async def numberfact(self, ctx, number:int):
+        url = f"http://numbersapi.com/{number}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                await ctx.response.send_message(embed=discord.Embed(description=await data.text(), colour=self.bot.primary_colour))
         
     @app_commands.command(description="Sends a random activity")
     async def activity(self, ctx):
