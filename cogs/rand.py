@@ -97,14 +97,6 @@ class Random(commands.Cog):
                     li = await ctx.guild.query_members(user_ids=[chosen])
                     await ctx.response.send_message(f"{str(li[0])} has been chosen!")
         '''
-    '''
-    @app_commands.command(name="chose", description="Choose, but rigged to always pick the second item")
-    async def chose(self, ctx, *args):
-        if len(args) == 1:
-            await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[0]), colour=self.bot.primary_colour))
-        else:
-            await ctx.response.send_message(embed=discord.Embed(description="The wheel has chosen **{}**!".format(args[1]), colour=self.bot.primary_colour))
-    '''
     @app_commands.command(
         name="colour",
         description="Pick a random colour",
@@ -439,44 +431,6 @@ class Random(commands.Cog):
             embed.add_field(name=f"Team {i+1}", value=res, inline=False)
         await ctx.response.send_message(embed=embed)
 
-    # TODO: fix this
-    '''
-    @app_commands.command(name="makegame", description="make a mafia like mystery game where each player will be assigned a role")
-    async def makegame(self, ctx):
-        await ctx.guild.chunk()
-        def check(msg):
-            return msg.author.id == ctx.author.id and msg.channel.id == ctx.channel.id
-        botmsg = await ctx.response.send_message(embed=discord.Embed(description="React to this message to join the game!", colour=self.bot.config.primary_colour))
-        await botmsg.add_reaction("✅")
-        cd = await ctx.response.send_message(10*'◻️')
-        for i in range(9,-1,-1):
-            await asyncio.sleep(1)
-            await ctx.response.edit_message(content=i*'◻️'+(10-i)*'◼️')
-        cache_msg = discord.utils.get(self.bot.cached_messages, id=botmsg.id) 
-        users=[]
-        for i in cache_msg.reactions:
-            li = await i.users().flatten()
-            for i in li:
-                if i.id != self.bot.user.id:
-                    users.append(i.id)
-        users=list(set(users))
-        roles=[]
-        while len(roles) != len(users):
-            await ctx.response.send_message(f"Input the roles separated with ,  .Input {len(users)} roles for all players! (The same user that made the game)")
-            rep = await self.bot.wait_for("message", timeout=60, check=check)
-            rep=rep.content
-            try:
-                roles=rep.split(',')
-            except:
-                roles=[rep]
-        random.shuffle(roles)
-        random.shuffle(users)
-        for i in range(len(roles)):
-            try:
-                await self.bot.get_user(users[i]).send(f"You were chosen to be the {roles[i]}")
-            except:
-                await ctx.response.send_message("Are you sure you allowed dms?")
-    '''
     @app_commands.command(name="spintax", description="use spintax in random.bot! (example here: https://spintaxtool.appspot.com/")
     async def spintaxcmd(self, ctx, *, spintxt:str):
         await ctx.response.send_message(spintax.spin(spintxt))
@@ -499,7 +453,7 @@ class Random(commands.Cog):
         for i in range(3):
             chosen+=str(random.randint(1,9))
         await ctx.response.send_message(f"{chosen}")
-
+    
 
 async def setup(bot):
     await bot.add_cog(Random(bot))
