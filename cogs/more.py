@@ -1,10 +1,10 @@
 import json
-
+import random
 import aiohttp
 import discord
 from discord.ext import commands
 from discord import app_commands
-
+import feedparser
 class More(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -23,17 +23,8 @@ class More(commands.Cog):
 
     @app_commands.command(description="Sends a random xkcd comic")
     async def xkcd(self, ctx):
-        url = "https://xkcd.com/info.0.json"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as data:
-                res = json.loads(await data.text())
-                num = random.randint(1, res["num"])
-                url = f"https://xkcd.com/{num}/info.0.json"
-                async with session.get(url) as data:
-                    res = json.loads(await data.text())
-                    embed = discord.Embed(title=res["title"], description=res["alt"], colour=self.bot.primary_colour)
-                    embed.set_image(url=res["img"])
-                    await ctx.response.send_message(embed=embed)
+        url = "https://c.xkcd.com/random/comic/"
+        await ctx.response.send_message(url)
     
     @app_commands.command(description="Sends a random anime waifu")
     async def waifu(self, ctx):
@@ -44,22 +35,50 @@ class More(commands.Cog):
                 embed = discord.Embed(colour=self.bot.primary_colour)
                 embed.set_image(url=res["url"])
                 await ctx.response.send_message(embed=embed)
-
-    @commands.is_nsfw()
-    @app_commands.command(description="Send a random nsfw picture")
-    async def nsfw(self, ctx):
-        channel_nsfw = await self.is_nsfw(ctx.message.channel) 
-        if not channel_nsfw: 
-            print("You cannot use this command in a non-nsfw channel")
-            return
-        url = "https://api.waifu.pics/nsfw/waifu"
+    '''# TODO: FIX THIS
+    @app_commands.command(description="Word of the day, from merriam-webster.com")
+    async def wotd(self, ctx):
+        url = "https://random-word-api.herokuapp.com/word?number=1"
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as data:
                 res = json.loads(await data.text())
-                embed = discord.Embed(colour=self.bot.primary_colour)
-                embed.set_image(url=res["url"])
-                await ctx.response.send_message(embed=embed)
-
+                word = res[0]
+                url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
+                async with session.get(url) as data:
+                    res = json.loads(await data.text())
+                    embed = discord.Embed(title=word, colour=self.bot.primary_colour)
+                    embed.add_field(name="Definition", value=res[0]["meanings"][0]["definitions"][0]["definition"])
+                    embed.add_field(name="Example", value=res[0]["meanings"][0]["definitions"][0]["example"])
+                    await ctx.response.send_message(embed=embed)
+    '''
+    
+    @app_commands.command(description="Sends a random insult")
+    async def insult(self, ctx):
+        url = "https://evilinsult.com/generate_insult.php?lang=en&type=json"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as data:
+                res = json.loads(await data.text())
+                await ctx.response.send_message(embed=discord.Embed(description=res["insult"], colour=self.bot.primary_colour))
+    
+    @app_commands.command(description="Send a random youtube video from Joe Rogan")
+    async def joerogan(self, ctx):
+        #! /usr/bin/env python3
+        channel_url = feedparser.parse("https://www.youtube.com/feeds/videos.xml?user=PowerfulJRE")
+        # Grab random video
+        video = channel_url.entries[random.randint(1, 10)]
+        url=video.link
+        embed = discord.Embed(colour=self.bot.primary_colour)
+        embed.set_image(url = data.url)
+        await ctx.response.send_message(embed=embed)
+    
+    @app_commands.command(description="Send a random youtube video from your favourite youtube channel")
+    async def youtube(self, ctx, channel:str):
+        channel_url = feedparser.parse(f"https://www.youtube.com/feeds/videos.xml?user={channel}")
+        video = channel_url.entries[random.randint(1, 10)]
+        url=video.link
+        embed = discord.Embed(colour=self.bot.primary_colour)
+        embed.set_image(url = data.url)
+        await ctx.response.send_message(embed=embed)
 
     
     @app_commands.command(description="Sends a random fact")
@@ -175,10 +194,7 @@ class More(commands.Cog):
                 embed = discord.Embed(description=res[0], colour=self.bot.primary_colour)
                 await ctx.response.send_message(embed=embed)
 
-
     
-
-
 
 async def setup(bot):
     await bot.add_cog(More(bot))

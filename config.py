@@ -62,7 +62,7 @@ initial_extensions = [
     "cogs.general",
     "cogs.miscellaneous",
     "cogs.snippets",
-    #"cogs.statcord"
+    "cogs.nsfw",
 ]
 
 
