@@ -4,10 +4,12 @@ import aiohttp
 import discord
 from discord.ext import commands
 from discord import app_commands
-
+from utils import checks
 class Nsfw(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @checks.is_patron()
     @app_commands.command(description="Send a random nsfw picture")
     async def nsfw(self, ctx):
         # check if channel is nsfw
@@ -21,6 +23,7 @@ class Nsfw(commands.Cog):
                 embed.set_image(url=res["url"])
                 await ctx.response.send_message(embed=embed)
     
+    @checks.is_patron()
     @app_commands.command(description="Send a random hentai picture")
     async def hentai(self, ctx):
         # check if channel is nsfw
@@ -34,6 +37,7 @@ class Nsfw(commands.Cog):
                 embed.set_image(url=res["url"])
                 await ctx.response.send_message(embed=embed)
 
+    @checks.is_patron()
     @app_commands.command(description="Send a random nude picture from reddit")
     async def nude(self, ctx):
         # check if channel is nsfw
@@ -47,6 +51,7 @@ class Nsfw(commands.Cog):
                 embed.set_image(url=res[0]["data"]["children"][0]["data"]["url"])
                 await ctx.response.send_message(embed=embed)
     
+    @checks.is_patron()
     @app_commands.command(description="Send a random hentai picture from reddit")
     async def rhentai(self, ctx):
         # check if channel is nsfw
@@ -60,6 +65,7 @@ class Nsfw(commands.Cog):
                 embed.set_image(url=res[0]["data"]["children"][0]["data"]["url"])
                 await ctx.response.send_message(embed=embed)
 
+    @checks.is_patron()
     @app_commands.command(description="Send a random pornhub video")
     async def phub(self, ctx):
         # check if channel is nsfw
