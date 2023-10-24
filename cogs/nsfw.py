@@ -69,10 +69,5 @@ class Nsfw(commands.Cog):
         await ctx.response.send_message(url)
     
 
-
-
-    
-        
-
 async def setup(bot):
     await bot.add_cog(Nsfw(bot))
