@@ -2,11 +2,14 @@ import discord
 from discord.ext import commands
 from classes import converters
 from discord import app_commands
+from utils import checks
 
 class Snippets(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         super().__init__()
+
+    @checks.is_patron()
     @app_commands.command(name="makelist", description="Store your own custom list to be used for /choose or /shuffle.")
     async def makelist(self, ctx, *, name:str, choices:str):
         async with self.bot.pool.acquire() as conn:
@@ -14,6 +17,8 @@ class Snippets(commands.Cog):
                     "INSERT INTO lists(userid,name,content) VALUES($1,$2,$3)", ctx.user.id, name, choices
                 )
             await ctx.response.send_message(embed=discord.Embed(description="Done!", colour=self.bot.primary_colour))
+
+    @checks.is_patron()
     @app_commands.command(name="deletelist", description="Delete your own custom list.")
     async def deletelist(self, ctx, *, name:str):
         async with self.bot.pool.acquire() as conn:
@@ -21,6 +26,8 @@ class Snippets(commands.Cog):
                     "DELETE FROM lists WHERE userid=$1 AND name=$2", ctx.user.id, name
                 )
             await ctx.response.send_message(embed=discord.Embed(description="Done!", colour=self.bot.primary_colour))
+
+    @checks.is_patron()
     @app_commands.command(name="viewlist", description="List your own custom list.")
     async def list(self, ctx):
         async with self.bot.pool.acquire() as conn:
@@ -30,6 +37,8 @@ class Snippets(commands.Cog):
             else:
                 res = [i["name"] for i in res]
                 await ctx.response.send_message(embed=discord.Embed(description="\n".join(res), colour=self.bot.primary_colour))
+
+    @checks.is_patron()
     @app_commands.command(name="listcontent", description="List the content of your own custom list.")
     async def listcontent(self, ctx, *, name:str):
         async with self.bot.pool.acquire() as conn:

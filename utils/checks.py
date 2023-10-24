@@ -22,26 +22,16 @@ def is_admin():
 
 def is_patron():
     async def predicate(ctx):
-        guild = await ctx.client.fetch_guild(725303414220914758)
-        await guild.chunk()
-        can = 0
-        member = await guild.fetch_member(ctx.user.id)
-        patron1 = discord.utils.find(lambda r: r.id == ctx.client.config.patron1, guild.roles)
-        patron2 = discord.utils.find(lambda r: r.id == ctx.client.config.patron2, guild.roles)
-        patron3 = discord.utils.find(lambda r: r.id == ctx.client.config.patron3, guild.roles)
-        if patron1 in member.roles:
-            can = 1
-        if patron2 in member.roles:
-            can = 1
-        if patron3 in member.roles:
-            can = 1
-        if can:
-            return True 
+        # check if the user has the patron role in the main server
+        guild = ctx.client.get_guild(ctx.client.config.main_server)
+        member = guild.get_member(ctx.user.id)
+        if not member:
+            return False
+        # check if the user has the patron role
+        if ctx.client.config.patron1 in [i.id for i in member.roles] or ctx.client.config.patron2 in [i.id for i in member.roles] or ctx.client.config.patron3 in [i.id for i in member.roles]:
+            return True
         else:
-            await ctx.response.send_message(embed=discord.Embed(
-                description=f"You do not have access to this command, as it is a premium only command. More information is available with the `/donate` command.",
-                colour=ctx.client.config.primary_colour
-            ))
-            return False 
+            return False
+        
 
     return app_commands.check(predicate)
