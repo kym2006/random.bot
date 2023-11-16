@@ -54,7 +54,6 @@ initial_extensions = [
     "cogs.rand",
     "cogs.more",
     "cogs.org",
-    "cogs.snippet",
     "cogs.economy",
     "cogs.configuration",
     "cogs.error_handler",
