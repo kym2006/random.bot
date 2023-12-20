@@ -58,7 +58,7 @@ class General(commands.Cog):
             value=f"[Invite Link](https://discord.com/oauth2/authorize?client_id=606402391314530319&permissions=268823640&scope=bot+applications.commands)",
         )
         page.add_field(name="Support Server", value="https://discord.gg/ZatYnsX", inline=False)
-        page.add_field(name="Donate", value="https://www.buymeacoffee.com/ktxdym", inline=False)
+        page.add_field(name="Donate", value="https://ko-fi.com/ktxdym", inline=False)
         page.set_thumbnail(url=self.bot.user.avatar)
         for _, cog_name in enumerate(self.bot.cogs):
             if cog_name in ["Owner", "Admin"]:
@@ -264,7 +264,7 @@ class General(commands.Cog):
     async def donate(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="Looking to donate?",
-            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://www.buymeacoffee.com/ktxdym).",
+            description="As the bot grows, so must our hosting servers. Please support us for us to get better hosting, and motivating us to spend more time developing the bot! Here's [the link](https://ko-fi.com/ktxdym).",
             colour=self.bot.primary_colour,
         )
         

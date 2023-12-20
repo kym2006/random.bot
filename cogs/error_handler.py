@@ -25,7 +25,7 @@ class ErrorHandler(commands.Cog):
             await ctx.response.send_message(
                 embed=discord.Embed(
                     title="Permission Denied",
-                    description="You do not have permission to use this command. Consider [becoming a patron](https://www.buymeacoffee.com/ktxdym) to use this command.",
+                    description="You do not have permission to use this command. Consider [becoming a patron](https://ko-fi.com/ktxdym) to use this command.",
                     colour=self.bot.error_colour,
                 )
             )
