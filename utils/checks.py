@@ -24,6 +24,7 @@ def is_patron():
     async def predicate(ctx):
         # check if the user has the patron role in the main server
         guild = ctx.client.get_guild(ctx.client.config.main_server)
+        await guild.chunk()
         member = guild.get_member(ctx.user.id)
         if not member:
             return False
