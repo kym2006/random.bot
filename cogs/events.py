@@ -133,7 +133,7 @@ class Events(commands.Cog):
                     await i.send(
                         embed=discord.Embed(
                             description="""Thank you for inviting random.bot! Join our support server at https://discord.gg/ZatYnsX if you need help.
-Type /help for a menu of all the commands. If you enjoy using the bot, consider [donating](https://buy.stripe.com/9AQaGfdZhgrm21G145)""",
+Type /help for a menu of all the commands. If you enjoy using the bot, consider [donating](https://ko-fi.com/ktxdym)""",
                             colour=self.bot.primary_colour,
                         )
                     )
